@@ -405,7 +405,7 @@ const BDJChatApp = (() => {
             renderHistory();
             saveState();
             try {
-                await fetch('http://127.0.0.1:8000/reset', { method: 'POST' });
+                await fetch('/reset', { method: 'POST' });
             } catch(e) {}
         }
     };
@@ -537,7 +537,7 @@ const BDJChatApp = (() => {
         const typingId = showTypingIndicator();
 
         try {
-            const res = await fetch('http://127.0.0.1:8000/chat', {
+            const res = await fetch('/chat', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ question: text, session_id: state.sessionId })
@@ -587,7 +587,7 @@ const BDJChatApp = (() => {
         saveState();
 
         try {
-            await fetch('http://127.0.0.1:8000/offer', {
+            await fetch('/offer', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ company, email, phone, items, machine: state.pendingMachine || "Dobór części" })
