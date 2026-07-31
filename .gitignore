@@ -1,0 +1,18 @@
+# Bezpieczeństwo - Ukrycie kluczy API i konfiguracji środowiskowej
+api.env
+*.env
+.env
+
+# Przeglądarki i system
+.DS_Store
+__pycache__/
+*.pyc
+
+# Baza danych LlamaIndex / pamięć podręczna
+*.log
+
+# Dane kontaktowe klientów (NIGDY NIE PUBLIKOWAĆ NA GITHUB!)
+baza_wiedzy/historia_pytan_klientow.json
+
+# Skrypty tymczasowe AI
+patch_*.py
