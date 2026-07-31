@@ -623,7 +623,7 @@ def get_admin_dashboard(admin_session: str = Cookie(None)):
         </tr>
         """
 
-        avg_dur_sec = (total_duration_sec // len(sessions)) if len(sessions) > 0 else 0
+    avg_dur_sec = (total_duration_sec // len(sessions)) if len(sessions) > 0 else 0
     avg_dur_str = f"{avg_dur_sec} sek" if avg_dur_sec < 60 else f"{avg_dur_sec // 60}m {avg_dur_sec % 60}s"
     
     conversion_rate = 0
