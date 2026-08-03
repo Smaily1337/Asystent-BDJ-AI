@@ -103,6 +103,7 @@ Oto oficjalne specyfikacje i ograniczenia maszyn:
 - **BDJ MAX DUAL HEAD**: Hybrydowa z wymiennymi głowicami | Kable i rurki od 7 mm do rur 50 mm | Zasięg: do 2500 m
 - **BDJ HYDRO CHAIN CABLE**: Kable 6 - 20 mm | Rury HDPE 32, 40, 50 mm | Zasięg: do 2500 m
 - **BDJ HYDRO CHAIN MULTI TUBE**: Pakiety mikrorurek (np. 3-5x10 mm) | Rury HDPE 32, 40, 50 mm | Zasięg: do 1500 m
+- **BDJ DRAGONAIR / DRAGONAIR COMPRESSOR**: Mobilny kompresor spalinowy 18.5 kW (silnik Vanguard B&S) dedykowany do zasilania wdmuchiwarek BDJ.
 
 Gdy użytkownik pyta o możliwości, zasięgi lub obsługiwane kable/rurki danej maszyny, odpowiedz precyzyjnie w oparciu o powyższe zestawienie.
 
@@ -129,55 +130,76 @@ Settings.num_output = 2048
 Settings.chunk_size = 1000
 Settings.chunk_overlap = 150
 
-Baza_Wiedzy_Path = "./baza_wiedzy"
-print(f"🚀 Ładowanie bazy wiedzy (.md) z: {Baza_Wiedzy_Path}...")
+def get_machine_tag_from_path(full_path: str) -> str:
+    path_lower = full_path.replace('\\', '/').lower()
+    if 'dragonair' in path_lower:
+        return 'BDJ DRAGONAIR'
+    elif 'multitube' in path_lower or 'multi tube' in path_lower or 'multi_tube' in path_lower:
+        return 'BDJ HYDRO CHAIN MULTI TUBE'
+    elif 'hydro chain' in path_lower or 'hydro_chain' in path_lower:
+        return 'BDJ HYDRO CHAIN CABLE'
+    elif 'budget plus' in path_lower or 'budget_plus' in path_lower:
+        return 'BDJ BUDGET PLUS EASY SET'
+    elif 'budget' in path_lower:
+        return 'BDJ BUDGET EASY SET'
+    elif 'mini' in path_lower or 'counter' in path_lower:
+        return 'BDJ MINI COUNTER'
+    elif 'next' in path_lower:
+        return 'BDJ NEXT'
+    elif 'extended' in path_lower or 'extend' in path_lower:
+        return 'BDJ EXTENDED'
+    elif 'max' in path_lower:
+        return 'BDJ MAX'
+    return ''
 
-if not os.path.exists(Baza_Wiedzy_Path):
-    os.makedirs(Baza_Wiedzy_Path)
+input_dirs = ["./baza_wiedzy", "./czesci_nowe"]
+dirs_to_read = [d for d in input_dirs if os.path.exists(d)]
 
-# Wczytujemy WYŁĄCZNIE pliki .md (odrzucamy szum z PDF-ów)
-original_documents = SimpleDirectoryReader(
-    Baza_Wiedzy_Path, 
-    recursive=True, 
-    required_exts=[".md"]
-).load_data()
+print(f"🚀 Ładowanie baz wiedzy (.md) z katalogów: {dirs_to_read}...")
+
+original_documents = []
+for d in dirs_to_read:
+    docs = SimpleDirectoryReader(
+        d, 
+        recursive=True, 
+        required_exts=[".md", ".MD"]
+    ).load_data()
+    original_documents.extend(docs)
 
 documents = []
 for doc in original_documents:
     full_path = doc.metadata.get('file_path', '')
-    normalized_path = full_path.replace('\\', '/')
     oznaczenie = ""
     
-    if 'Wdmuchiwarki/' in normalized_path:
-        try:
-            machine_name = normalized_path.split('Wdmuchiwarki/')[1].split('/')[0]
-            oznaczenie += f"[DOKUMENT DOTYCZY MASZYNY: BDJ {machine_name.upper()}]\n\n"
-        except: pass
+    machine_tag = get_machine_tag_from_path(full_path)
+    if machine_tag:
+        oznaczenie += f"[DOKUMENT DOTYCZY MASZYNY: {machine_tag}]\n"
+        if 'czesci_nowe' in full_path.replace('\\', '/'):
+            oznaczenie += f"[NOWA BAZA CZĘŚCI I PEŁNA LISTA BOM DLA MASZYNY {machine_tag}]\n"
+        oznaczenie += "\n"
             
-    if 'cenniki' in normalized_path.lower():
+    if 'cenniki' in full_path.lower():
         oznaczenie += "[DOKUMENT JEST CENNIKIEM - ZAWIERA CENY. WALUTA: WSZYSTKIE CENY W CENNIKU SĄ W EURO (EUR/€)]\n"
         oznaczenie += "[KEYWORDS: price, cost, pricing, budget, euro, eur, cennik]\n\n"
 
-    if 'pytania_inne' in normalized_path.lower() or 'faq' in normalized_path.lower():
+    if 'pytania_inne' in full_path.lower() or 'faq' in full_path.lower():
         oznaczenie += "[SEKCJA FAQ - CZĘSTE PYTANIA I ODPOWIEDZI.]\n\n"
 
     nowy_tekst = oznaczenie + doc.text
     documents.append(Document(text=nowy_tekst, metadata=doc.metadata))
 
-print(f"✅ Wczytano {len(documents)} czystych dokumentów Markdown.")
+print(f"✅ Wczytano {len(documents)} czystych dokumentów Markdown (baza_wiedzy + czesci_nowe).")
 
 from llama_index.core.retrievers import BaseRetriever
 
 nodes = SentenceSplitter(chunk_size=1000, chunk_overlap=150).get_nodes_from_documents(documents)
 for node in nodes:
     full_path = node.metadata.get('file_path', '').replace('\\', '/')
-    if 'Wdmuchiwarki/' in full_path:
-        try:
-            machine_name = full_path.split('Wdmuchiwarki/')[1].split('/')[0]
-            header_prefix = f"[DOKUMENT DOTYCZY MASZYNY: BDJ {machine_name.upper()}]\n"
-            if header_prefix not in node.text:
-                node.text = header_prefix + node.text
-        except: pass
+    machine_tag = get_machine_tag_from_path(full_path)
+    if machine_tag:
+        header_prefix = f"[DOKUMENT DOTYCZY MASZYNY: {machine_tag}]\n"
+        if header_prefix not in node.text:
+            node.text = header_prefix + node.text
 
 base_bm25 = BM25Retriever.from_defaults(nodes=nodes, similarity_top_k=5)
 
@@ -192,29 +214,32 @@ class MachineFilteringRetriever(BaseRetriever):
         all_nodes = self._bm25_retriever.retrieve(query_bundle)
         
         target_machine = None
-        if re.search(r'\b(bdj\s*)?nexta?\b', query_lower):
-            target_machine = "next"
+        if re.search(r'\b(dragonair|kompresor)\b', query_lower):
+            target_machine = "bdj dragonair"
+        elif re.search(r'\b(bdj\s*)?nexta?\b', query_lower):
+            target_machine = "bdj next"
         elif re.search(r'\b(bdj\s*)?(mini|minie|counter)\b', query_lower):
-            target_machine = "mini counter"
+            target_machine = "bdj mini counter"
         elif re.search(r'\b(bdj\s*)?budget\s*plus\b', query_lower):
-            target_machine = "budget plus easy set"
+            target_machine = "bdj budget plus easy set"
         elif re.search(r'\b(bdj\s*)?budget\b', query_lower):
-            target_machine = "budget easy set"
+            target_machine = "bdj budget easy set"
         elif re.search(r'\b(bdj\s*)?extended\b', query_lower):
-            target_machine = "extended"
+            target_machine = "bdj extended"
         elif re.search(r'\bmulti\s*tube\b', query_lower):
-            target_machine = "hydro chain multi tube"
+            target_machine = "bdj hydro chain multi tube"
         elif re.search(r'\bhydro\s*chain\b', query_lower):
-            target_machine = "hydro chain cable"
+            target_machine = "bdj hydro chain cable"
         elif re.search(r'\b(bdj\s*)?max\b', query_lower):
-            target_machine = "max"
+            target_machine = "bdj max"
 
         if target_machine:
             filtered = []
             for n in all_nodes:
                 fpath = n.node.metadata.get("file_path", "").lower().replace("\\", "/")
-                if "wdmuchiwarki/" in fpath:
-                    if f"wdmuchiwarki/{target_machine}/" in fpath:
+                node_machine = get_machine_tag_from_path(fpath).lower()
+                if node_machine:
+                    if target_machine in node_machine or node_machine in target_machine:
                         filtered.append(n)
                 else:
                     filtered.append(n)
