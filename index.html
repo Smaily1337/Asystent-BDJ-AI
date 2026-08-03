@@ -330,9 +330,34 @@
     <div class="modal-box">
         <h2>Zapytanie Ofertowe</h2>
         <div id="modal-selected-preview"></div>
+        <div id="modal-error-msg" style="display:none; color:#ef4444; background:#fee2e2; border:1px solid #fca5a5; padding:10px 14px; border-radius:12px; font-size:0.85rem; font-weight:600; margin-bottom:14px;"></div>
         <input type="text" id="inp-company" placeholder="Nazwa firmy *" required>
-        <input type="email" id="inp-email" placeholder="Adres e-mail *" required>
-        <input type="tel" id="inp-phone" placeholder="Numer telefonu *" required>
+        <input type="email" id="inp-email" placeholder="Adres e-mail (np. jan@firma.pl) *" required>
+        <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+            <select id="inp-country-code" style="width: 145px; padding: 12px 8px; border: 1px solid var(--border-light); border-radius: 14px; background: #f8fafc; font-size: 0.88rem; font-weight: 600; outline: none; cursor: pointer; color: var(--text-dark);">
+                <option value="+48" selected>🇵🇱 PL (+48)</option>
+                <option value="+49">🇩🇪 DE (+49)</option>
+                <option value="+44">🇬🇧 GB (+44)</option>
+                <option value="+420">🇨🇿 CZ (+420)</option>
+                <option value="+421">🇸🇰 SK (+421)</option>
+                <option value="+380">🇺🇦 UA (+380)</option>
+                <option value="+33">🇫🇷 FR (+33)</option>
+                <option value="+39">🇮🇹 IT (+39)</option>
+                <option value="+34">🇪🇸 ES (+34)</option>
+                <option value="+31">🇳🇱 NL (+31)</option>
+                <option value="+47">🇳🇴 NO (+47)</option>
+                <option value="+46">🇸🇪 SE (+46)</option>
+                <option value="+45">🇩🇰 DK (+45)</option>
+                <option value="+358">🇫🇮 FI (+358)</option>
+                <option value="+43">🇦🇹 AT (+43)</option>
+                <option value="+41">🇨🇭 CH (+41)</option>
+                <option value="+32">🇧🇪 BE (+32)</option>
+                <option value="+1">🇺🇸 US (+1)</option>
+                <option value="+971">🇦🇪 AE (+971)</option>
+                <option value="">🌐 Inny (+)</option>
+            </select>
+            <input type="tel" id="inp-phone" placeholder="Numer telefonu (min. 7 cyfr) *" required style="flex: 1; margin-bottom: 0;">
+        </div>
         <div class="modal-footer">
             <button class="btn-cancel" id="btn-cancel">Anuluj</button>
             <button class="btn-submit" id="btn-submit-offer">Wyślij zapytanie</button>
@@ -564,11 +589,55 @@ const BDJChatApp = (() => {
     };
 
     const submitOffer = async () => {
-        const company = document.getElementById('inp-company').value.trim();
-        const email = document.getElementById('inp-email').value.trim();
-        const phone = document.getElementById('inp-phone').value.trim();
+        const inpCompany = document.getElementById('inp-company');
+        const inpEmail = document.getElementById('inp-email');
+        const inpPhone = document.getElementById('inp-phone');
+        const inpCountry = document.getElementById('inp-country-code');
+        const errorBox = document.getElementById('modal-error-msg');
 
-        if (!company || !email || !phone) return alert("Proszę wypełnić wszystkie wymagane pola.");
+        inpCompany.style.borderColor = "var(--border-light)";
+        inpEmail.style.borderColor = "var(--border-light)";
+        inpPhone.style.borderColor = "var(--border-light)";
+        errorBox.style.display = 'none';
+        errorBox.textContent = '';
+
+        const company = inpCompany.value.trim();
+        const email = inpEmail.value.trim();
+        let rawPhone = inpPhone.value.trim();
+        const countryCode = inpCountry ? inpCountry.value : "+48";
+
+        if (!company) {
+            inpCompany.style.borderColor = "#ef4444";
+            errorBox.textContent = "Proszę podać nazwę firmy.";
+            errorBox.style.display = 'block';
+            inpCompany.focus();
+            return;
+        }
+
+        // WALIDACJA EMAIL: Wymagany pełny format (nazwa@domena.pl / .com / itp.)
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!email || !emailRegex.test(email)) {
+            inpEmail.style.borderColor = "#ef4444";
+            errorBox.textContent = "Wprowadź poprawny i pełny adres e-mail (np. jan@firma.pl).";
+            errorBox.style.display = 'block';
+            inpEmail.focus();
+            return;
+        }
+
+        // WALIDACJA NUMERU TELEFONU: Min. 7 cyfr
+        const digitsOnly = rawPhone.replace(/\D/g, '');
+        if (!rawPhone || digitsOnly.length < 7) {
+            inpPhone.style.borderColor = "#ef4444";
+            errorBox.textContent = "Wprowadź poprawny numer telefonu (minimum 7 cyfr).";
+            errorBox.style.display = 'block';
+            inpPhone.focus();
+            return;
+        }
+
+        let fullPhone = rawPhone;
+        if (countryCode && !rawPhone.startsWith('+')) {
+            fullPhone = countryCode + ' ' + rawPhone;
+        }
 
         const checkedBoxes = document.querySelectorAll('.offer-checkbox:checked');
         const items = Array.from(checkedBoxes).map(cb => JSON.parse(cb.dataset.itemData));
@@ -581,7 +650,7 @@ const BDJChatApp = (() => {
             itemsSummary = "<br><ul style='margin-left:16px; margin-top:6px;'>" + items.map(item => `<li>${item.filter(x => x && x !== 'Wybór').join(' | ')}</li>`).join('') + "</ul>";
         }
 
-        const successMsg = `Wysłano zapytanie ofertowe dla firmy <strong>${company}</strong>.${itemsSummary}<br>Potwierdzenie zostanie przesłane na: <em>${email}</em> / tel. <em>${phone}</em>.`;
+        const successMsg = `Wysłano zapytanie ofertowe dla firmy <strong>${company}</strong>.${itemsSummary}<br>Potwierdzenie zostanie przesłane na: <em>${email}</em> / tel. <em>${fullPhone}</em>.`;
         state.messages.push({ role: 'bot', content: successMsg, raw: successMsg });
         renderHistory();
         saveState();
@@ -590,7 +659,7 @@ const BDJChatApp = (() => {
             await fetch('/offer', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ company, email, phone, items, machine: state.pendingMachine || "Dobór części" })
+                body: JSON.stringify({ company, email, phone: fullPhone, items, machine: state.pendingMachine || "Dobór części" })
             });
         } catch(e) { console.error("Błąd wysyłki zgłoszenia", e); }
         

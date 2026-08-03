@@ -980,6 +980,8 @@ def read_index():
 def get_avatar():
     return FileResponse("avatar.png")
 
+OFFERS_LOG_FILE = Path("baza_wiedzy/historia_ofert.json")
+
 @app.post("/offer")
 def handle_offer(request: OfferRequest):
     print("\n" + "="*50)
@@ -998,38 +1000,77 @@ def handle_offer(request: OfferRequest):
             zaznaczony_element = " | ".join(item) if isinstance(item, list) else item
             print(f"   -> {zaznaczony_element}")
     print("="*50 + "\n")
-    
-    # --- WYSYŁKA GMAIL SMTP ---
+
+    # Zapiszmy ofertę do pliku JSON (gwarancja braku utraty leadów)
+    try:
+        offers_history = []
+        if OFFERS_LOG_FILE.exists():
+            try:
+                with open(OFFERS_LOG_FILE, "r", encoding="utf-8") as f:
+                    offers_history = json.load(f)
+            except Exception: pass
+            
+        new_entry = {
+            "id": str(uuid.uuid4())[:8],
+            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "company": request.company,
+            "email": request.email,
+            "phone": request.phone,
+            "machine": request.machine or "",
+            "items": request.items or []
+        }
+        offers_history.append(new_entry)
+        with open(OFFERS_LOG_FILE, "w", encoding="utf-8") as f:
+            json.dump(offers_history, f, ensure_ascii=False, indent=2)
+    except Exception as err_log:
+        print(f"⚠️ Błąd zapisu oferty do pliku JSON: {err_log}")
+
+    # --- WYSYŁKA GMAIL SMTP (SSL 465 z fallback do TLS 587) ---
+    recipients = ["info@gamm-bud.pl", "info@bluedragonjet.com"]
     msg = MIMEMultipart()
     msg['Subject'] = f"Nowe zapytanie z Bota AI - {request.company}"
     msg['From'] = SMTP_LOGIN 
-    msg['To'] = "info@gamm-bud.pl"   # <--- Zmieniono na docelowy adres firmy
+    msg['To'] = ", ".join(recipients)
 
-    body = f"Nowy lead z Chatbota!\n\nFirma: {request.company}\nEmail: {request.email}\nTelefon: {request.phone}\n\n"
+    body = f"Nowe zapytanie ofertowe z Chatbota BDJ!\n\n"
+    body += f"🏢 Firma: {request.company}\n"
+    body += f"📧 E-mail: {request.email}\n"
+    body += f"📞 Telefon: {request.phone}\n\n"
     
     if request.machine:
-        body += f"🎯 Klient prosi o wycenę maszyny: {request.machine}\n\n"
+        body += f"🎯 Klient prosi o wycenę maszyny / tematu: {request.machine}\n\n"
         
     if request.items and len(request.items) > 0:
-        body += "🔧 Wybrane części zamienne/akcesoria:\n"
+        body += "🔧 Wybrane części zamienne / akcesoria:\n"
         for item in request.items:
             zaznaczony_element = " | ".join(item) if isinstance(item, list) else item
-            body += f"- {zaznaczony_element}\n"
+            body += f"  • {zaznaczony_element}\n"
 
     msg.attach(MIMEText(body, 'plain', 'utf-8'))
 
+    email_sent = False
     try:
-        print("Wysyłanie e-maila przez Gmail...")
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
+        print("Wysyłanie e-maila przez Gmail SSL (port 465)...")
+        server = smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=10)
         server.login(SMTP_LOGIN, SMTP_PASSWORD)
         server.send_message(msg)
         server.quit()
-        print("✅ E-mail został pomyślnie wysłany na info@gamm-bud.pl!")
-    except Exception as e:
-        print(f"⚠️ Błąd wysyłki e-mail: {e}")
-        
-    return {"status": "success"}
+        email_sent = True
+        print(f"✅ E-mail został pomyślnie wysłany na {recipients} przez SSL 465!")
+    except Exception as e_ssl:
+        print(f"⚠️ SSL 465 nie powiódł się ({e_ssl}). Próba przez TLS 587...")
+        try:
+            server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
+            server.starttls()
+            server.login(SMTP_LOGIN, SMTP_PASSWORD)
+            server.send_message(msg)
+            server.quit()
+            email_sent = True
+            print(f"✅ E-mail został pomyślnie wysłany na {recipients} przez TLS 587!")
+        except Exception as e_tls:
+            print(f"❌ Błąd wysyłki e-mail przez TLS 587: {e_tls}")
+
+    return {"status": "success", "email_sent": email_sent}
 
 
 @app.get("/admin/export_csv")

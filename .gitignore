@@ -13,6 +13,7 @@ __pycache__/
 
 # Dane kontaktowe klientów (NIGDY NIE PUBLIKOWAĆ NA GITHUB!)
 baza_wiedzy/historia_pytan_klientow.json
+baza_wiedzy/historia_ofert.json
 
 # Skrypty tymczasowe AI
 patch_*.py
