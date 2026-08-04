@@ -2,11 +2,14 @@
 api.env
 *.env
 .env
+!.env.example
 
 # Przeglądarki i system
 .DS_Store
 __pycache__/
 *.pyc
+.venv/
+venv/
 
 # Baza danych LlamaIndex / pamięć podręczna
 *.log
@@ -14,6 +17,13 @@ __pycache__/
 # Dane kontaktowe klientów (NIGDY NIE PUBLIKOWAĆ NA GITHUB!)
 baza_wiedzy/historia_pytan_klientow.json
 baza_wiedzy/historia_ofert.json
+knowledge/data/
+_legacy_knowledge/**/historia_pytan_klientow.json
+_legacy_knowledge/**/historia_ofert.json
+
+# Skażone / wycofane pliki wiedzy
+_quarantine/
+_legacy_knowledge/
 
 # Skrypty tymczasowe AI
 patch_*.py
