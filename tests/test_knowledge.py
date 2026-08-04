@@ -595,6 +595,131 @@ def test_parts_for_machine_no_substring_leak():
     assert not any(p.sku.upper().startswith("UM-D35") for p in max_rows)
 
 
+def test_intent_slots_rule_fallback_uszczelka():
+    """Reguły (bez LLM) wypełniają sloty — bez wymyślania SKU."""
+    from app.rag.intent import extract_part_slots, slots_to_lookup_question
+
+    slots = extract_part_slots(
+        "potrzebuję uszczelkę mikrorurki 7 mm do Extended",
+        use_llm=False,
+    )
+    assert slots.part_kind == "uszczelka_mikrorurka"
+    assert slots.size_mm == 7.0
+    assert slots.exact_fi is False
+    assert slots.list_all is False
+    assert "sku" not in slots_to_lookup_question(slots, "").lower()
+    q = slots_to_lookup_question(slots, "x")
+    assert "uszczelka" in q.lower()
+    assert "7" in q
+
+
+def test_intent_slots_vague_followup_same_but_cable():
+    """„to samo ale na kabel” dziedziczy size/machine z historii."""
+    from app.rag.intent import extract_part_slots
+    from app.rag.part_lookup import lookup_from_slots
+
+    history = [
+        ("user", "Mam maszynę BDJ Extended. uszczelka mikrorurki 7 mm"),
+        (
+            "assistant",
+            "Na podstawie katalogu… | UM-D35X5-6,5 | Uszczelka na mikrorurkę |",
+        ),
+    ]
+    slots = extract_part_slots(
+        "to samo ale na kabel",
+        history=history,
+        chip_machine="BDJ Extended",
+        use_llm=False,
+    )
+    assert slots.part_kind == "uszczelka_kabel"
+    assert slots.size_mm == 7.0
+    assert slots.machine and "extended" in slots.machine.lower()
+
+    result = lookup_from_slots(
+        slots,
+        "to samo ale na kabel",
+        chip_machine="BDJ Extended",
+        prior_reason="uszczelka",
+        llm=None,
+    )
+    assert result is not None
+    assert result.parts
+    assert all(p.kind == "uszczelka" for p in result.parts)
+    assert any(p.sku.upper().startswith("UK-") for p in result.parts)
+    # żadnego zmyślonego SKU poza katalogiem
+    from app.rag.sku_validate import extract_skus, catalog_sku_set
+
+    allowed = catalog_sku_set("bdj extended")
+    for sku in extract_skus(result.answer):
+        assert sku.upper() in allowed
+
+
+def test_intent_slots_bare_size_after_need_size():
+    """Gołe «7 mm» po need_size → inferuje uszczelkę z historii."""
+    from app.rag.intent import extract_part_slots
+    from app.rag.part_lookup import lookup_from_slots
+
+    history = [
+        ("user", "uszczelka mikrorurki do Extended"),
+        ("assistant", "napisz tylko średnicę w mm dla uszczelkę"),
+    ]
+    slots = extract_part_slots(
+        "7 mm",
+        history=history,
+        chip_machine="BDJ Extended",
+        prior_reason="need_size",
+        use_llm=False,
+    )
+    assert slots.size_mm == 7.0
+    assert slots.part_kind == "uszczelka_mikrorurka"
+    result = lookup_from_slots(
+        slots, "7 mm", chip_machine="BDJ Extended", prior_reason="need_size"
+    )
+    assert result is not None
+    assert result.parts
+    assert "UM-D35X5-6" in result.parts[0].sku.upper()
+
+
+def test_intent_list_all_slot():
+    from app.rag.intent import extract_part_slots
+    from app.rag.part_lookup import lookup_from_slots
+
+    slots = extract_part_slots(
+        "wyświetl listę uszczelek na mikrorurkę",
+        chip_machine="BDJ Max Dual Head",
+        use_llm=False,
+    )
+    assert slots.list_all is True
+    assert slots.part_kind == "uszczelka_mikrorurka"
+    result = lookup_from_slots(
+        slots,
+        "wyświetl listę uszczelek na mikrorurkę",
+        chip_machine="BDJ Max Dual Head",
+    )
+    assert result is not None
+    assert result.reason == "uszczelka_list"
+    assert len(result.parts) >= 2
+
+
+def test_hybrid_engine_vague_followup_no_invented_sku():
+    """SessionChatManager: follow-up rozmiaru przez sloty, sanitize nadal aktywny."""
+    from app.rag.engine import SessionChatManager
+    from app.rag.sku_validate import extract_skus, catalog_sku_set
+
+    class _DummyRetriever:
+        pass
+
+    mgr = SessionChatManager(retriever=_DummyRetriever(), llm=None)
+    sid = "test_hybrid_sess"
+    a1 = mgr.chat(sid, "uszczelka mikrorurki", machine="BDJ Extended")
+    assert "mm" in a1.lower() or "średnic" in a1.lower()
+    a2 = mgr.chat(sid, "7 mm", machine="BDJ Extended")
+    assert "UM-D35X5-6" in a2
+    allowed = catalog_sku_set("bdj extended")
+    for sku in extract_skus(a2):
+        assert sku.upper() in allowed
+
+
 if __name__ == "__main__":
     tests = [v for k, v in globals().items() if k.startswith("test_") and callable(v)]
     failed = 0

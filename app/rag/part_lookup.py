@@ -1,12 +1,19 @@
-"""Deterministyczny dobór części z katalogu — omija halucynacje BM25/LLM."""
+"""Deterministyczny dobór części z katalogu — omija halucynacje BM25/LLM.
+
+SKU wyłącznie z katalogu. Intencja/sloty (app.rag.intent) mogą wzbogacić pytanie,
+ale nigdy nie generują kodów.
+"""
 
 from __future__ import annotations
 
+import json
 import re
 import unicodedata
 from dataclasses import dataclass
+from typing import Any
 
 from app.rag.catalog import PartRow, format_parts_markdown, load_catalog, parts_for_machine
+from app.rag.intent import PartSlots, slots_to_lookup_question
 from app.rag.machines import machine_display_name, resolve_machine_from_query
 from app.rag.query_rewrite import apply_colloquial_aliases
 
@@ -670,6 +677,177 @@ def _keyword_search(parts: list[PartRow], question: str, limit: int = 6) -> list
     return out
 
 
+def _candidates_short_list(
+    parts: list[PartRow],
+    display: str,
+    *,
+    intro: str | None = None,
+    limit: int = 5,
+) -> LookupResult:
+    """Krótka lista kandydatów z katalogu — bez wolnego LLM i bez dumpa całego BOM."""
+    uniq: list[PartRow] = []
+    seen: set[str] = set()
+    for p in parts:
+        key = p.sku.upper()
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq.append(p)
+        if len(uniq) >= limit:
+            break
+    text = intro or (
+        f"W katalogu maszyny **{display}** znalazłem kilka pasujących pozycji "
+        f"— wybierz właściwą (albo doprecyzuj wymiar / nazwę). "
+        f"Zaznacz część i kliknij **«Zapytaj o wycenę»**."
+    )
+    return LookupResult(
+        answer=format_parts_markdown(uniq, text, display),
+        parts=tuple(uniq),
+        reason="candidates",
+    )
+
+
+def _llm_pick_candidate_index(
+    question: str,
+    candidates: list[PartRow],
+    llm: Any,
+) -> int | None:
+    """
+    LLM wybiera indeks spośród podanych kandydatów katalogowych albo None (= dopytaj).
+    Nie może wymyślić SKU poza listą.
+    """
+    if llm is None or len(candidates) < 2:
+        return None
+    lines = [
+        f"{i}: {p.sku} | {p.name}"
+        for i, p in enumerate(candidates[:5])
+    ]
+    prompt = (
+        "Wybierz JEDNĄ pozycję z listy kandydatów katalogowych najlepiej pasującą "
+        "do pytania użytkownika. Odpowiedz WYŁĄCZNIE JSON: "
+        '{"index": <int|null>, "ask": <bool>}. '
+        "Jeśli niepewne — index=null, ask=true. NIGDY nie wymyślaj SKU.\n"
+        f"Pytanie: {question}\n"
+        f"Kandydaci:\n" + "\n".join(lines)
+    )
+    try:
+        if hasattr(llm, "complete"):
+            resp = llm.complete(prompt)
+            text = str(getattr(resp, "text", None) or resp)
+        else:
+            return None
+    except Exception:
+        return None
+    m = re.search(r"\{[\s\S]*\}", text or "")
+    if not m:
+        return None
+    try:
+        data = json.loads(m.group(0))
+    except json.JSONDecodeError:
+        return None
+    if data.get("ask") is True:
+        return None
+    idx = data.get("index")
+    if isinstance(idx, int) and 0 <= idx < min(5, len(candidates)):
+        return idx
+    return None
+
+
+def maybe_refine_with_candidates(
+    result: LookupResult,
+    *,
+    question: str,
+    llm: Any = None,
+) -> LookupResult:
+    """
+    Gdy keyword zwróci 2–5 trafień — LLM może wskazać jedną z listy katalogowej
+    albo zostawiamy krótką listę (nigdy nie wymyśla SKU).
+    """
+    if result.reason != "keyword" or len(result.parts) < 2:
+        return result
+    parts = list(result.parts)[:5]
+    if len(parts) == 1:
+        return result
+    # jeden wyraźny faworyt po nazwie — bez LLM
+    display = machine_display_name(parts[0].machine_tag) or parts[0].machine
+    picked = _llm_pick_candidate_index(question, parts, llm)
+    if picked is not None:
+        chosen = parts[picked]
+        intro = (
+            f"Na podstawie katalogu części dla maszyny **{display}**, "
+            f"oto najlepiej pasująca pozycja spośród kandydatów: "
+            f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+        )
+        return LookupResult(
+            answer=format_parts_markdown([chosen], intro, display),
+            parts=(chosen,),
+            reason="candidate_pick",
+        )
+    # bez pewnego wyboru — krótka lista zamiast dumpa
+    if len(parts) > 1:
+        return _candidates_short_list(parts, display, limit=5)
+    return result
+
+
+def lookup_from_slots(
+    slots: PartSlots,
+    original_question: str,
+    *,
+    chip_machine: str | None = None,
+    prior_reason: str | None = None,
+    llm: Any = None,
+) -> LookupResult | None:
+    """
+    Hybryda: sloty → wzbogacone pytanie → wyłącznie katalog.
+    Soft inference (historia/kind/size) siedzi w slotach; SKU tylko z BOM.
+    """
+    enriched = slots_to_lookup_question(slots, original_question)
+    chip = chip_machine or slots.machine
+    result = try_deterministic_lookup(
+        enriched,
+        chip_machine=chip,
+        prior_reason=prior_reason,
+    )
+    if result is None and enriched != (original_question or "").strip():
+        result = try_deterministic_lookup(
+            original_question,
+            chip_machine=chip,
+            prior_reason=prior_reason,
+        )
+    if result is None:
+        return None
+
+    # Smarter clarify: jedno pytanie naraz wg slotów
+    if result.reason == "need_machine" and slots.needs_clarify == "machine":
+        return result
+    if result.reason == "need_size" and slots.needs_clarify in {"size", "none"}:
+        return result
+
+    if result.reason == "keyword" and result.parts:
+        return maybe_refine_with_candidates(
+            result, question=original_question or enriched, llm=llm
+        )
+
+    # miss + keyword na oryginale → krótka lista kandydatów zamiast pustki
+    if result.reason == "miss" and chip:
+        machine = resolve_machine_from_query(
+            enriched, chip_machine=chip
+        ) or resolve_machine_from_query(original_question or "", chip_machine=chip)
+        if machine:
+            local = parts_for_machine(machine)
+            display = machine_display_name(machine)
+            cands = _keyword_search(local, apply_colloquial_aliases(original_question or enriched), limit=5)
+            if not cands and slots.part_kind.startswith("uszczelka"):
+                cands = _list_tube_gaskets(local)[:5] if slots.list_all else []
+            if cands:
+                return maybe_refine_with_candidates(
+                    _candidates_short_list(cands, display),
+                    question=original_question or enriched,
+                    llm=llm,
+                )
+    return result
+
+
 def try_deterministic_lookup(
     question: str,
     chip_machine: str | None = None,
@@ -679,7 +857,7 @@ def try_deterministic_lookup(
     """
     Dobór części wyłącznie z katalogu.
     Dla pytań o części ZAWSZE zwraca LookupResult (trafienie / dopytanie / miss) —
-    caller nie powinien iść do LLM.
+    caller nie powinien iść do LLM po SKU.
     prior_reason: ostatni reason z sesji (np. need_size / uszczelka) — follow-up listy.
     """
     q = apply_colloquial_aliases((question or "").strip())

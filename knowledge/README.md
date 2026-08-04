@@ -2,6 +2,8 @@
 
 Katalogi części pochodzą **1:1 z plików Excel BOM** (bez cen), z opcjonalnym dziedziczeniem rodzin głowicy.
 
+**Hybryda asystenta:** LLM (lub reguły) myśli o intencji / slotach (`app/rag/intent.py`), katalog o SKU (`part_lookup` / `catalog`). Kodów SKU nigdy nie wymyśla model — tylko wiersze z BOM + `sku_validate`.
+
 ## Regeneracja
 
 ```bash

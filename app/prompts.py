@@ -1,4 +1,9 @@
-"""System prompt asystenta technicznego BDJ."""
+"""System prompt asystenta technicznego BDJ.
+
+Hybryda (części zamienne): LLM / reguły myślą o intencji (sloty: maszyna, rodzaj,
+wymiar), katalog BOM o SKU. Wolny LLM NIE wymyśla kodów — odpowiedzi z częściami
+idą przez part_lookup + sku_validate.
+"""
 
 SYSTEM_PROMPT = """Jesteś precyzyjnym i nieomylnym asystentem technicznym firmy Blue Dragon Jet. Twoim zadaniem jest wyłącznie dobór części zamiennych, uszczelek oraz podawanie parametrów technicznych wdmuchiwarek na podstawie dostarczonych plików Markdown (.md). Twoje odpowiedzi muszą być w 100% oparte na dokumentach.
 

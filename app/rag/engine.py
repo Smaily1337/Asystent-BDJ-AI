@@ -1,4 +1,8 @@
-"""Per-session ContextChatEngine — izolacja pamięci między użytkownikami."""
+"""Per-session ContextChatEngine — izolacja pamięci między użytkownikami.
+
+Hybryda części: LLM/reguły myślą o intencji (sloty), katalog o SKU.
+Odpowiedzi z częściami zawsze przechodzą przez sanitize_answer_skus.
+"""
 
 from __future__ import annotations
 
@@ -10,14 +14,35 @@ from llama_index.core.memory import ChatMemoryBuffer
 
 from app.config import settings
 from app.prompts import SYSTEM_PROMPT
+from app.rag.intent import extract_part_slots, with_chip_machine
 from app.rag.machines import machine_display_name, resolve_machine_from_query
 from app.rag.part_lookup import (
     is_gasket_list_followup,
     is_parts_intent,
+    lookup_from_slots,
     try_deterministic_lookup,
 )
 from app.rag.query_rewrite import rewrite_query
 from app.rag.sku_validate import sanitize_answer_skus
+
+# Powody sesji uznawane za kontekst części (follow-upy)
+_PARTS_REASONS = frozenset({
+    "uszczelka",
+    "uszczelka_list",
+    "need_size",
+    "need_machine",
+    "tuleja",
+    "pas",
+    "oponka",
+    "manometr",
+    "keyword",
+    "candidates",
+    "candidate_pick",
+    "exact_name",
+    "found_elsewhere",
+    "reject_clarify",
+    "miss",
+})
 
 
 class SessionChatManager:
@@ -39,6 +64,7 @@ class SessionChatManager:
         self._engines: dict[str, ContextChatEngine] = {}
         self._order: list[str] = []
         self._last_part_reason: dict[str, str] = {}
+        self._turns: dict[str, list[tuple[str, str]]] = {}
         self._lock = threading.Lock()
 
     def _make_engine(self) -> ContextChatEngine:
@@ -63,11 +89,24 @@ class SessionChatManager:
             while len(self._engines) >= self._max_sessions and self._order:
                 oldest = self._order.pop(0)
                 self._engines.pop(oldest, None)
+                self._turns.pop(oldest, None)
 
             engine = self._make_engine()
             self._engines[sid] = engine
             self._order.append(sid)
             return engine
+
+    def _recent_history(self, sid: str, n: int = 4) -> list[tuple[str, str]]:
+        with self._lock:
+            turns = self._turns.get(sid) or []
+            return list(turns[-n:])
+
+    def _remember(self, sid: str, role: str, text: str) -> None:
+        with self._lock:
+            buf = self._turns.setdefault(sid, [])
+            buf.append((role, (text or "")[:800]))
+            if len(buf) > 12:
+                del buf[:-12]
 
     def chat(self, session_id: str, question: str, machine: str | None = None) -> str:
         sid = session_id or "sess_default"
@@ -81,31 +120,67 @@ class SessionChatManager:
             q = f"Mam maszynę {machine}. {question}"
 
         prior_reason = self._last_part_reason.get(sid)
+        history = self._recent_history(sid, n=4)
 
-        # Dobór części: WYŁĄCZNIE katalog — LLM tu nie ma prawa wymyślać SKU
-        # + follow-up „wyświetl listę wybiorę sam” po flow uszczelki
+        # (1) Lekka ekstrakcja intencji/slotów — LLM lub reguły; bez SKU
+        slots = extract_part_slots(
+            question,
+            history=history,
+            chip_machine=machine,
+            prior_reason=prior_reason,
+            llm=self._llm,
+            use_llm=True,
+        )
+        slots = with_chip_machine(slots, machine)
+
         wants_parts = (
             is_parts_intent(q)
             or is_parts_intent(question)
             or is_gasket_list_followup(question, prior_reason)
             or is_gasket_list_followup(q, prior_reason)
+            or slots.is_parts_ish()
+            or (prior_reason in _PARTS_REASONS and slots.size_mm is not None)
+            or (prior_reason in _PARTS_REASONS and slots.list_all)
         )
+
         if wants_parts:
-            deterministic = try_deterministic_lookup(
-                q, chip_machine=machine, prior_reason=prior_reason
+            # (2) ZAWSZE resolve SKU tylko przez katalog
+            deterministic = lookup_from_slots(
+                slots,
+                q,
+                chip_machine=machine,
+                prior_reason=prior_reason,
+                llm=self._llm,
             )
             if deterministic is None:
+                deterministic = lookup_from_slots(
+                    slots,
+                    question,
+                    chip_machine=machine,
+                    prior_reason=prior_reason,
+                    llm=self._llm,
+                )
+            if deterministic is None:
                 deterministic = try_deterministic_lookup(
-                    question, chip_machine=machine, prior_reason=prior_reason
+                    q, chip_machine=machine, prior_reason=prior_reason
                 )
             if deterministic is not None:
                 self._last_part_reason[sid] = deterministic.reason
-                return deterministic.answer
-            # nie powinno się zdarzyć — is_parts_intent ⇒ lookup zawsze coś zwraca
-            return (
+                # (3) Odpowiedź katalogowa — sanitize na wszelki wypadek
+                answer = sanitize_answer_skus(
+                    deterministic.answer, q, chip_machine=machine
+                )
+                self._remember(sid, "user", question)
+                self._remember(sid, "assistant", answer)
+                return answer
+            self._last_part_reason[sid] = "need_clarify"
+            fallback = (
                 "Podaj proszę model maszyny oraz nazwę / wymiar części "
                 "(np. uszczelka mikrorurki 7 mm do Budget Plus)."
             )
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", fallback)
+            return fallback
 
         query = rewrite_query(q, chip_machine=machine)
         engine = self.get_engine(sid)
@@ -115,13 +190,17 @@ class SessionChatManager:
             self.reset(sid)
             engine = self.get_engine(sid)
             raw = str(engine.chat(query))
-        return sanitize_answer_skus(raw, q, chip_machine=machine)
+        answer = sanitize_answer_skus(raw, q, chip_machine=machine)
+        self._remember(sid, "user", question)
+        self._remember(sid, "assistant", answer)
+        return answer
 
     def reset(self, session_id: str) -> None:
         sid = session_id or "sess_default"
         with self._lock:
             engine = self._engines.pop(sid, None)
             self._last_part_reason.pop(sid, None)
+            self._turns.pop(sid, None)
             if sid in self._order:
                 self._order.remove(sid)
             if engine is not None:
