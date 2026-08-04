@@ -58,9 +58,9 @@ class Settings:
 
     chunk_size: int = 1000
     chunk_overlap: int = 150
-    bm25_top_k: int = 5
+    bm25_top_k: int = 12
     memory_token_limit: int = 3000
-    llm_temperature: float = 0.1
+    llm_temperature: float = 0.0
     context_window: int = 32768
     max_tokens: int = 2048
 

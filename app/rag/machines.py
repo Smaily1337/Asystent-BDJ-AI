@@ -49,12 +49,13 @@ _MACHINE_RULES: list[tuple[str, re.Pattern[str]]] = [
     ("bdj mini c plus", re.compile(r"\b(bdj\s*)?(mini(?:e)?|counter)\b", re.I)),
     ("bdj next", re.compile(r"\b(bdj\s*)?nexta?\b", re.I)),
     ("bdj extended", re.compile(r"\b(bdj\s*)?extended\b", re.I)),
-    ("bdj max", re.compile(r"\b(bdj\s*)?max\b", re.I)),
+    ("bdj max", re.compile(r"\b(bdj\s*)?max\b(?!\s*dual)", re.I)),
     ("bdj budget", re.compile(r"\b(bdj\s*)?budget\b(?!\s*(?:plus|easy))", re.I)),
 ]
 
 _CORRECTION_PATTERN = re.compile(
-    r"\b(?:mam|posiadam|jednak|chodzi\s+o|to\s+jest|chce\s+(?:do|dla)?|potrzebuj[eę]\s+(?:do|dla)?)"
+    r"\b(?:mam|posiadam|jednak|chodzi\s+o|to\s+jest|chce\s+(?:do|dla)?|potrzebuj[eę]\s+(?:do|dla)?|"
+    r"do\s+maszyny|dla\s+maszyny)"
     r"\s+(?:bdj\s+)?"
     r"(dragonair|max\s*dual(?:\s*head)?|multi\s*tube|hydro\s*(?:chain|belt)|"
     r"budget\s*plus\s*easy\s*set|budget\s*easy\s*set|budget\s*plus|budget|"
@@ -85,25 +86,56 @@ _TOKEN_TO_TAG = {
     "max": "bdj max",
 }
 
-_CHIP_TO_TAG = {
-    "bdj dragonair": "bdj dragonair",
-    "dragonair": "bdj dragonair",
-    "bdj max dual head": "bdj max dual head",
-    "max dual head": "bdj max dual head",
-    "hydro chain": "bdj hydro chain cable",
-    "bdj hydro chain cable": "bdj hydro chain cable",
-    "bdj hydro chain multi tube": "bdj hydro chain multi tube",
-    "bdj next": "bdj next",
-    "bdj mini": "bdj mini c plus",
-    "bdj mini c plus": "bdj mini c plus",
-    "bdj mini counter": "bdj mini c plus",
-    "mini c plus": "bdj mini c plus",
-    "bdj budget plus easy set": "bdj budget plus easy set",
-    "bdj budget easy set": "bdj budget easy set",
-    "bdj budget plus": "bdj budget plus",
-    "bdj budget": "bdj budget",
-    "bdj extended": "bdj extended",
-    "bdj max": "bdj max",
+def _build_chip_to_tag() -> dict[str, str]:
+    """Display name, short label, folder slug, underscore/space variants → canonical tag."""
+    out: dict[str, str] = {}
+
+    def _add(alias: str, tag: str) -> None:
+        key = re.sub(r"\s+", " ", (alias or "").lower().strip())
+        if not key:
+            return
+        out[key] = tag
+        out[key.replace(" ", "_")] = tag
+        out[key.replace("_", " ")] = tag
+        out[key.replace("-", " ")] = tag
+        out[key.replace("-", "_")] = tag
+
+    for slug, display in FOLDER_TO_TAG.items():
+        tag = display.lower()
+        _add(display, tag)
+        _add(slug, tag)
+        # bez prefiksu BDJ
+        short = re.sub(r"^bdj\s+", "", display, flags=re.I).strip()
+        _add(short, tag)
+        # slug ze spacjami (max dual head)
+        _add(slug.replace("_", " "), tag)
+
+    # Aliasy UI / legacy
+    extras = {
+        "dragonair": "bdj dragonair",
+        "max dual": "bdj max dual head",
+        "max dh": "bdj max dual head",
+        "hydro chain": "bdj hydro chain cable",
+        "hydro belt": "bdj hydro chain cable",
+        "bdj mini": "bdj mini c plus",
+        "bdj mini counter": "bdj mini c plus",
+        "mini counter": "bdj mini c plus",
+        "mini": "bdj mini c plus",
+        "minie": "bdj mini c plus",
+        "counter": "bdj mini c plus",
+    }
+    for alias, tag in extras.items():
+        _add(alias, tag)
+
+    return out
+
+
+_CHIP_TO_TAG = _build_chip_to_tag()
+
+# Child slug → parent slug(s) whose head-family parts are unioned into the child catalog.
+# Dual Head shares Extended's head assembly — config, not per-SKU hacks.
+MACHINE_BOM_INHERITS: dict[str, list[str]] = {
+    "max_dual_head": ["extended"],
 }
 
 
@@ -152,10 +184,23 @@ def _normalize_token(token: str) -> str | None:
 
 
 def _chip_to_tag(chip_machine: str | None) -> str | None:
+    """Akceptuje display name (BDJ MAX), slug (max_dual_head) i warianty spacji/underscore."""
     if not chip_machine:
         return None
-    key = re.sub(r"\s+", " ", chip_machine.lower().strip())
-    return _CHIP_TO_TAG.get(key)
+    raw = chip_machine.lower().strip()
+    if not raw:
+        return None
+    # normalizuj separatory
+    key = re.sub(r"[\s_\-]+", " ", raw).strip()
+    if key in _CHIP_TO_TAG:
+        return _CHIP_TO_TAG[key]
+    underscored = key.replace(" ", "_")
+    if underscored in _CHIP_TO_TAG:
+        return _CHIP_TO_TAG[underscored]
+    # już kanoniczny tag?
+    if key in TAG_TO_DISPLAY:
+        return key
+    return _CHIP_TO_TAG.get(raw)
 
 
 def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
@@ -179,6 +224,9 @@ def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
 def resolve_machine_from_query(query: str, chip_machine: str | None = None) -> str | None:
     """Wybiera właściwy model: korekta użytkownika > ostatnie wspomnienie > chip UI."""
     q = (query or "").strip()
+    # Literówki klientów
+    q = re.sub(r"\bbuget\b", "budget", q, flags=re.I)
+    q = re.sub(r"\bbudzet\b", "budget", q, flags=re.I)
     if not q:
         return _chip_to_tag(chip_machine)
 

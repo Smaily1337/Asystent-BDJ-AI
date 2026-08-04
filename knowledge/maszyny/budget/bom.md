@@ -1,15 +1,14 @@
 [MODEL MASZYNY: BDJ BUDGET]
-[TYP: BOM PRODUKCYJNY — źródło prawdy SKU dla BDJ BUDGET]
-[ŹRÓDŁO: BUDGET.XLS]
-[ZASADA: Podawaj wyłącznie kody SKU z tej listy. Nie wymyślaj części.]
+[BOM PRODUKCYJNY DLA BDJ BUDGET]
+[ŹRÓDŁO: BUDGET.XLS — import 1:1, bez cen]
+[ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
-# LISTA CZĘŚCI — BDJ BUDGET
+# BOM — BDJ BUDGET
 
-[MODEL MASZYNY: BDJ BUDGET / BUDGET]
-[LICZBA POZYCJI: 67]
+Pełna lista pozycji z pliku **BUDGET.XLS** (67 SKU).
 
-| LP | Kod SKU | Nazwa | Ilość |
-|:---|:---|:---|:---|
+| Lp | Kod SKU | Nazwa | Ilość |
+| :---: | :--- | :--- | :---: |
 | 1 | BUD-BLO-KOL | BUDGET - Blokada koła | 2 |
 | 2 | BUD-DZIEL-PIANKA | Pianka do skrzynki Budget dzielony | 1 |
 | 3 | BUD-GLO-DZI-CEO | BUDGET - Głowica dzielona - Ceownik | 1 |
@@ -41,7 +40,7 @@
 | 29 | BUD-WAL-NAP | BUDGET - Wałek do napedu | 1 |
 | 30 | BUD-WAL-SWO | BUDGET - Wałek swobodny | 1 |
 | 31 | KLU-IMB-DLU-2.5MM | Klucz imbusowy długi 2,5 mm | 1 |
-| 32 | KLU-IMB-DLU-4MM | Klucz imbusowy długi  4mm | 1 |
+| 32 | KLU-IMB-DLU-4MM | Klucz imbusowy długi 4mm | 1 |
 | 33 | KOL-MOS-1/4GWGZ | Kolano gwintowane 90°, G1/4(GW)-R1/4(GZ), 16 bar, mosiądz niklowany | 1 |
 | 34 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 |
 | 35 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 |

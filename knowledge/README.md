@@ -1,35 +1,47 @@
-# Baza wiedzy BDJ AI (jedna struktura)
+# Baza wiedzy — maszyny BDJ
 
+Katalogi części pochodzą **1:1 z plików Excel BOM** (bez cen), z opcjonalnym dziedziczeniem rodzin głowicy.
+
+## Regeneracja
+
+```bash
+python3 scripts/import_bom_from_excel.py ~/Downloads
+# albo z kopii w repo:
+python3 scripts/import_bom_from_excel.py knowledge/source_excel
 ```
-knowledge/
-  maszyny/<model>/
-    czesci.md   # katalog części (SKU) — główne źródło dla chatbota, pogrupowane tematycznie
-    bom.md      # pełna lista produkcyjna z Excel (źródło prawdy)
-  wspolne/      # specyfikacje, FAQ, cenniki, słowniczek
-  karty_produktow/PL/  # PDF
-  data/         # logi JSON (nie commitować treści klientów)
-```
 
-## Maszyny (źródło: Excel Comarch / checklisty)
+Skrypt:
+1. usuwa stare `knowledge/maszyny/*`
+2. czyta XLS z podanego folderu (fallback: `knowledge/source_excel/`)
+3. stosuje dziedziczenie głowicy (`BOM_INHERITS`, np. Dual Head ← Extended head-family)
+4. zapisuje `bom.md` + `czesci.md` per maszyna
+5. kopiuje źródła do `knowledge/source_excel/`
 
-| Folder | Model | Plik źródłowy |
+Runtime (`app/rag/catalog.py`) ponownie scala `MACHINE_BOM_INHERITS` przy ładowaniu katalogu.
+
+DragonAir: brak Excela → stub bez SKU (zakaz podawania kodów).
+
+## Dziedziczenie BOM (głowica)
+
+| Dziecko | Rodzic | Co jest mergowane |
 |---|---|---|
-| `budget` | BDJ BUDGET | BUDGET.XLS |
-| `budget_easy_set` | BDJ BUDGET EASY SET | BUDGET EASY SET.XLS |
-| `budget_plus` | BDJ BUDGET PLUS | BUDGET PLUS.XLS |
-| `budget_plus_easy_set` | BDJ BUDGET PLUS EASY SET | BUDGET PLUS EASY SET.XLS |
-| `mini_c_plus` | BDJ MINI C PLUS | MINI C PLUS.XLS |
-| `next` | BDJ NEXT | NEXT.XLS |
-| `extended` | BDJ EXTENDED | EXTENDED.XLS |
-| `max` | BDJ MAX | MAX.XLS |
-| `max_dual_head` | BDJ MAX DUAL HEAD | MAX DH.XLS |
-| `hydro_chain_cable` | BDJ HYDRO CHAIN CABLE | HYDRO BELT CABLE.XLS |
-| `hydro_chain_multi_tube` | BDJ HYDRO CHAIN MULTI TUBE | HYDROCHAIN MULTITUBE.XLS |
-| `dragonair` | BDJ DRAGONAIR | (bez nowego Excela) |
+| `max_dual_head` | `extended` | rodzina głowicy (UM-/UGD/UK-/GLO-/tuleje…) |
 
-## Zasady dla AI
+Konfiguracja: `MACHINE_BOM_INHERITS` w `app/rag/machines.py` (+ mirror w skrypcie importu).
 
-1. Jedna maszyna = jeden folder.
-2. **czesci.md wygrywa** przy doborze części eksploatacyjnych.
-3. Wolno podawać **tylko SKU obecne w tabelach** danej maszyny — bez zmyślania kodów.
-4. Ceny z Exceli BOM **nie są** kopiowane do katalogu części (cenniki osobno w `wspolne/cenniki/`).
+## Maszyny
+
+| Folder | Źródło Excel |
+|---|---|
+| budget | BUDGET.XLS |
+| budget_easy_set | BUDGET EASY SET.XLS |
+| budget_plus | BUDGET PLUS.XLS |
+| budget_plus_easy_set | BUDGET PLUS EASY SET.XLS |
+| mini_c_plus | MINI C PLUS.XLS |
+| next | NEXT.XLS |
+| extended | EXTENDED.XLS |
+| max | MAX.XLS |
+| max_dual_head | MAX DH.XLS ∪ Extended head-family |
+| hydro_chain_cable | HYDRO BELT CABLE.XLS |
+| hydro_chain_multi_tube | HYDROCHAIN MULTITUBE.XLS |
+| dragonair | (brak XLS) |

@@ -1,15 +1,14 @@
 [MODEL MASZYNY: BDJ BUDGET PLUS EASY SET]
-[TYP: BOM PRODUKCYJNY — źródło prawdy SKU dla BDJ BUDGET PLUS EASY SET]
-[ŹRÓDŁO: BUDGET PLUS EASY SET.XLS]
-[ZASADA: Podawaj wyłącznie kody SKU z tej listy. Nie wymyślaj części.]
+[BOM PRODUKCYJNY DLA BDJ BUDGET PLUS EASY SET]
+[ŹRÓDŁO: BUDGET PLUS EASY SET.XLS — import 1:1, bez cen]
+[ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
-# LISTA CZĘŚCI — BDJ BUDGET PLUS EASY SET
+# BOM — BDJ BUDGET PLUS EASY SET
 
-[MODEL MASZYNY: BDJ BUDGET PLUS EASY SET / BUDGET PLUS EASY SET]
-[LICZBA POZYCJI: 69]
+Pełna lista pozycji z pliku **BUDGET PLUS EASY SET.XLS** (69 SKU).
 
-| LP | Kod SKU | Nazwa | Ilość |
-|:---|:---|:---|:---|
+| Lp | Kod SKU | Nazwa | Ilość |
+| :---: | :--- | :--- | :---: |
 | 1 | BUD-BLO-KOL | BUDGET - Blokada koła | 2 |
 | 2 | BUD-DZIEL-PIANKA | Pianka do skrzynki Budget dzielony | 1 |
 | 3 | BUD-GLO-DZI-CEO | BUDGET - Głowica dzielona - Ceownik | 1 |
@@ -42,7 +41,7 @@
 | 30 | BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 |
 | 31 | BUD-WAL-SWO | BUDGET - Wałek swobodny | 1 |
 | 32 | KLU-IMB-DLU-2.5MM | Klucz imbusowy typu "L" długi 2,5 mm | 1 |
-| 33 | KLU-IMB-DLU-4MM | Klucz imbusowy długi  4mm | 1 |
+| 33 | KLU-IMB-DLU-4MM | Klucz imbusowy długi 4mm | 1 |
 | 34 | KOL-MOS-1/4GWGZ | Kolano gwintowane 90°, G1/4(GW)-R1/4(GZ), 16 bar, mosiądz niklowany | 1 |
 | 35 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 |
 | 36 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 |
@@ -74,7 +73,7 @@
 | 62 | UGD-D22X5-9.5 | Uszczelka D22x5 fi 9,5 do głowicy dzielonej | 1 |
 | 63 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 |
 | 64 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 |
-| 65 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget -  Bosch GSR 12V-15FC | 1 |
+| 65 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 |
 | 66 | ZAS-MIK-RUR-10 | Zaślepka mikrorurek 10mm | 1 |
 | 67 | ZAS-MIK-RUR-5 | Zaślepka mikrorurek 5mm | 1 |
 | 68 | ZAS-MIK-RUR-7 | Zaślepka mikroruek 7mm | 1 |

@@ -551,25 +551,29 @@
             font-size: inherit;
         }
         .bot-notice {
-            display: flex;
-            gap: 10px;
-            align-items: flex-start;
-            padding: 12px 14px;
+            display: block;
+            position: relative;
+            padding: 12px 14px 12px 44px;
             border-radius: 12px;
             margin: 0 0 14px;
             font-size: 0.9rem;
             line-height: 1.55;
         }
         .bot-notice::before {
-            flex-shrink: 0;
+            content: "";
+            position: absolute;
+            left: 14px;
+            top: 13px;
             width: 20px;
             height: 20px;
             border-radius: 6px;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.75rem;
             font-weight: 800;
+            line-height: 20px;
+            text-align: center;
         }
         .bot-notice-info {
             background: #eff6ff;
@@ -797,29 +801,26 @@
         /* --- FOOTER INPUT --- */
         .widget-footer { 
             padding: 16px 20px;
-            background: rgba(255, 255, 255, 0.38);
-            backdrop-filter: var(--blur-soft);
-            -webkit-backdrop-filter: var(--blur-soft);
-            border-top: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
+            background: #ffffff;
+            border-top: 1px solid rgba(226, 232, 240, 0.95);
+            box-shadow: 0 -8px 24px rgba(15, 23, 42, 0.04);
             flex-shrink: 0; min-width: 0;
+            z-index: 2;
         }
         .input-group { 
             display: flex; align-items: flex-end;
-            background: rgba(255, 255, 255, 0.48);
-            border: 1px solid rgba(255, 255, 255, 0.65);
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
             border-radius: 22px;
             padding: 10px 14px 10px 18px;
             transition: all 0.22s ease;
             min-width: 0;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06), inset 0 1px 0 rgba(255,255,255,0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.9);
         }
         .input-group:focus-within {
-            background: rgba(255, 255, 255, 0.72);
+            background: #ffffff;
             border-color: rgba(96, 165, 250, 0.7);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12), 0 10px 28px rgba(37, 99, 235, 0.08), inset 0 1px 0 rgba(255,255,255,0.9);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
         }
         #chat-input {
             flex: 1 1 auto; min-width: 0; width: 100%;
@@ -1147,24 +1148,46 @@ const BDJChatApp = (() => {
         if (!state.messages || state.messages.length === 0) {
             state.messages = [welcomeMessage];
         }
+        // Stary clear zostawiał pendingMachine w localStorage przy pustym czacie —
+        // wtedy każde wklejenie dostało „Mam maszynę NEXT” mimo braku wyboru.
+        const hasUserMsg = (state.messages || []).some((m) => m && m.role === 'user');
+        if (!hasUserMsg) {
+            state.pendingMachine = null;
+        }
+        if (!state.pendingRequestType) {
+            state.pendingRequestType = 'oferta';
+        }
+        // Nadpisz popsute localStorage (stary clear zostawiał maszynę przy pustym czacie)
+        try { localStorage.setItem('bdj_chat_state', JSON.stringify(state)); } catch (e) {}
     };
 
     const resetSession = async () => {
-        if(confirm('Czy na pewno chcesz wyczyścić historię rozmowy i rozpocząć nową konwersację?')) {
-            localStorage.removeItem('bdj_chat_state');
-            state.sessionId = 'sess_' + Math.random().toString(36).substring(2, 10);
-            state.messages = [welcomeMessage];
-            DOM.offerBar.style.display = 'none';
-            renderHistory();
-            saveState();
-            try {
+        if (!confirm('Czy na pewno chcesz wyczyścić historię rozmowy i rozpocząć nową konwersację?')) {
+            return;
+        }
+        const oldSessionId = state.sessionId;
+        localStorage.removeItem('bdj_chat_state');
+        state = {
+            messages: [welcomeMessage],
+            pendingMachine: null,
+            pendingRequestType: 'oferta',
+            sessionId: 'sess_' + Math.random().toString(36).substring(2, 10)
+        };
+        DOM.offerBar.style.display = 'none';
+        DOM.input.value = '';
+        resizeInput();
+        renderHistory();
+        saveState();
+        try {
+            // Reset starej sesji na backendzie (nie nowej — ta jest pusta)
+            if (oldSessionId) {
                 await fetch('/reset', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ session_id: state.sessionId })
+                    body: JSON.stringify({ session_id: oldSessionId })
                 });
-            } catch(e) {}
-        }
+            }
+        } catch (e) {}
     };
 
     const renderHistory = () => {
@@ -1193,8 +1216,8 @@ const BDJChatApp = (() => {
             { id: 'BDJ Budget Plus', label: 'Budget Plus' },
             { id: 'BDJ Budget Plus Easy Set', label: 'Budget Plus Easy Set' },
             { id: 'BDJ Extended', label: 'Extended' },
-            { id: 'BDJ Max', label: 'Max' },
             { id: 'BDJ Max Dual Head', label: 'Max Dual Head' },
+            { id: 'BDJ Max', label: 'Max' },
             { id: 'Hydro Chain', label: 'Hydro Chain' },
         ];
         const chips = models.map(m =>
@@ -1213,6 +1236,7 @@ const BDJChatApp = (() => {
                 const model = btn.getAttribute('data-model');
                 state.pendingMachine = model;
                 saveState();
+                // Podpowiedź w polu — user może ją skasować; nie mutujemy potem w tle.
                 DOM.input.value = `Mam maszynę ${model}. Potrzebuję dobrać część: `;
                 resizeInput();
                 DOM.input.focus();
@@ -1465,6 +1489,103 @@ const BDJChatApp = (() => {
         marked.setOptions({ breaks: true, gfm: true });
     }
 
+    /** Upewnij się, że GFM-tabele mają pustą linię przed sobą i LF (nie CRLF / dosłowne \\n). */
+    const normalizeMarkdownTables = (markdownText) => {
+        let md = String(markdownText || '');
+        // Czasem JSON/proxy zostawia dosłowne "\n" zamiast prawdziwych linebreaków
+        if (md.includes('\\n') && !md.includes('\n')) {
+            md = md.replace(/\\n/g, '\n');
+        }
+        md = md.replace(/\r\n?/g, '\n');
+        // Pusta linia przed tabelą (wymagane przez część parserów przy breaks:true)
+        md = md.replace(/([^\n|])\n(\|[^\n]+\|)\n(\|[\s:|-]+\|)/g, '$1\n\n$2\n$3');
+        return md;
+    };
+
+    /** Parsuj surowy blok | a | b | gdy marked zostawił go w <p>. */
+    const parsePipeTableBlock = (text) => {
+        const lines = String(text || '')
+            .split('\n')
+            .map((l) => l.trim())
+            .filter(Boolean);
+        if (lines.length < 2) return null;
+        const isRow = (l) => /^\|(.+)\|$/.test(l) || (/\|/.test(l) && l.split('|').length >= 3);
+        const isSep = (l) => /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(l);
+        let start = lines.findIndex((l) => isRow(l) && l.includes('|'));
+        if (start < 0) return null;
+        // znajdź separator w sąsiedztwie
+        let sepIdx = -1;
+        for (let i = start; i < Math.min(start + 3, lines.length); i++) {
+            if (isSep(lines[i])) {
+                sepIdx = i;
+                break;
+            }
+        }
+        if (sepIdx < 0) return null;
+        const headerLine = sepIdx > start ? lines[sepIdx - 1] : lines[start];
+        const splitCells = (line) => {
+            let s = line.trim();
+            if (s.startsWith('|')) s = s.slice(1);
+            if (s.endsWith('|')) s = s.slice(0, -1);
+            return s.split('|').map((c) => c.trim());
+        };
+        const headers = splitCells(headerLine);
+        if (headers.length < 2) return null;
+        const rows = [];
+        for (let i = sepIdx + 1; i < lines.length; i++) {
+            if (!isRow(lines[i]) || isSep(lines[i])) break;
+            const cells = splitCells(lines[i]);
+            if (cells.every((c) => !c)) continue;
+            while (cells.length < headers.length) cells.push('');
+            rows.push(cells.slice(0, headers.length));
+        }
+        if (!rows.length) return null;
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const hr = document.createElement('tr');
+        headers.forEach((h) => {
+            const th = document.createElement('th');
+            th.textContent = h;
+            hr.appendChild(th);
+        });
+        thead.appendChild(hr);
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        rows.forEach((cells) => {
+            const tr = document.createElement('tr');
+            cells.forEach((c) => {
+                const td = document.createElement('td');
+                td.textContent = c;
+                tr.appendChild(td);
+            });
+            tbody.appendChild(tr);
+        });
+        table.appendChild(tbody);
+        return table;
+    };
+
+    const rescuePipeTables = (root) => {
+        const candidates = Array.from(root.querySelectorAll('p, pre, code'));
+        candidates.forEach((el) => {
+            const text = el.textContent || '';
+            if (!text.includes('|') || !/\|[\s:|-]+\|/.test(text)) return;
+            // Gdy marked wrzucił table-as-paragraph z <br>, znormalizuj
+            const normalized = text.replace(/\u00a0/g, ' ');
+            const table = parsePipeTableBlock(normalized);
+            if (!table) return;
+            // Zachowaj tekst przed tabelą (intro w tym samym <p>)
+            const before = normalized.split('\n').filter((l) => l.trim() && !l.includes('|'));
+            const frag = document.createDocumentFragment();
+            if (before.length) {
+                const p = document.createElement('p');
+                p.textContent = before.join(' ').trim();
+                frag.appendChild(p);
+            }
+            frag.appendChild(table);
+            el.replaceWith(frag);
+        });
+    };
+
     const buildHandoffCard = (machine) => {
         const m = (machine || 'Zapytanie').trim();
         return `<div class="handoff-card">
@@ -1499,13 +1620,20 @@ const BDJChatApp = (() => {
 
     const processBotResponse = (markdownText) => {
         const { md, quoteMachine, requestMachine } = extractResponseTags(markdownText);
-        const rawHTML = marked.parse(md);
+        const normalized = normalizeMarkdownTables(md);
+        const rawHTML = (window.marked && typeof marked.parse === 'function')
+            ? marked.parse(normalized)
+            : normalized.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>');
         const parser = new DOMParser();
-        const doc = parser.parseFromString(rawHTML, 'text/html');
+        const doc = parser.parseFromString(`<div id="md-root">${rawHTML}</div>`, 'text/html');
         const wrapper = document.createElement('div');
         wrapper.className = 'bot-md';
 
-        Array.from(doc.body.childNodes).forEach((node) => wrapper.appendChild(node.cloneNode(true)));
+        const parsedRoot = doc.getElementById('md-root') || doc.body;
+        Array.from(parsedRoot.childNodes).forEach((node) => wrapper.appendChild(node.cloneNode(true)));
+
+        // Gdy GFM nie złapał tabeli — odbuduj z surowych pipe'ów
+        rescuePipeTables(wrapper);
 
         const apologyRe = /przepraszam|nie mam przypisanej|nie znalaz/i;
         const apologyEl = Array.from(wrapper.querySelectorAll('p')).find((p) =>
@@ -1526,6 +1654,15 @@ const BDJChatApp = (() => {
                 ? 'Najbliższe dostępne części'
                 : 'Proponowane części';
             table.replaceWith(buildPartsCardList(table, title));
+        });
+
+        // Tabele informacyjne (bez konwersji na karty) — owijamy w scroll wrapper
+        wrapper.querySelectorAll('table').forEach((table) => {
+            if (table.closest('.table-wrapper, .parts-list-wrapper')) return;
+            const wrap = document.createElement('div');
+            wrap.className = 'table-wrapper';
+            table.replaceWith(wrap);
+            wrap.appendChild(table);
         });
 
         enhanceBotMarkdown(wrapper);
@@ -1550,64 +1687,60 @@ const BDJChatApp = (() => {
     };
 
     const resolveMachineFromText = (text) => {
-        const correction = text.match(
-            /\b(?:mam|chce\s+do|do)\s+(?:bdj\s+)?(extended|nexta?|mini\s*c\s*\+?\s*plus|mini|budget\s+plus\s+easy(?:\s*set)?|budget\s+easy(?:\s*set)?|budget\s+plus|budget|max(?:\s*dual)?|hydro(?:\s*(?:chain|belt))?|dragonair)\b/i
-        );
-        if (correction) {
-            const token = correction[1].toLowerCase();
-            if (token.includes('extended')) return 'BDJ Extended';
-            if (token.startsWith('next')) return 'BDJ Next';
-            if (token.includes('mini c')) return 'BDJ Mini C Plus';
-            if (token === 'mini' || token === 'counter') return 'BDJ Mini C Plus';
-            if (token.includes('budget plus easy')) return 'BDJ Budget Plus Easy Set';
-            if (token.includes('budget easy')) return 'BDJ Budget Easy Set';
-            if (token.includes('budget plus')) return 'BDJ Budget Plus';
-            if (token === 'budget') return 'BDJ Budget';
-            if (token.includes('max dual')) return 'BDJ Max Dual Head';
-            if (token === 'max') return 'BDJ Max';
-            if (token.includes('hydro')) return 'Hydro Chain';
-            if (token.includes('dragonair')) return 'BDJ Dragonair';
-        }
-        const ordered = [
-            ['BDJ Max Dual Head', /\bmax\s*dual\b/i],
-            ['BDJ Budget Plus Easy Set', /\bbudget\s+plus\s+easy\b/i],
-            ['BDJ Budget Easy Set', /\bbudget\s+easy\b/i],
-            ['BDJ Budget Plus', /\bbudget\s+plus\b/i],
-            ['BDJ Mini C Plus', /\bmini\s*c\s*\+?\s*plus\b|\bmini(?:e)?\b|\bcounter\b/i],
-            ['BDJ Next', /\bnexta?\b/i],
-            ['BDJ Max', /\bmax\b/i],
-            ['BDJ Budget', /\bbudget\b/i],
-            ['BDJ Extended', /\bextended\b/i],
-            ['BDJ Dragonair', /\bdragonair\b/i],
-            ['Hydro Chain', /\bhydro\s*(?:chain|belt)\b/i],
+        const normalized = (text || '')
+            .replace(/\bbuget\b/gi, 'budget')
+            .replace(/\bbudzet\b/gi, 'budget');
+
+        // Ostatnia wzmianka wygrywa (np. „Mam NEXT… do budget plus” → Budget Plus)
+        const patterns = [
+            // Dłuższe / bardziej specyficzne wzorce pierwsze; Max ≠ Max Dual Head
+            ['BDJ Max Dual Head', /\bmax\s*dual(?:\s*head)?\b/gi],
+            ['BDJ Budget Plus Easy Set', /\bbudget\s+plus\s+easy(?:\s*set)?\b/gi],
+            ['BDJ Budget Easy Set', /\bbudget\s+easy(?:\s*set)?\b/gi],
+            ['BDJ Budget Plus', /\bbudget\s+plus\b/gi],
+            ['BDJ Mini C Plus', /\bmini\s*c\s*\+?\s*plus\b|\bminie\b|\bmini(?:\s*counter)?\b|\bcounter\b/gi],
+            ['BDJ Next', /\bnexta?\b/gi],
+            ['BDJ Max', /\bmax\b(?!\s*dual)/gi],
+            ['BDJ Budget', /\bbudget\b(?!\s*(?:plus|easy))/gi],
+            ['BDJ Extended', /\bextended\b/gi],
+            ['BDJ Dragonair', /\bdragonair\b/gi],
+            ['Hydro Chain', /\bhydro\s*(?:chain|belt)\b/gi],
         ];
-        for (const [name, pattern] of ordered) {
-            if (pattern.test(text)) return name;
+
+        let last = null;
+        let lastIndex = -1;
+        let lastLen = 0;
+        for (const [name, pattern] of patterns) {
+            pattern.lastIndex = 0;
+            let m;
+            while ((m = pattern.exec(normalized)) !== null) {
+                const len = m[0].length;
+                // Przy tym samym starcie wygrywa dłuższy match (Max Dual Head > Max)
+                if (m.index > lastIndex || (m.index === lastIndex && len > lastLen)) {
+                    lastIndex = m.index;
+                    lastLen = len;
+                    last = name;
+                }
+            }
         }
-        return null;
+        return last;
     };
 
     const sendMessage = async () => {
-        let text = DOM.input.value.trim();
+        const text = DOM.input.value.trim();
         if (!text) return;
 
-        // Skrót modelu: jeśli klient wybrał chip i dopisał tylko część — doklej model
-        if (state.pendingMachine) {
-            const m = state.pendingMachine;
-            const hasModel = new RegExp(m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(text)
-                || /\b(bdj\s+)?(nexta?|mini|budget|max|extended|hydro|dragonair)\b/i.test(text);
-            if (!hasModel) {
-                text = `Mam maszynę ${m}. ${text}`;
-            } else if (!/mam maszynę/i.test(text) && !new RegExp(m.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i').test(text)) {
-                text = `Mam maszynę ${m}. ${text}`;
-            }
+        // NIGDY nie doklejaj „Mam maszynę …” do treści wiadomości.
+        // Maszyna z chipa idzie tylko w polu API `machine`; treść = to, co user wpisał/wkleił.
+        const fromText = resolveMachineFromText(text);
+        if (fromText) {
+            state.pendingMachine = fromText;
         }
+        // Jeśli w tekście jest inna maszyna niż chip — tekst wygrywa (już ustawione).
+        // Jeśli tekst nie ma maszyny, zostaje pendingMachine z chipa (jeśli wybrany).
+        saveState();
 
-        const resolvedModel = resolveMachineFromText(text);
-        if (resolvedModel) {
-            state.pendingMachine = resolvedModel;
-            saveState();
-        }
+        const machineForApi = fromText || state.pendingMachine || null;
 
         DOM.input.value = '';
         DOM.input.disabled = true;
@@ -1627,7 +1760,7 @@ const BDJChatApp = (() => {
                 body: JSON.stringify({
                     question: text,
                     session_id: state.sessionId,
-                    machine: state.pendingMachine || null
+                    machine: machineForApi
                 })
             });
             const data = await res.json();

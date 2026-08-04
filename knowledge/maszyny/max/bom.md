@@ -1,15 +1,14 @@
 [MODEL MASZYNY: BDJ MAX]
-[TYP: BOM PRODUKCYJNY — źródło prawdy SKU dla BDJ MAX]
-[ŹRÓDŁO: MAX.XLS]
-[ZASADA: Podawaj wyłącznie kody SKU z tej listy. Nie wymyślaj części.]
+[BOM PRODUKCYJNY DLA BDJ MAX]
+[ŹRÓDŁO: MAX.XLS — import 1:1, bez cen]
+[ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
-# LISTA CZĘŚCI — BDJ MAX
+# BOM — BDJ MAX
 
-[MODEL MASZYNY: BDJ MAX / MAX]
-[LICZBA POZYCJI: 124]
+Pełna lista pozycji z pliku **MAX.XLS** (126 SKU).
 
-| LP | Kod SKU | Nazwa | Ilość |
-|:---|:---|:---|:---|
+| Lp | Kod SKU | Nazwa | Ilość |
+| :---: | :--- | :--- | :---: |
 | 1 | ELE-BLA-210-1 | Pomiar odległości - mocowanie licznika mechanicznego v1.2 | 1 |
 | 2 | ELE-BLA-210-2 | Pomiar odległości - podstawa Pneumatic i MINI v1.1 | 1 |
 | 3 | GLO-DUZ-KOR-DOL-V3 | Głowica DUŻA - Korpus dolny v3.3 | 1 |
@@ -61,76 +60,78 @@
 | 49 | PNE-OBE-SIL | PNEUMATIC - Obejma silnika v1.0 | 2 |
 | 50 | PNE-OSL-POL | PNEUMATIC - Osłona poliwęglanowa v1.2 | 1 |
 | 51 | PNE-PAS-DOL | Pas z nakładką 5mm czerwony z frezem centralnym do PNEUMATIC | 1 |
-| 52 | PNE-PAS-GOR | Pas z nakładką 5mm czerwony płaski do PNEUMATIC | 1 |
-| 53 | PNE-PLY-DOL-POD-V2 | PNEUMATIC - Płyta dolna podajnika V2 | 1 |
-| 54 | PNE-PLY-GOR-POD-V2 | PNEUMATIC - Płyta górna podajnika V2 | 1 |
-| 55 | PNE-PLY-GOR-RAM | PNEUMATIC - Płyta górna ramy v1.0 | 1 |
-| 56 | PNE-POD-WDM | PNEUMATIC - Podstawa wdmuchiwarki  / Grubość 3.0mm / Bl.nierdzewna / Szlif-TAK / Gięcie-TAK / Folia-TAK | 1 |
-| 57 | PNE-RAM-ALU-USL-FRE | PNEUMATIC - Rama aluminiowa v1.1 frezowana - składana | 1 |
-| 58 | PNE-SKRZYNKA | Skrzynka 62x35x38h cm skl. 9mm, niebieska, PCV, z grawerem | 1 |
-| 59 | PNE-SRU-POD-POD-LEW | Pneumatic - Śruba podnoszenia podajnika lewa v1.0 | 1 |
-| 60 | PNE-ZAS-KOL-DUZ | PNEUMATIC - Zaślepka koła dużego v1.0  / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 2 |
-| 61 | POD-MIE-1/4 | Podkładka miedziana 13,5x19x1,5 1/4" | 8 |
-| 62 | POJ-NA-OLEJ | Pojemnik na olej 250ml | 1 |
-| 63 | POK-VCT-50B-M10-C5 | Pokrętło VCT.50 B-M10-C5 | 1 |
-| 64 | PRE-GWI-M12-343 | Pręt gwintowany M12x343-4.6 oc DIN 975 (na rączki) | 1 |
-| 65 | PRO-KAB-BLA-UCH | PROWADZENIE KABLA - Blaszka uchwytu v1.0  / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 4 |
-| 66 | PRO-KAB-TUL-DWU-MAX | PROWADZENIE KABLA - Tuleja dwudzielna połówka v1.0 (16) | 4 |
-| 67 | PRO-KAB-UCH-TUL-POD-PLY | PROWADZENIE KABLA - Uchwyt tulejki podst - uchylna do plyty | 1 |
-| 68 | PRO-KAB-UCH-TUL-POD-POD | PROWADZENIE KABLA - Uchwyt tulejki podst - uchylna do podstawy | 1 |
-| 69 | PRO-KAB-UCH-TUL-ZAC | PROWADZENIE KABLA - Uchwyt tulejki zacisk | 2 |
-| 70 | PRZ-MOS-NIK-1/4-13MM | Przedłużka gwintowa, G1/4-13mm, 16 bar, mosiądz niklowany | 2 |
-| 71 | PRZ-PNE-PU-10X6,5 | WĄŻ 10/6,5 PU | 1.5 |
-| 72 | PRZ-TEF-FHL-1SSB-C01C01-10X208 | Przewód teflon.gł.FHL 1SSB C01C01 (22)10x208 | 1 |
-| 73 | PRZ-TEF-FHL-1SSB-C01C01-10X267 K-90 | Przewód teflon.gł.FHL 1SSB C01C01 (22)10x267 K-90 | 1 |
-| 74 | PRZ-TEF-FHL-1SSB-C01C01-10X780 K-90 | Przewód teflon.gł.FHL 1SSB C01C01 (22)10x780 K-90 (WĄŻ ŁĄCZĄCY ZPP Z DUŻĄ GŁOWICĄ) (Przewód teflonowy) | 1 |
-| 75 | RAC-DO-WDM-BLA-BOC | RĄCZKA DO WDMUCHIWARKI - Blacha boczna  / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 2 |
-| 76 | RED-1/2-GZ-1/4-GW-MOS-NIK | Złączka redukcyjna, G1/2(GZ)-G1/4(GW), 16 bar, mosiądz niklowany | 3 |
-| 77 | SIL-PNE-REW-OBER-LFB2R | Silnik pneumatyczny rewersyjny OBER 160W (LFB2R) | 2 |
-| 78 | SKR-PRO-CAL-N12S | Skrzynka na akcesoria do BDJ mini narzędziowa warsztatowa CALIBER N12S | 1 |
-| 79 | SPR-NAC-Z17 | Sprężyna naciskowa nieszlifowana d 0,9 x Dz 14,9 x Lo163 x z17 | 1 |
-| 80 | SRU-DO-OCZ-1/4 | Śruba do oczek G1/4" 1600-00-04 | 4 |
-| 81 | SRU-IMB-A2-DIN912-M3X40 | Śruba imbusowa A2 DIN912 M3x40 | 1 |
-| 82 | SRU-NIE-OCZ-A2-DIN444-M8X90 | Śruba oczkowa DIN444 A2 M8x90 | 6 |
-| 83 | SRU-PAS-M10-35-OCY | Śruba pasowana M10/12x35, kl. 12.9 ISO 7379 - ocynkowana | 2 |
-| 84 | SRU-PAS-M5-20-OCY | Śruba pasowana M5/6x20, kl. 12.9 ISO 7379 - ocynkowana | 2 |
-| 85 | SRU-PAS-M5-60-OCY | Śruba pasowana M5/6x60, kl. 12.9 ISO 7379 - ocynkowana | 2 |
-| 86 | SRU-PAS-M8-35-OCY | Śruba pasowana M8/10x35, kl. 12.9 ISO 7379 - ocynkowana | 8 |
-| 87 | SZY-NW7.2-1/4-GZ | Szybkozłączka NW7,2 G1/4" GZ | 3 |
-| 88 | TLU-SIL-PNE-1/4-GZ | Tłumik silnika pneumatycznego 1/4"GZ | 2 |
-| 89 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 |
-| 90 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 |
-| 91 | TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 |
-| 92 | TUL-DYS-6X3,2X30 | Tulejka dystansowa mosiądz niklowany 6x3,2x30 DR316/3.2X30 | 1 |
-| 93 | TUL-SLI-IGUS-A500SM-0608-08 | Tuleja ślizgowa 6x8x8 mm IGUS A500SM-0608-08 | 6 |
-| 94 | UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 |
-| 95 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 |
-| 96 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 2 |
-| 97 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 2 |
-| 98 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 2 |
-| 99 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 2 |
-| 100 | UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 |
-| 101 | UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 |
-| 102 | UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 |
-| 103 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 2 |
-| 104 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 2 |
-| 105 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 2 |
-| 106 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 |
-| 107 | WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 |
-| 108 | WAZ-10M-HIL-1,5 | WĄŻ POWIETRZNY DO WDMUCHIWARKI 1,5 CAL Przewód Hilcoflex DN38 Lc=10m; 2x GW Rd55x1/6" + adaptor GZ Rd55x1/6" / GZ1.1/2" BSP | 1 |
-| 109 | WKR-PZ1X75 | Wkrętak krzyżakowy PZ1x75 mm 60933 VOREL | 1 |
-| 110 | ZAW-CAM-454-900 | Zawór ręczny bistabilny, sterowanie przód, tył | 1 |
-| 111 | ZAW-CFG.30-40SH-6 | ZAWIAS SZYBKI PLEXIGLAS CFG.30/40SH-6 | 2 |
-| 112 | ZAW-KUL-1,5GW | Zawór kulowy, mosiądz, Eco-Line 1 1/2" GZ/GW, PN25 | 1 |
-| 113 | ZAW-KUL-1/2-GWGZ | Zawór kulowy, mosiądz, Eco-Line, R/Rp1/2 (GZ/GW) | 1 |
-| 114 | ZAW-KUL-MIN-1/2-GWGZ | Zawór kulowy mini, mosiądz G1/2(GW/GZ) | 1 |
-| 115 | ZES-REG-WYS-WSP-12G-LEW | Zespół regulacji wysokości - wspornik 12G v1.0 z lewym gwintem | 1 |
-| 116 | ZES-REG-WYS-WSP-12L | Zespół regulacji wysokości - wspornik 12L v1.0 | 1 |
-| 117 | ZES-REG-WYS-WSP-12U | Zespół regulacji wysokości - wspornik 12U v1.0 | 4 |
-| 118 | ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 |
-| 119 | ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 |
-| 120 | ZLA-KLO-1/2-GZ | Złącze kłowe G1/2" GZ, rozstaw 42 | 1 |
-| 121 | ZPP-CAM-MC1-VM | Zestaw montażowy | 2 |
-| 122 | ZPP-CAM-MC104-D00 | Filtr i reduktor ciśnienia | 1 |
-| 123 | ZPP-CAM-MC104-L00 | Smarownica G 1/4 seria MC | 1 |
-| 124 | ZPP-CAM-MC104-V01 | Zawór typu 3/2 G1/4" seria MC (start-stop) | 1 |
+| 52 | Feeder belt 5mm red with a groove for PNEUMATIC |  | 1 |
+| 53 | PNE-PAS-GOR | Pas z nakładką 5mm czerwony płaski do PNEUMATIC | 1 |
+| 54 | Feeder belt 5mm flat red for PNEUMATIC |  | 1 |
+| 55 | PNE-PLY-DOL-POD-V2 | PNEUMATIC - Płyta dolna podajnika V2 | 1 |
+| 56 | PNE-PLY-GOR-POD-V2 | PNEUMATIC - Płyta górna podajnika V2 | 1 |
+| 57 | PNE-PLY-GOR-RAM | PNEUMATIC - Płyta górna ramy v1.0 | 1 |
+| 58 | PNE-POD-WDM | PNEUMATIC - Podstawa wdmuchiwarki / Grubość 3.0mm / Bl.nierdzewna / Szlif-TAK / Gięcie-TAK / Folia-TAK | 1 |
+| 59 | PNE-RAM-ALU-USL-FRE | PNEUMATIC - Rama aluminiowa v1.1 frezowana - składana | 1 |
+| 60 | PNE-SKRZYNKA | Skrzynka 62x35x38h cm skl. 9mm, niebieska, PCV, z grawerem | 1 |
+| 61 | PNE-SRU-POD-POD-LEW | Pneumatic - Śruba podnoszenia podajnika lewa v1.0 | 1 |
+| 62 | PNE-ZAS-KOL-DUZ | PNEUMATIC - Zaślepka koła dużego v1.0 / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 2 |
+| 63 | POD-MIE-1/4 | Podkładka miedziana 13,5x19x1,5 1/4" | 8 |
+| 64 | POJ-NA-OLEJ | Pojemnik na olej 250ml | 1 |
+| 65 | POK-VCT-50B-M10-C5 | Pokrętło VCT.50 B-M10-C5 | 1 |
+| 66 | PRE-GWI-M12-343 | Pręt gwintowany M12x343-4.6 oc DIN 975 (na rączki) | 1 |
+| 67 | PRO-KAB-BLA-UCH | PROWADZENIE KABLA - Blaszka uchwytu v1.0 / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 4 |
+| 68 | PRO-KAB-TUL-DWU-MAX | PROWADZENIE KABLA - Tuleja dwudzielna połówka v1.0 (16) | 4 |
+| 69 | PRO-KAB-UCH-TUL-POD-PLY | PROWADZENIE KABLA - Uchwyt tulejki podst - uchylna do plyty | 1 |
+| 70 | PRO-KAB-UCH-TUL-POD-POD | PROWADZENIE KABLA - Uchwyt tulejki podst - uchylna do podstawy | 1 |
+| 71 | PRO-KAB-UCH-TUL-ZAC | PROWADZENIE KABLA - Uchwyt tulejki zacisk | 2 |
+| 72 | PRZ-MOS-NIK-1/4-13MM | Przedłużka gwintowa, G1/4-13mm, 16 bar, mosiądz niklowany | 2 |
+| 73 | PRZ-PNE-PU-10X6,5 | WĄŻ 10/6,5 PU | 1.5 |
+| 74 | PRZ-TEF-FHL-1SSB-C01C01-10X208 | Przewód teflon.gł.FHL 1SSB C01C01 (22)10x208 | 1 |
+| 75 | PRZ-TEF-FHL-1SSB-C01C01-10X267 K-90 | Przewód teflon.gł.FHL 1SSB C01C01 (22)10x267 K-90 | 1 |
+| 76 | PRZ-TEF-FHL-1SSB-C01C01-10X780 K-90 | Przewód teflon.gł.FHL 1SSB C01C01 (22)10x780 K-90 (WĄŻ ŁĄCZĄCY ZPP Z DUŻĄ GŁOWICĄ) (Przewód teflonowy) | 1 |
+| 77 | RAC-DO-WDM-BLA-BOC | RĄCZKA DO WDMUCHIWARKI - Blacha boczna / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 2 |
+| 78 | RED-1/2-GZ-1/4-GW-MOS-NIK | Złączka redukcyjna, G1/2(GZ)-G1/4(GW), 16 bar, mosiądz niklowany | 3 |
+| 79 | SIL-PNE-REW-OBER-LFB2R | Silnik pneumatyczny rewersyjny OBER 160W (LFB2R) | 2 |
+| 80 | SKR-PRO-CAL-N12S | Skrzynka na akcesoria do BDJ mini narzędziowa warsztatowa CALIBER N12S | 1 |
+| 81 | SPR-NAC-Z17 | Sprężyna naciskowa nieszlifowana d 0,9 x Dz 14,9 x Lo163 x z17 | 1 |
+| 82 | SRU-DO-OCZ-1/4 | Śruba do oczek G1/4" 1600-00-04 | 4 |
+| 83 | SRU-IMB-A2-DIN912-M3X40 | Śruba imbusowa A2 DIN912 M3x40 | 1 |
+| 84 | SRU-NIE-OCZ-A2-DIN444-M8X90 | Śruba oczkowa DIN444 A2 M8x90 | 6 |
+| 85 | SRU-PAS-M10-35-OCY | Śruba pasowana M10/12x35, kl. 12.9 ISO 7379 - ocynkowana | 2 |
+| 86 | SRU-PAS-M5-20-OCY | Śruba pasowana M5/6x20, kl. 12.9 ISO 7379 - ocynkowana | 2 |
+| 87 | SRU-PAS-M5-60-OCY | Śruba pasowana M5/6x60, kl. 12.9 ISO 7379 - ocynkowana | 2 |
+| 88 | SRU-PAS-M8-35-OCY | Śruba pasowana M8/10x35, kl. 12.9 ISO 7379 - ocynkowana | 8 |
+| 89 | SZY-NW7.2-1/4-GZ | Szybkozłączka NW7,2 G1/4" GZ | 3 |
+| 90 | TLU-SIL-PNE-1/4-GZ | Tłumik silnika pneumatycznego 1/4"GZ | 2 |
+| 91 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 |
+| 92 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 |
+| 93 | TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 |
+| 94 | TUL-DYS-6X3,2X30 | Tulejka dystansowa mosiądz niklowany 6x3,2x30 DR316/3.2X30 | 1 |
+| 95 | TUL-SLI-IGUS-A500SM-0608-08 | Tuleja ślizgowa 6x8x8 mm IGUS A500SM-0608-08 | 6 |
+| 96 | UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 |
+| 97 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 |
+| 98 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 2 |
+| 99 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 2 |
+| 100 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 2 |
+| 101 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 2 |
+| 102 | UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 |
+| 103 | UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 |
+| 104 | UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 |
+| 105 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 2 |
+| 106 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 2 |
+| 107 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 2 |
+| 108 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 |
+| 109 | WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 |
+| 110 | WAZ-10M-HIL-1,5 | WĄŻ POWIETRZNY DO WDMUCHIWARKI 1,5 CAL Przewód Hilcoflex DN38 Lc=10m; 2x GW Rd55x1/6" + adaptor GZ Rd55x1/6" / GZ1.1/2" BSP | 1 |
+| 111 | WKR-PZ1X75 | Wkrętak krzyżakowy PZ1x75 mm 60933 VOREL | 1 |
+| 112 | ZAW-CAM-454-900 | Zawór ręczny bistabilny, sterowanie przód, tył | 1 |
+| 113 | ZAW-CFG.30-40SH-6 | ZAWIAS SZYBKI PLEXIGLAS CFG.30/40SH-6 | 2 |
+| 114 | ZAW-KUL-1,5GW | Zawór kulowy, mosiądz, Eco-Line 1 1/2" GZ/GW, PN25 | 1 |
+| 115 | ZAW-KUL-1/2-GWGZ | Zawór kulowy, mosiądz, Eco-Line, R/Rp1/2 (GZ/GW) | 1 |
+| 116 | ZAW-KUL-MIN-1/2-GWGZ | Zawór kulowy mini, mosiądz G1/2(GW/GZ) | 1 |
+| 117 | ZES-REG-WYS-WSP-12G-LEW | Zespół regulacji wysokości - wspornik 12G v1.0 z lewym gwintem | 1 |
+| 118 | ZES-REG-WYS-WSP-12L | Zespół regulacji wysokości - wspornik 12L v1.0 | 1 |
+| 119 | ZES-REG-WYS-WSP-12U | Zespół regulacji wysokości - wspornik 12U v1.0 | 4 |
+| 120 | ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 |
+| 121 | ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 |
+| 122 | ZLA-KLO-1/2-GZ | Złącze kłowe G1/2" GZ, rozstaw 42 | 1 |
+| 123 | ZPP-CAM-MC1-VM | Zestaw montażowy | 2 |
+| 124 | ZPP-CAM-MC104-D00 | Filtr i reduktor ciśnienia | 1 |
+| 125 | ZPP-CAM-MC104-L00 | Smarownica G 1/4 seria MC | 1 |
+| 126 | ZPP-CAM-MC104-V01 | Zawór typu 3/2 G1/4" seria MC (start-stop) | 1 |

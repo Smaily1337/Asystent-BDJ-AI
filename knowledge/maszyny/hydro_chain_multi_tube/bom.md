@@ -1,15 +1,14 @@
 [MODEL MASZYNY: BDJ HYDRO CHAIN MULTI TUBE]
-[TYP: BOM PRODUKCYJNY — źródło prawdy SKU dla BDJ HYDRO CHAIN MULTI TUBE]
-[ŹRÓDŁO: HYDROCHAIN MULTITUBE.XLS]
-[ZASADA: Podawaj wyłącznie kody SKU z tej listy. Nie wymyślaj części.]
+[BOM PRODUKCYJNY DLA BDJ HYDRO CHAIN MULTI TUBE]
+[ŹRÓDŁO: HYDROCHAIN MULTITUBE.XLS — import 1:1, bez cen]
+[ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
-# LISTA CZĘŚCI — BDJ HYDRO CHAIN MULTI TUBE
+# BOM — BDJ HYDRO CHAIN MULTI TUBE
 
-[MODEL MASZYNY: BDJ HYDRO CHAIN MULTI TUBE / HYDROCHAIN MULTITUBE]
-[LICZBA POZYCJI: 74]
+Pełna lista pozycji z pliku **HYDROCHAIN MULTITUBE.XLS** (74 SKU).
 
-| LP | Kod SKU | Nazwa | Ilość |
-|:---|:---|:---|:---|
+| Lp | Kod SKU | Nazwa | Ilość |
+| :---: | :--- | :--- | :---: |
 | 1 | GLO-DUZ-KOR-DOL-V3 | Głowica DUŻA - Korpus dolny v3.1 | 1 |
 | 2 | GLO-DUZ-KOR-GOR-V3 | Głowica DUŻA - Korpus górny v3.1 | 1 |
 | 3 | GLO-DUZ-KOR-UCH-V3 | Głowica DUŻA - Korpus uchwyt v3.1 | 1 |
@@ -42,7 +41,7 @@
 | 30 | HYD-CHA-PLY-DOD | HydroChain - Płyta dodatkowa v1.0 | 1 |
 | 31 | HYD-CHA-PLY-DOL | HydroChain - Płyta dolna v1.0 | 1 |
 | 32 | HYD-CHA-POD-PRO | HydroChain - Podpora prowadnicy v1.2 | 2 |
-| 33 | HYD-CHA-POD-WDM | HydroChain - Podstawa  / Grubość 3.0mm / Bl.nierdzewna / Szlif-TAK / Gięcie-TAK / Folia-TAK | 1 |
+| 33 | HYD-CHA-POD-WDM | HydroChain - Podstawa / Grubość 3.0mm / Bl.nierdzewna / Szlif-TAK / Gięcie-TAK / Folia-TAK | 1 |
 | 34 | HYD-CHA-PRO-LAN | HydroChain - Prowadnica łańcucha v1.0 | 4 |
 | 35 | HYD-CHA-PRO-RUR-KAT-RAM | HydroChain - Prowadzenie rurek kątownik ramy v1.0 | 1 |
 | 36 | HYD-CHA-PRO-RUR-KAT-WST | HydroChain - Prowadzenie rurek kątownik wstawek v1.0 | 1 |

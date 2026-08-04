@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+
 from llama_index.core import Document, Settings, SimpleDirectoryReader
 from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.retrievers import BaseRetriever
@@ -135,19 +137,37 @@ class MachineFilteringRetriever(BaseRetriever):
                 rest = [n for n in all_nodes if n not in price_first]
                 all_nodes = price_first + rest
 
-        if not target_machine:
-            return all_nodes
+        wants_gasket = bool(re.search(r"\b(uszczelk\w*|gumk\w*)\b", raw, re.I))
 
-        filtered = []
-        for n in all_nodes:
-            fpath = n.node.metadata.get("file_path", "").lower().replace("\\", "/")
-            node_machine = get_machine_tag_from_path(fpath).lower()
-            if node_machine:
-                if target_machine in node_machine or node_machine in target_machine:
+        if target_machine:
+            filtered = []
+            for n in all_nodes:
+                fpath = n.node.metadata.get("file_path", "").lower().replace("\\", "/")
+                node_machine = get_machine_tag_from_path(fpath).lower()
+                if node_machine:
+                    # Exact tag only — "bdj max" must NOT match "bdj max dual head"
+                    if node_machine == target_machine:
+                        filtered.append(n)
+                else:
                     filtered.append(n)
-            else:
-                filtered.append(n)
-        return filtered if filtered else all_nodes
+            all_nodes = filtered if filtered else all_nodes
+
+        # Preferuj czesci.md; przy uszczelce odsuń chunki z samymi tulejkami
+        def _rank_key(n):
+            fpath = n.node.metadata.get("file_path", "").lower().replace("\\", "/")
+            text = (n.node.get_content() or "").lower()
+            score = 0
+            if fpath.endswith("czesci.md") or "/czesci.md" in fpath:
+                score -= 100
+            if wants_gasket:
+                if "uszczel" in text or re.search(r"\b(ugd|um-|uk-)", text):
+                    score -= 50
+                if "tulej" in text and "uszczel" not in text:
+                    score += 80
+            return (score, -float(getattr(n, "score", 0) or 0))
+
+        all_nodes = sorted(all_nodes, key=_rank_key)
+        return all_nodes
 
 
 def build_retriever(cfg: AppSettings | None = None) -> MachineFilteringRetriever:

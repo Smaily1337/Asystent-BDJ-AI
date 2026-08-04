@@ -1,15 +1,14 @@
 [MODEL MASZYNY: BDJ BUDGET EASY SET]
-[TYP: BOM PRODUKCYJNY — źródło prawdy SKU dla BDJ BUDGET EASY SET]
-[ŹRÓDŁO: BUDGET EASY SET.XLS]
-[ZASADA: Podawaj wyłącznie kody SKU z tej listy. Nie wymyślaj części.]
+[BOM PRODUKCYJNY DLA BDJ BUDGET EASY SET]
+[ŹRÓDŁO: BUDGET EASY SET.XLS — import 1:1, bez cen]
+[ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
-# LISTA CZĘŚCI — BDJ BUDGET EASY SET
+# BOM — BDJ BUDGET EASY SET
 
-[MODEL MASZYNY: BDJ BUDGET EASY SET / BUDGET EASY SET]
-[LICZBA POZYCJI: 82]
+Pełna lista pozycji z pliku **BUDGET EASY SET.XLS** (82 SKU).
 
-| LP | Kod SKU | Nazwa | Ilość |
-|:---|:---|:---|:---|
+| Lp | Kod SKU | Nazwa | Ilość |
+| :---: | :--- | :--- | :---: |
 | 1 | BUD-BLO-KOL | BUDGET - Blokada koła | 2 |
 | 2 | BUD-GLO-PRZ | BUDGET - Głowica Przód | 1 |
 | 3 | BUD-GLO-WST-4 | BUDGET - Głowica wstawka - 4 | 1 |
@@ -20,7 +19,7 @@
 | 8 | BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 | 2 |
 | 9 | BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 85 shA | 2 |
 | 10 | BUD-GUM-PLA | Gumka na koło napędowe płaska/ oponka płaska 31,5x39,5x8 bez rowka | 1 |
-| 11 | BUD-KLU-WIE | BUDGET - Klucz (Klucz do głowicy wielowymiarowy)  / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 1 |
+| 11 | BUD-KLU-WIE | BUDGET - Klucz (Klucz do głowicy wielowymiarowy) / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 1 |
 | 12 | BUD-MOC-LOZ | BUDGET - Mocowanie łożyska dolne | 1 |
 | 13 | BUD-MOC-LOZ-RUC | BUDGET - Mocowanie łożyska ruchome | 1 |
 | 14 | BUD-MOC-POD | BUDGET - Mocowanie podajnika | 2 |
@@ -46,7 +45,7 @@
 | 34 | GAM-STO-BDGN-POD | Podstawa stojaka do wdmuchiwarki BDJ Budget Easyset | 1 |
 | 35 | GAM-STO-BDGN-TYC | Tyczka stojaka do wdmuchiwarki Budget Easyset | 1 |
 | 36 | KLU-IMB-DLU-2.5MM | Klucz imbusowy długi 2,5 mm | 1 |
-| 37 | KLU-IMB-DLU-4MM | Klucz imbusowy długi  4mm | 1 |
+| 37 | KLU-IMB-DLU-4MM | Klucz imbusowy długi 4mm | 1 |
 | 38 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 |
 | 39 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 |
 | 40 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 |
@@ -82,7 +81,7 @@
 | 70 | USZ-HYD-3/8 | Uszczelka hydrauliczna G3/8 | 1 |
 | 71 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 |
 | 72 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 |
-| 73 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget -  Bosch GSR 12V-15FC | 1 |
+| 73 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 |
 | 74 | ZAS-MIK-RUR-10 | Zaślepka mikrorurek 10mm | 1 |
 | 75 | ZAS-MIK-RUR-12 | Zaślepka mikrorurek 12mm | 1 |
 | 76 | ZAS-MIK-RUR-14 | Zaślepka mikrorurek 14mm | 1 |

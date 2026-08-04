@@ -1,15 +1,14 @@
 [MODEL MASZYNY: BDJ MINI C PLUS]
-[TYP: BOM PRODUKCYJNY — źródło prawdy SKU dla BDJ MINI C PLUS]
-[ŹRÓDŁO: MINI C PLUS.XLS]
-[ZASADA: Podawaj wyłącznie kody SKU z tej listy. Nie wymyślaj części.]
+[BOM PRODUKCYJNY DLA BDJ MINI C PLUS]
+[ŹRÓDŁO: MINI C PLUS.XLS — import 1:1, bez cen]
+[ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
-# LISTA CZĘŚCI — BDJ MINI C PLUS
+# BOM — BDJ MINI C PLUS
 
-[MODEL MASZYNY: BDJ MINI C PLUS / MINI C PLUS / MINI COUNTER / BDJ MINI / MINIe]
-[LICZBA POZYCJI: 117]
+Pełna lista pozycji z pliku **MINI C PLUS.XLS** (117 SKU).
 
-| LP | Kod SKU | Nazwa | Ilość |
-|:---|:---|:---|:---|
+| Lp | Kod SKU | Nazwa | Ilość |
+| :---: | :--- | :--- | :---: |
 | 1 | GLO-POW-KOR-DOL | GŁOWICA POW - Korpus dolny v1.0 | 1 |
 | 2 | GLO-POW-KOR-GOR | GŁOWICA POW - Korpus górny v1.0 | 1 |
 | 3 | GLO-POW-MOC-ZAM-DOL | GŁOWICA POW - Mocowanie zamknięcia dół v1.0 | 2 |
