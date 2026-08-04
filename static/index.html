@@ -1852,10 +1852,6 @@ const BDJChatApp = (() => {
         const messageNote = clientMessage
             ? `<br><strong>Twoja wiadomość:</strong> ${clientMessage.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
             : '';
-        const successMsg = `Dziękujemy za kontakt — wkrótce nasz zespół skontaktuje się z Tobą.${itemsSummary}${messageNote}`;
-        state.messages.push({ role: 'bot', content: successMsg, raw: successMsg });
-        renderHistory();
-        saveState();
 
         try {
             const handoffNotes = (state.pendingRequestType === 'zapytanie' && items.length === 0)
@@ -1867,7 +1863,7 @@ const BDJChatApp = (() => {
                     .map((q) => ['Pytanie klienta', q])
                 : [];
 
-            await fetch('/offer', {
+            const offerRes = await fetch('/offer', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -1880,7 +1876,25 @@ const BDJChatApp = (() => {
                     message: clientMessage,
                 })
             });
-        } catch(e) { console.error("Błąd wysyłki zgłoszenia", e); }
+            let emailSent = false;
+            try {
+                const offerData = await offerRes.json();
+                emailSent = !!offerData.email_sent;
+            } catch (_) { /* ignore parse errors */ }
+
+            const successMsg = emailSent
+                ? `Dziękujemy za kontakt — wkrótce nasz zespół skontaktuje się z Tobą.${itemsSummary}${messageNote}`
+                : `Zapisaliśmy Twoje zgłoszenie, ale automatyczna wysyłka e-mail nie powiodła się (konfiguracja serwera). Skontaktuj się bezpośrednio: info@gamm-bud.pl / info@bluedragonjet.com.${itemsSummary}${messageNote}`;
+            state.messages.push({ role: 'bot', content: successMsg, raw: successMsg });
+            renderHistory();
+            saveState();
+        } catch(e) {
+            console.error("Błąd wysyłki zgłoszenia", e);
+            const failMsg = `Nie udało się wysłać zgłoszenia. Spróbuj ponownie lub napisz na info@gamm-bud.pl / info@bluedragonjet.com.${itemsSummary}${messageNote}`;
+            state.messages.push({ role: 'bot', content: failMsg, raw: failMsg });
+            renderHistory();
+            saveState();
+        }
 
         inpCompany.value = '';
         inpEmail.value = '';
