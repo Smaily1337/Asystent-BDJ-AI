@@ -13,10 +13,20 @@ _SYNONYM_RULES: list[tuple[re.Pattern[str], str]] = [
     (re.compile(r"\b(nak[lł]adk\w*\s+pas\w*|pas\s+z\s+nak[lł]adk\w*)\b", re.I), "pas napędowy PNE-PAS"),
     (re.compile(r"\b(tulejk\w*\s+kabl\w*|wstawk\w*\s+kabl\w*|prowadzen\w*\s+kabl\w*)\b", re.I), "tuleja kabla"),
     (re.compile(r"\b(tulejk\w*\s+mikro\w*|wstawk\w*\s+mikro\w*|wstawk\w*\s+rurk\w*|uchwyt\w*\s+mikro\w*)\b", re.I), "tuleja mikrorurki"),
-    (re.compile(r"\b(oponk\w*|gumk\w*\s+na\s+(rolk\w*|ko[łl]\w*)|gumk\w*\s+jezdn\w*)\b", re.I), "oponka MINI-OPONKI"),
+    (re.compile(
+        r"\b("
+        r"oponk\w*"
+        r"|gumk\w*\s+na\s+(?:rolk\w*|ko[łl]\w*)"
+        r"|gumk\w*\s+jezdn\w*"
+        r"|ko[łl]o\s+nap\w*"
+        r"|gumk\w*\s+na\s+ko[łl]o\s+nap\w*"
+        r")\b",
+        re.I,
+    ), "oponka"),
     (re.compile(r"\b(zegar|wska[zź]nik\s+ci[sś]nieni\w*|ci[sś]?nieniomierz|cinieniomierz)\b", re.I), "manometr"),
     (re.compile(r"\b(wałek|wałki|ośka|ośki)\b", re.I), "wałek"),
-    (re.compile(r"\b(kółk\w*|kolk\w*|koło|kola|koła)\b", re.I), "rolka"),
+    (re.compile(r"\b(kółk\w*|kolk\w*|koła)\b", re.I), "rolka"),
+    (re.compile(r"\bkoło\b(?!\s+nap\w*)", re.I), "rolka"),
     (re.compile(r"\b(t[lł]umik\w*)\b", re.I), "tłumik"),
     (re.compile(r"\b(bullet\w*|ko[nń]c[oó]wk\w*\s+na\s+kabel)\b", re.I), "bullet końcówka kabla"),
     (re.compile(r"\b(spadochron\w*|t[lł]oczek|t[lł]oczki|piston)\b", re.I), "spadochron tłoczek"),
@@ -94,6 +104,8 @@ def _gasket_size_hints(question: str) -> list[str]:
 
 # Potoczne → fachowe (kolejność: bardziej specyficzne pierwsze)
 _COLLOQUIAL_REPLACEMENTS: list[tuple[re.Pattern[str], str]] = [
+    (re.compile(r"\bgumk\w*\s+na\s+ko[łl]o\s+nap\w*\b", re.I), "oponka płaska"),
+    (re.compile(r"\bko[łl]o\s+nap\w*\b", re.I), "oponka"),
     (re.compile(r"\bgumk\w*\s+jezdn\w*\b", re.I), "oponka"),
     (re.compile(r"\bgumk\w*\s+na\s+(?:rolk\w*|ko[łl]\w*)\b", re.I), "oponka"),
     (re.compile(r"\b(o-?ring|oring)\b", re.I), "uszczelka"),

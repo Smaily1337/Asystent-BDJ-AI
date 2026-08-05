@@ -173,6 +173,21 @@ def test_rewrite_oponki_mini():
     assert "mini" in out.lower() or "BDJ MINI" in out
 
 
+def test_rewrite_kolo_napedowe_to_oponka():
+    from app.rag.query_rewrite import apply_colloquial_aliases, rewrite_query
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    assert "oponk" in apply_colloquial_aliases("koło napędowe").lower()
+    assert "oponk" in apply_colloquial_aliases("gumka na koło napędowe").lower()
+    out = rewrite_query("koło napędowe fi 4 do budget plus")
+    assert "oponk" in out.lower()
+
+    r = try_deterministic_lookup("koło napędowe fi 4", chip_machine="BDJ Budget Plus")
+    assert r is not None
+    assert r.parts
+    assert any(p.sku.upper() == "BUD-GUM-FI4-R2" for p in r.parts)
+
+
 def test_mini_bom_exists():
     bom = KB / "mini_c_plus" / "bom.md"
     assert bom.exists(), "Brak bom.md dla mini_c_plus"

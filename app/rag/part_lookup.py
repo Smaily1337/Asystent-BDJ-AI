@@ -35,7 +35,15 @@ _PAS_RE = re.compile(
     r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*)\b",
     re.I,
 )
-_OPONKA_RE = re.compile(r"\b(oponk\w*|gumk\w*\s+(?:jezdn|na\s+(?:rolk|ko)))\b", re.I)
+_OPONKA_RE = re.compile(
+    r"\b("
+    r"oponk\w*"
+    r"|gumk\w*\s+(?:jezdn|na\s+(?:rolk|ko))"
+    r"|ko[łl]o\s+nap\w*"
+    r"|gumk\w*\s+na\s+ko[łl]o\s+nap\w*"
+    r")\b",
+    re.I,
+)
 # mikrorurka / mikrorur / mikro rur / do mikrorur / na mikrorurk*
 _MIKRORURKA_RE = re.compile(
     r"\b("
@@ -85,7 +93,7 @@ _PARTS_INTENT_RE = re.compile(
     r"tulejk\w*|tulej\w*|wstawk\w*|"
     # «pas napędowy»: \w* zjada ę; bare «pas» / «pasy» — nie «pasowana» (brak \b po pas)
     r"pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*|"
-    r"oponk\w*|"
+    r"oponk\w*|ko[łl]o\s+nap\w*|"
     r"śrub\w*|srub\w*|"
     r"rolk\w*|kółk\w*|kolk\w*|"
     r"wałek|wałki|ośka|"

@@ -63,7 +63,17 @@ def _extract_fi(sku: str, name: str) -> float | None:
 
 def _classify_kind(sku: str, name: str, section: str) -> str:
     blob = f"{sku} {name} {section}".lower()
-    if any(x in blob for x in ("oponka", "oponki", "gumka na koło", "gumka na kolo")):
+    if any(
+        x in blob
+        for x in (
+            "oponka",
+            "oponki",
+            "gumka na koło",
+            "gumka na kolo",
+            "koło napędowe",
+            "kolo napedowe",
+        )
+    ):
         return "oponka"
     if re.search(r"\b(pas|pasek)\b", blob) or sku.upper().startswith(("PNE-PAS", "MOD-PAS")):
         if "śrub" in blob or "srub" in blob or sku.upper().startswith("SRU"):
