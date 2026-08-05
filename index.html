@@ -1001,7 +1001,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">prealpha 0.0.2</span>
+                <span class="app-version">prealpha 0.0.7</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1015,18 +1015,19 @@
 
     <div class="changelog-bar" id="changelog-bar">
         <button type="button" class="changelog-toggle" id="changelog-toggle" aria-expanded="false">
-            <span>Spis zmian — 4 sie 2026</span>
+            <span>Spis zmian — 5 sie 2026 · prealpha 0.0.7</span>
             <span class="chevron">▾</span>
         </button>
         <div class="changelog-body">
             <ul>
-                <li><strong>MINI / MINI COUNTER:</strong> pełny BOM 152 pozycje + synchronizacja wszystkich SKU do <code>czesci.md</code> (oponki, pas zębaty, głowica M, napęd E).</li>
-                <li><strong>BDJ EXTENDED:</strong> zaktualizowany BOM produkcyjny (152 pozycje).</li>
-                <li><strong>Wyszukiwanie:</strong> mapowanie „pasek” → Pas, „oponki” → <code>MINI-OPONKI-*</code>, rozszerzony słowniczek synonimów.</li>
-                <li><strong>Stabilność API:</strong> naprawa błędu <code>_handoff_failures</code> przy udanych odpowiedziach czatu.</li>
-                <li><strong>UI:</strong> liquid glass — matowe szkło, blur, gradienty cool-blue na widżecie, bąbelkach, modalu i inputcie.</li>
-                <li><strong>Karty części:</strong> glass cards zamiast szerokich tabel, lepsza responsywność na mobile.</li>
-                <li><strong>Testy:</strong> regresja SKU, sync pasków BOM→części, oponki Mini Counter.</li>
+                <li><strong>Katalog deterministyczny:</strong> SKU tylko z BOM — bez halucynacji LLM; hybryda: sloty intencji + katalog.</li>
+                <li><strong>MAX vs MAX Dual Head:</strong> poprawne rozpoznanie modelu; Dual Head dziedziczy głowicę Extended (UM/UK).</li>
+                <li><strong>Listy części:</strong> „pokaż listę uszczelek” bez wymiaru mm; follow-up po rozmowie o uszczelki.</li>
+                <li><strong>Budget / Easy Set:</strong> union katalogów (Budget↔Easy Set, Plus↔Plus Easy Set); Plus dziedziczy UK z Budget.</li>
+                <li><strong>Nazwy w BOM:</strong> <code>fi 50 (50 mm)</code> przy imporcie — lepsze wyszukiwanie po mm i fi.</li>
+                <li><strong>Synonimy:</strong> koło napędowe → oponka; oponka płaska nie myli się z uszczelką po wcześniejszej sesji.</li>
+                <li><strong>UI:</strong> chipy Hydro Multi Tube / DragonAir; spis zmian domyślnie zwinięty; błąd maila gdy brak SMTP.</li>
+                <li><strong>Render:</strong> HEAD /health — stabilniejszy deploy.</li>
             </ul>
         </div>
     </div>

@@ -17,7 +17,7 @@ def create_app() -> FastAPI:
     application = FastAPI(
         title="Asystent BDJ AI",
         description="Chatbot doboru części zamiennych Blue Dragon Jet",
-        version="0.0.2-prealpha",
+        version="0.0.7-prealpha",
     )
 
     application.add_middleware(
@@ -68,7 +68,7 @@ def create_app() -> FastAPI:
 
     @application.get("/health")
     def health():
-        return {"status": "ok", "version": "0.0.2-prealpha"}
+        return {"status": "ok", "version": "0.0.7-prealpha"}
 
     return application
 

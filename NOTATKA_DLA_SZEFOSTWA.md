@@ -42,4 +42,4 @@ Chatbot dostał **pełniejszą i aktualniejszą bazę części**, **wygodniejszy
 
 ---
 
-*Wersja: prealpha 0.0.2 · Autor aktualizacji: Bartłomiej*
+*Wersja: prealpha 0.0.7 · Autor aktualizacji: Bartłomiej*
