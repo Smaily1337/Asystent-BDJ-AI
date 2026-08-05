@@ -904,6 +904,17 @@ def lookup_from_slots(
     Hybryda: sloty → wzbogacone pytanie → wyłącznie katalog.
     Soft inference (historia/kind/size) siedzi w slotach; SKU tylko z BOM.
     """
+    q_orig = apply_colloquial_aliases((original_question or "").strip())
+    if _OPONKA_RE.search(q_orig):
+        # Nowa intencja oponki — nie ciągnij flow uszczelki z sesji
+        direct = try_deterministic_lookup(
+            original_question,
+            chip_machine=chip_machine,
+            prior_reason=None,
+        )
+        if direct is not None and direct.reason not in ("need_machine",):
+            return direct
+
     enriched = slots_to_lookup_question(slots, original_question)
     chip = chip_machine or slots.machine
     result = try_deterministic_lookup(
@@ -971,6 +982,8 @@ def try_deterministic_lookup(
         _is_list_intent(q, prior_reason=prior_reason)
         or _is_list_intent(question or "", prior_reason=prior_reason)
     )
+    if _OPONKA_RE.search(q) or _OPONKA_RE.search(question or ""):
+        list_intent = False
     parts_q = is_parts_intent(q) or is_parts_intent(question or "")
     if not parts_q and not list_intent:
         return None
@@ -1115,7 +1128,18 @@ def try_deterministic_lookup(
 
     elif wants_oponka:
         if size is None:
-            matched = [p for p in parts if p.kind == "oponka"][:6]
+            matched = [p for p in parts if p.kind == "oponka"][:12]
+            if matched:
+                intro = (
+                    f"Oto **oponki / gumki na koło napędowe** w katalogu maszyny **{display}** "
+                    f"({len(matched)} pozycji). "
+                    f"Zaznacz wybraną pozycję i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+                )
+                return LookupResult(
+                    answer=format_parts_markdown(matched, intro, display),
+                    parts=tuple(matched),
+                    reason="oponka_list",
+                )
         else:
             matched = _filter_by_kind_and_size(parts, "oponka", size)[:4]
         reason = "oponka"

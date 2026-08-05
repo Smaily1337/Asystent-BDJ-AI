@@ -188,6 +188,34 @@ def test_rewrite_kolo_napedowe_to_oponka():
     assert any(p.sku.upper() == "BUD-GUM-FI4-R2" for p in r.parts)
 
 
+def test_oponka_plaska_not_uszczelka_after_session():
+    from app.rag.engine import SessionChatManager
+    from app.rag.intent import extract_part_slots
+    from app.rag.knowledge import build_retriever, create_llm
+    from app.config import settings
+
+    llm = create_llm(settings)
+    slots = extract_part_slots(
+        "oponka płaska",
+        chip_machine="BDJ Budget Plus Easy Set",
+        prior_reason="uszczelka_list",
+        use_llm=True,
+        llm=llm,
+    )
+    assert slots.part_kind == "oponka"
+
+    mgr = SessionChatManager(retriever=build_retriever(settings), llm=llm)
+    mgr._last_part_reason["sess-oponka"] = "uszczelka_list"
+    mgr._turns["sess-oponka"] = [
+        ("user", "lista uszczelek"),
+        ("assistant", "Oto lista uszczelek na rurkę"),
+    ]
+    ans = mgr.chat("sess-oponka", "oponka płaska", machine="BDJ Budget Plus Easy Set")
+    assert "uszczel" not in ans.lower() or "oponk" in ans.lower()
+    assert "BUD-GUM" in ans
+    assert "lista uszczelek na rurkę" not in ans.lower()
+
+
 def test_mini_bom_exists():
     bom = KB / "mini_c_plus" / "bom.md"
     assert bom.exists(), "Brak bom.md dla mini_c_plus"

@@ -34,6 +34,7 @@ _PARTS_REASONS = frozenset({
     "tuleja",
     "pas",
     "oponka",
+    "oponka_list",
     "manometr",
     "keyword",
     "candidates",

@@ -18,6 +18,7 @@ PartKind = Literal[
     "uszczelka_kabel",
     "tuleja",
     "pas",
+    "oponka",
     "manometr",
     "other",
     "unknown",
@@ -29,6 +30,7 @@ _VALID_KINDS = frozenset({
     "uszczelka_kabel",
     "tuleja",
     "pas",
+    "oponka",
     "manometr",
     "other",
     "unknown",
@@ -53,6 +55,15 @@ _PAS_RE = re.compile(
     re.I,
 )
 _MANOMETR_RE = re.compile(r"\b(manometr\w*|zegar|wska[zź]nik\s+ci[sś]nieni)\b", re.I)
+_OPONKA_RE = re.compile(
+    r"\b("
+    r"oponk\w*"
+    r"|ko[łl]o\s+nap\w*"
+    r"|gumk\w*\s+na\s+ko[łl]o\s+nap\w*"
+    r"|gumk\w*\s+(?:jezdn|na\s+(?:rolk|ko))"
+    r")\b",
+    re.I,
+)
 _LIST_RE = re.compile(
     r"\b("
     r"lista|list[eę]|listy|wszystkie|wszystkich|"
@@ -88,6 +99,7 @@ _KIND_TO_PHRASE: dict[str, str] = {
     "uszczelka_kabel": "uszczelka na kabel",
     "tuleja": "tulejka",
     "pas": "pas napędowy",
+    "oponka": "oponka",
     "manometr": "manometr",
 }
 
@@ -98,7 +110,7 @@ NIGDY nie wymyślaj kodów SKU / numerów katalogowych — tylko sloty z tekstu.
 Pola JSON:
 {
   "machine": string|null,          // model z tekstu/historii, np. "Extended", "Next"
-  "part_kind": "uszczelka_mikrorurka"|"uszczelka_kabel"|"tuleja"|"pas"|"manometr"|"other"|"unknown",
+  "part_kind": "uszczelka_mikrorurka"|"uszczelka_kabel"|"tuleja"|"pas"|"oponka"|"manometr"|"other"|"unknown",
   "size_mm": number|null,          // średnica w mm jeśli podana
   "exact_fi": bool,                // true gdy użytkownik napisał jawne "fi X"
   "list_all": bool,                // chce listę / wszystkie / wybiorę sam
@@ -111,6 +123,7 @@ Reguły:
 - „to samo ale na kabel” → zachowaj machine/size z historii, part_kind=uszczelka_kabel.
 - Gołe „7” / „7 mm” po pytaniu o uszczelkę → size_mm + kind z historii.
 - „gumka/oring” → uszczelka_*; „pasek” → pas; „zegar” → manometr.
+- „oponka”, „oponka płaska”, „koło napędowe” → part_kind=oponka (NIE uszczelka), nawet po wcześniejszej rozmowie o uszczelkach.
 - Gdy brak modelu a potrzeba części → needs_clarify=machine.
 - Gdy uszczelka/tuleja bez rozmiaru i nie list_all → needs_clarify=size.
 - Nie zgaduj size_mm ani machine jeśli nie ma w tekście/historii.
@@ -160,6 +173,8 @@ def _extract_size(text: str) -> tuple[float | None, bool]:
 
 def _detect_kind(text: str) -> PartKind:
     q = apply_colloquial_aliases(text or "")
+    if _OPONKA_RE.search(q):
+        return "oponka"
     has_usz = bool(_USZCZELKA_RE.search(q))
     tube = bool(_MIKRORURKA_RE.search(q))
     kabel = bool(_KABEL_RE.search(q))
@@ -434,6 +449,9 @@ def _llm_extract(
 def _merge_slots(primary: PartSlots, fallback: PartSlots) -> PartSlots:
     """Uzupełnij dziury z LLM slotami z reguł (i odwrotnie dla machine/size)."""
     kind = primary.part_kind if primary.part_kind != "unknown" else fallback.part_kind
+    # LLM po flow uszczelki często myli „oponka” — reguły wygrywają
+    if fallback.part_kind == "oponka":
+        kind = "oponka"
     size = primary.size_mm if primary.size_mm is not None else fallback.size_mm
     exact = primary.exact_fi if primary.size_mm is not None else fallback.exact_fi
     machine = primary.machine or fallback.machine
@@ -452,6 +470,8 @@ def _merge_slots(primary: PartSlots, fallback: PartSlots) -> PartSlots:
         clarify = "machine"
     elif kind in ("uszczelka_mikrorurka", "uszczelka_kabel", "tuleja") and size is None and not list_all:
         clarify = "size"
+    elif kind == "oponka":
+        clarify = "none"
     elif clarify == "kind" and kind != "unknown":
         clarify = "none"
     return PartSlots(
@@ -495,7 +515,10 @@ def extract_part_slots(
     )
     if llm_slots is None:
         return rules
-    return _merge_slots(llm_slots, rules)
+    merged = _merge_slots(llm_slots, rules)
+    if _OPONKA_RE.search(apply_colloquial_aliases(message or "")):
+        merged = replace(merged, part_kind="oponka", needs_clarify="none")
+    return merged
 
 
 def slots_to_lookup_question(slots: PartSlots, original: str) -> str:
