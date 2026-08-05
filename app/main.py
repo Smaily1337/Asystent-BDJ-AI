@@ -66,6 +66,17 @@ def create_app() -> FastAPI:
     def get_avatar():
         return FileResponse(str(avatar_path))
 
+    @application.get("/embed.js")
+    def get_embed_js():
+        embed_path = static_dir / "embed.js"
+        if not embed_path.exists():
+            embed_path = settings.root_dir / "static" / "embed.js"
+        return FileResponse(
+            str(embed_path),
+            media_type="application/javascript; charset=utf-8",
+            headers={"Cache-Control": "public, max-age=60"},
+        )
+
     @application.get("/health")
     def health():
         return {
