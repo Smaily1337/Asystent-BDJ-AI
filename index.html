@@ -50,6 +50,19 @@
                 linear-gradient(160deg, #eef4fb 0%, #f7fafc 45%, #e8eef7 100%) !important;
         }
 
+        /* Tryb osadzenia w WordPress / iframe (?embed=1) */
+        html.embed-mode,
+        html.embed-mode body {
+            background: transparent !important;
+            min-height: 0 !important;
+            height: 100% !important;
+            overflow: hidden !important;
+        }
+        html.embed-mode #fab-btn { z-index: 2147483646; }
+        html.embed-mode #chat-widget { z-index: 2147483645; }
+        html.embed-mode .fab-tooltip { z-index: 2147483644; }
+        html.embed-mode .modal-overlay { z-index: 2147483647; }
+
         /* --- FAB BUTTON --- */
         #fab-btn {
             position: fixed; bottom: 28px; right: 28px; width: 60px; height: 60px;
@@ -932,6 +945,7 @@
     </style>
 </head>
 <body>
+<script>if (/[?&]embed=1(?:&|$)/.test(location.search)) document.documentElement.classList.add('embed-mode');</script>
 
 <!-- FLOATING TOOLTIP / CHMURKA ZACHĘCAJĄCA (Po 3 sekundach) -->
 <div id="fab-tooltip" class="fab-tooltip">
