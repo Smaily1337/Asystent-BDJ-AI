@@ -197,10 +197,10 @@ def test_max_dual_head_has_belt_parts():
 def test_excel_import_row_counts():
     """Szybka kontrola, że katalogi nie są puste po imporcie Excel."""
     expected_min = {
-        "budget": 60,
-        "budget_easy_set": 70,
-        "budget_plus": 60,
-        "budget_plus_easy_set": 60,
+        "budget": 100,
+        "budget_easy_set": 100,
+        "budget_plus": 65,
+        "budget_plus_easy_set": 65,
         "extended": 120,
         "next": 130,
         "max": 100,
@@ -622,6 +622,62 @@ def test_max_dual_head_inherits_extended_um_via_config():
     assert r is not None
     assert r.parts
     assert any("UM-D35X5-13" in p.sku.upper() for p in r.parts)
+
+
+def test_budget_easy_set_union_shares_uk_cable_seals():
+    """MACHINE_BOM_UNION_PAIRS: Budget ↔ Easy Set — oba widzą UK-D25X5-* z Easy Set Excel."""
+    from app.rag.catalog import load_catalog, parts_for_machine
+    from app.rag.machines import MACHINE_BOM_UNION_PAIRS
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    assert ("budget", "budget_easy_set") in MACHINE_BOM_UNION_PAIRS
+    assert ("budget_plus", "budget_plus_easy_set") in MACHINE_BOM_UNION_PAIRS
+
+    load_catalog.cache_clear()
+    for chip in ("budget", "budget_easy_set"):
+        rows = parts_for_machine(chip)
+        uk = [p for p in rows if p.sku.upper().startswith("UK-D25X5-")]
+        assert uk, f"{chip}: brak UK-D25X5-* po unionie Budget ↔ Easy Set"
+        assert any(p.sku.upper() == "UK-D25X5-7" for p in uk)
+
+    for chip in ("budget", "budget_easy_set"):
+        r = try_deterministic_lookup("uszczelka na kabel 7mm", chip_machine=chip)
+        assert r is not None
+        assert r.parts
+        assert any(p.sku.upper() == "UK-D25X5-7" for p in r.parts), (chip, r.reason, r.parts)
+
+
+def test_budget_plus_inherits_uk_cable_from_budget():
+    """Plus Excel nie ma UK-*; dziedziczy rodzinę uszczelek z Budget (+ union Easy Set)."""
+    from app.rag.catalog import load_catalog, parts_for_machine
+    from app.rag.machines import MACHINE_BOM_INHERITS
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    assert MACHINE_BOM_INHERITS.get("budget_plus") == ["budget"]
+    assert MACHINE_BOM_INHERITS.get("budget_plus_easy_set") == ["budget"]
+
+    load_catalog.cache_clear()
+    plus = parts_for_machine("budget_plus")
+    plus_es = parts_for_machine("budget_plus_easy_set")
+    assert plus and plus_es
+    assert {p.sku.upper() for p in plus} == {p.sku.upper() for p in plus_es}
+    assert any(p.sku.upper() == "UK-D25X5-7" for p in plus_es)
+
+    for chip in ("budget_plus", "budget_plus_easy_set", "BDJ Budget Plus Easy Set"):
+        r = try_deterministic_lookup("uszczelka kabla 7mm", chip_machine=chip)
+        assert r is not None
+        assert r.parts
+        assert any(p.sku.upper() == "UK-D25X5-7" for p in r.parts), (chip, r.reason, r.answer)
+        assert "KUL-LOZ" not in (r.answer or "")
+        assert "nieistniej" not in (r.answer or "").lower()
+
+
+def test_uszczelka_kabla_does_not_match_kulka_by_mm_only():
+    from app.rag.part_lookup import _find_exact_name_matches
+
+    hits = _find_exact_name_matches("uszczelka kabla 7mm")
+    assert not any(p.sku.upper().startswith("KUL-") for p in hits)
+    assert not any(p.sku.upper().startswith("ZAS-") for p in hits)
 
 
 def test_colloquial_gumka_on_lookup_path():

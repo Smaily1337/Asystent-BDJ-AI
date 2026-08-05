@@ -375,11 +375,40 @@ def _distinctive_tokens(norm: str) -> set[str]:
     return tokens
 
 
+def _query_wants_gasket(query_norm: str) -> bool:
+    return bool(re.search(r"\buszczel", query_norm))
+
+
+def _query_wants_cable(query_norm: str) -> bool:
+    return bool(re.search(r"\bkabel", query_norm))
+
+
+def _part_is_gasket(part: PartRow) -> bool:
+    sku = (part.sku or "").upper()
+    name = (part.name or "").lower()
+    if sku.startswith(("UK-", "UM-", "UGD", "USZ-")) or "USZ" in sku:
+        return True
+    return "uszczel" in name or part.kind == "uszczelka"
+
+
+def _part_is_cable_gasket(part: PartRow) -> bool:
+    sku = (part.sku or "").upper()
+    name = (part.name or "").lower()
+    return sku.startswith("UK-") or "na kabel" in name or ("uszczel" in name and "kabel" in name)
+
+
 def _name_match_score(query_norm: str, part: PartRow) -> float:
     name_n = _normalize_text(part.name)
     sku_n = _normalize_text(part.sku)
     if not query_norm or not name_n:
         return 0.0
+
+    # „uszczelka kabla 7mm” NIE może trafić w kulkę/zaślepkę tylko po wspólnym „7mm”
+    if _query_wants_gasket(query_norm) and not _part_is_gasket(part):
+        return 0.0
+    if _query_wants_cable(query_norm) and not _part_is_cable_gasket(part):
+        return 0.0
+
     if query_norm == name_n or query_norm == sku_n:
         return 1.0
     # pełna nazwa zawarta w zapytaniu (lub odwrotnie) — najwyższy priorytet
@@ -436,14 +465,22 @@ def _name_match_score(query_norm: str, part: PartRow) -> float:
     overlap = q_tok & p_tok
     if not overlap:
         return 0.0
+    # sam wymiar (fi/7) bez wspólnego typu części — za słabe na exact
+    non_size = {
+        t for t in overlap
+        if not t.startswith("fi") and not re.fullmatch(r"\d+(?:\.\d+)?", t)
+    }
+    if not non_size:
+        return 0.0
     ratio = len(overlap) / max(len(q_tok), 1)
     strong = bool(
         any(_DIM_TOKEN_RE.fullmatch(t) for t in overlap)
         or any(t.startswith("fi") for t in overlap)
         or "mikrorurk" in overlap
+        or "kabel" in overlap
         or any("-" in t and len(t) > 5 for t in overlap)
     )
-    if strong and ratio >= 0.55 and len(overlap) >= 3:
+    if strong and ratio >= 0.55 and len(overlap) >= 3 and non_size:
         return 0.75 + 0.15 * min(ratio, 1.0)
     return 0.0
 
@@ -993,6 +1030,11 @@ def try_deterministic_lookup(
 
     def _miss_or_elsewhere(detail: str) -> LookupResult:
         """Po lokalnym miss — sprawdź czy exact nazwa jest na innych maszynach."""
+        # Tylko przy wklejonej pełnej nazwie katalogowej — nie promuj kulki po „7mm”
+        if not (
+            _looks_like_catalog_title(q) or _looks_like_catalog_title(question or "")
+        ):
+            return _miss(display, detail)
         cross = _try_exact_or_elsewhere(question or q, machine, display, parts)
         if cross is not None and cross.reason == "found_elsewhere":
             return cross

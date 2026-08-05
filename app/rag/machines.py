@@ -138,9 +138,20 @@ _CHIP_TO_TAG = _build_chip_to_tag()
 
 # Child slug → parent slug(s) whose head-family parts are unioned into the child catalog.
 # Dual Head shares Extended's head assembly — config, not per-SKU hacks.
+# Budget Plus Excel nie ma UK-* (uszczelki na kabel); linia Budget je ma — dziedziczymy
+# rodzinę głowicy/uszczelki z Budget, bo Plus Easy Set ≡ ta sama głowica zużycia.
 MACHINE_BOM_INHERITS: dict[str, list[str]] = {
     "max_dual_head": ["extended"],
+    "budget_plus": ["budget"],
+    "budget_plus_easy_set": ["budget"],
 }
+
+# Undirected pairs: full catalog union (Easy Set ≡ base machine — shared parts).
+# Each chip stays distinct; both catalogs see the union of both Excels.
+MACHINE_BOM_UNION_PAIRS: list[tuple[str, str]] = [
+    ("budget", "budget_easy_set"),
+    ("budget_plus", "budget_plus_easy_set"),
+]
 
 
 def get_machine_tag_from_path(full_path: str) -> str:
