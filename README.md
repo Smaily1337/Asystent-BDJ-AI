@@ -39,17 +39,16 @@ Na Renderze ustaw te same klucze w **Environment** (Dashboard → serwis → Env
 | Klucz | Wymagany | Opis |
 |-------|----------|------|
 | `DEEPSEEK_API_KEY` | tak | chat / RAG |
-| `SMTP_LOGIN` | tak (mail) | konto SMTP (np. Gmail) |
-| `SMTP_PASSWORD` | tak (mail) | hasło aplikacji (App Password), nie zwykłe hasło |
-| `SMTP_SERVER` | nie | domyślnie `smtp.gmail.com` |
-| `SMTP_PORT_SSL` | nie | domyślnie `465` |
-| `SMTP_PORT_TLS` | nie | domyślnie `587` |
-| `OFFER_RECIPIENTS` | nie | domyślnie `info@gamm-bud.pl,info@bluedragonjet.com` |
+| `RESEND_API_KEY` | tak (Render) | wysyłka maili przez API (działa na Free) |
+| `RESEND_FROM` | nie | domyślnie `Dragon AI <onboarding@resend.dev>` |
+| `OFFER_RECIPIENTS` | nie | domyślnie `info@gamm-bud.com` |
+| `SMTP_LOGIN` | lokalnie | konto SMTP (na Render Free **nie działa**) |
+| `SMTP_PASSWORD` | lokalnie | hasło aplikacji Gmail |
 | `ADMIN_USER` / `ADMIN_PASSWORD` | zalecane | panel `/admin` |
 | `HOST` | na Renderze | `0.0.0.0` (nie `127.0.0.1`) |
 | `PORT` | Render ustawia | zwykle zostaw domyślne z platformy |
 
-Bez `SMTP_LOGIN` / `SMTP_PASSWORD` endpoint `POST /offer` zwraca `{"status":"success","email_sent":false}` — formularz „działa”, ale mail nie wychodzi.
+Bez `RESEND_API_KEY` (produkcja) ani `SMTP_LOGIN` / `SMTP_PASSWORD` (lokalnie) endpoint `POST /offer` zwraca `{"status":"success","email_sent":false}`.
 
 Start na Renderze (przykład): `uvicorn server:app --host 0.0.0.0 --port $PORT`
 

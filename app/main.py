@@ -71,7 +71,13 @@ def create_app() -> FastAPI:
         return {
             "status": "ok",
             "version": "0.0.7",
-            "email_configured": bool(settings.smtp_login and settings.smtp_password),
+            "email_configured": bool(
+                settings.resend_api_key
+                or (settings.smtp_login and settings.smtp_password)
+            ),
+            "email_provider": "resend" if settings.resend_api_key else (
+                "smtp" if settings.smtp_login and settings.smtp_password else "none"
+            ),
         }
 
     return application

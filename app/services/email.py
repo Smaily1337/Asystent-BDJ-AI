@@ -1,4 +1,4 @@
-"""Wysyłka maili ofertowych przez SMTP."""
+"""Wysyłka maili ofertowych — Resend API (Render) lub SMTP (lokalnie)."""
 
 from __future__ import annotations
 
@@ -7,28 +7,22 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from typing import List, Optional
 
+import httpx
+
 from app.config import settings
 
 
-def send_offer_email(
+def _build_body(
     company: str,
     email: str,
     phone: str,
-    machine: Optional[str] = "",
-    items: Optional[List[List[str]]] = None,
-    request_type: str = "oferta",
-    message: str = "",
-) -> bool:
-    if not settings.smtp_login or not settings.smtp_password:
-        print("⚠️ Brak SMTP_LOGIN / SMTP_PASSWORD — pomijam wysyłkę e-mail.")
-        return False
-
-    recipients = list(settings.offer_recipients)
-    msg = MIMEMultipart()
+    machine: Optional[str],
+    items: Optional[List[List[str]]],
+    request_type: str,
+    message: str,
+) -> tuple[str, str]:
     subject_type = "zapytanie" if request_type == "zapytanie" else "zapytanie ofertowe"
-    msg["Subject"] = f"Nowe {subject_type} z Bota AI - {company}"
-    msg["From"] = settings.smtp_login
-    msg["To"] = ", ".join(recipients)
+    subject = f"Nowe {subject_type} z Bota AI - {company}"
 
     if request_type == "zapytanie":
         body = "Nowe zapytanie (kontakt) z Chatbota BDJ!\n\n"
@@ -54,6 +48,40 @@ def send_offer_email(
     if message and message.strip():
         body += f"💬 Wiadomość od klienta:\n{message.strip()}\n"
 
+    return subject, body
+
+
+def _send_via_resend(subject: str, body: str, recipients: list[str]) -> bool:
+    try:
+        response = httpx.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {settings.resend_api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "from": settings.resend_from,
+                "to": recipients,
+                "subject": subject,
+                "text": body,
+            },
+            timeout=15.0,
+        )
+        if response.status_code in (200, 201):
+            print(f"✅ E-mail wysłany przez Resend na {recipients}")
+            return True
+        print(f"❌ Resend HTTP {response.status_code}: {response.text}")
+        return False
+    except Exception as e:
+        print(f"❌ Błąd wysyłki Resend: {e}")
+        return False
+
+
+def _send_via_smtp(subject: str, body: str, recipients: list[str]) -> bool:
+    msg = MIMEMultipart()
+    msg["Subject"] = subject
+    msg["From"] = settings.smtp_login
+    msg["To"] = ", ".join(recipients)
     msg.attach(MIMEText(body, "plain", "utf-8"))
 
     try:
@@ -75,5 +103,27 @@ def send_offer_email(
             print(f"✅ E-mail wysłany na {recipients} przez TLS!")
             return True
         except Exception as e_tls:
-            print(f"❌ Błąd wysyłki e-mail: {e_tls}")
+            print(f"❌ Błąd wysyłki e-mail SMTP: {e_tls}")
             return False
+
+
+def send_offer_email(
+    company: str,
+    email: str,
+    phone: str,
+    machine: Optional[str] = "",
+    items: Optional[List[List[str]]] = None,
+    request_type: str = "oferta",
+    message: str = "",
+) -> bool:
+    recipients = list(settings.offer_recipients)
+    subject, body = _build_body(company, email, phone, machine, items, request_type, message)
+
+    if settings.resend_api_key:
+        return _send_via_resend(subject, body, recipients)
+
+    if settings.smtp_login and settings.smtp_password:
+        return _send_via_smtp(subject, body, recipients)
+
+    print("⚠️ Brak RESEND_API_KEY ani SMTP_LOGIN / SMTP_PASSWORD — pomijam wysyłkę e-mail.")
+    return False

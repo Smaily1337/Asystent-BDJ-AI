@@ -36,12 +36,16 @@ class Settings:
     smtp_port_tls: int = field(default_factory=lambda: int(os.getenv("SMTP_PORT_TLS", "587")))
     smtp_login: str = field(default_factory=lambda: os.getenv("SMTP_LOGIN", ""))
     smtp_password: str = field(default_factory=lambda: os.getenv("SMTP_PASSWORD", ""))
+    resend_api_key: str = field(default_factory=lambda: os.getenv("RESEND_API_KEY", ""))
+    resend_from: str = field(
+        default_factory=lambda: os.getenv("RESEND_FROM", "Dragon AI <onboarding@resend.dev>")
+    )
     offer_recipients: tuple[str, ...] = field(
         default_factory=lambda: tuple(
             r.strip()
             for r in os.getenv(
                 "OFFER_RECIPIENTS",
-                "info@gamm-bud.pl,info@bluedragonjet.com",
+                "info@gamm-bud.com",
             ).split(",")
             if r.strip()
         )
