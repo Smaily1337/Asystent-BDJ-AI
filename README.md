@@ -51,7 +51,9 @@ Na Renderze ustaw te same klucze w **Environment** (Dashboard → serwis → Env
 
 Bez `SMTP_LOGIN` / `SMTP_PASSWORD` endpoint `POST /offer` zwraca `{"status":"success","email_sent":false}` — formularz „działa”, ale mail nie wychodzi.
 
-Start na Renderze (przykład): `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
+Start na Renderze (przykład): `uvicorn server:app --host 0.0.0.0 --port $PORT`
+
+Health check w Renderze: ustaw ścieżkę **`/health`** (albo `/` — obsługujemy też `HEAD`).
 
 ## Testy
 

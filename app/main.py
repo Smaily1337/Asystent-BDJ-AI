@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from app.api import admin, chat, offer
@@ -52,6 +52,15 @@ def create_app() -> FastAPI:
     @application.get("/")
     def read_index():
         return FileResponse(str(index_path))
+
+    @application.head("/")
+    def read_index_head():
+        # Render robi HEAD / przy deployu — bez tego 405 i deploy może timeoutować
+        return Response(status_code=200)
+
+    @application.head("/health")
+    def health_head():
+        return Response(status_code=200)
 
     @application.get("/avatar.png")
     def get_avatar():
