@@ -1,11 +1,16 @@
-"""Współdzielone rodziny BOM między maszynami (np. Dual Head ← Extended head)."""
+"""Współdzielone katalogi BOM: dziedziczenie rodziny głowicy + pełny union par Easy Set."""
 
 from __future__ import annotations
 
 import re
 from typing import TYPE_CHECKING
 
-from app.rag.machines import FOLDER_TO_TAG, MACHINE_BOM_INHERITS, TAG_TO_DISPLAY
+from app.rag.machines import (
+    FOLDER_TO_TAG,
+    MACHINE_BOM_INHERITS,
+    MACHINE_BOM_UNION_PAIRS,
+    TAG_TO_DISPLAY,
+)
 
 if TYPE_CHECKING:
     from app.rag.catalog import PartRow
@@ -35,47 +40,76 @@ def tag_for_slug(slug: str) -> str:
     return FOLDER_TO_TAG.get(slug, "").lower()
 
 
+def _append_missing_parts(
+    child_rows: list[PartRow],
+    donor_rows: list[PartRow],
+    child_tag: str,
+    *,
+    head_family_only: bool,
+) -> list[PartRow]:
+    from app.rag.catalog import PartRow  # lokalny import — unika cyklu
+
+    have = {p.sku.upper() for p in child_rows}
+    display = TAG_TO_DISPLAY.get(child_tag, child_tag.upper())
+    out = list(child_rows)
+    for p in donor_rows:
+        if p.sku.upper() in have:
+            continue
+        if head_family_only and not is_head_family_part(p.sku, p.name, p.section):
+            continue
+        out.append(
+            PartRow(
+                sku=p.sku,
+                name=p.name,
+                qty=p.qty,
+                machine=display,
+                machine_tag=child_tag,
+                section=p.section,
+                fi_mm=p.fi_mm,
+                kind=p.kind,
+            )
+        )
+        have.add(p.sku.upper())
+    return out
+
+
 def merge_inherited_parts(
     catalog: dict[str, list[PartRow]],
 ) -> dict[str, list[PartRow]]:
     """
-    Dla każdego wpisu MACHINE_BOM_INHERITS dołącz head-family z rodziców
-    (dedupe po SKU). Wiersze dziedziczone dostają tag/display dziecka.
+    1) MACHINE_BOM_INHERITS — dołącz head-family z rodziców (dedupe po SKU).
+    2) MACHINE_BOM_UNION_PAIRS — pełny union katalogów (Easy Set ≡ baza).
     """
-    from app.rag.catalog import PartRow  # lokalny import — unika cyklu
-
     for child_slug, parent_slugs in MACHINE_BOM_INHERITS.items():
         child_tag = tag_for_slug(child_slug)
         if not child_tag:
             continue
         child_rows = list(catalog.get(child_tag, []))
-        have = {p.sku.upper() for p in child_rows}
-        display = TAG_TO_DISPLAY.get(child_tag, child_tag.upper())
-
         for parent_slug in parent_slugs:
             parent_tag = tag_for_slug(parent_slug)
             if not parent_tag:
                 continue
-            for p in catalog.get(parent_tag, []):
-                if p.sku.upper() in have:
-                    continue
-                if not is_head_family_part(p.sku, p.name, p.section):
-                    continue
-                child_rows.append(
-                    PartRow(
-                        sku=p.sku,
-                        name=p.name,
-                        qty=p.qty,
-                        machine=display,
-                        machine_tag=child_tag,
-                        section=p.section,
-                        fi_mm=p.fi_mm,
-                        kind=p.kind,
-                    )
-                )
-                have.add(p.sku.upper())
-
+            child_rows = _append_missing_parts(
+                child_rows,
+                catalog.get(parent_tag, []),
+                child_tag,
+                head_family_only=True,
+            )
         catalog[child_tag] = child_rows
+
+    for left_slug, right_slug in MACHINE_BOM_UNION_PAIRS:
+        left_tag = tag_for_slug(left_slug)
+        right_tag = tag_for_slug(right_slug)
+        if not left_tag or not right_tag:
+            continue
+        left_rows = list(catalog.get(left_tag, []))
+        right_rows = list(catalog.get(right_tag, []))
+        catalog[left_tag] = _append_missing_parts(
+            left_rows, right_rows, left_tag, head_family_only=False
+        )
+        catalog[right_tag] = _append_missing_parts(
+            right_rows, left_rows, right_tag, head_family_only=False
+        )
 
     return catalog
 
@@ -91,6 +125,21 @@ def merge_excel_rows(
         if sku.upper() in have:
             continue
         if not is_head_family_part(sku, name):
+            continue
+        out.append((sku, name, qty))
+        have.add(sku.upper())
+    return out
+
+
+def merge_excel_rows_full(
+    a_rows: list[tuple[str, str, str]],
+    b_rows: list[tuple[str, str, str]],
+) -> list[tuple[str, str, str]]:
+    """Import-time: pełny union dwóch BOM (sku, name, qty), dedupe po SKU."""
+    have = {sku.upper() for sku, _, _ in a_rows}
+    out = list(a_rows)
+    for sku, name, qty in b_rows:
+        if sku.upper() in have:
             continue
         out.append((sku, name, qty))
         have.add(sku.upper())

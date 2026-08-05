@@ -2,12 +2,12 @@
 [KATALOG CZĘŚCI EKSPLOATACYJNYCH — GŁÓWNE ŹRÓDŁO SKU DLA BDJ BUDGET]
 [ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z poniższych tabel. Zakaz wymyślania SKU.]
 [ALIAZY MODELU: BDJ BUDGET / BUDGET]
-[ŹRÓDŁO DANYCH: BUDGET.XLS | pełny BOM: bom.md | BEZ CEN]
+[ŹRÓDŁO DANYCH: BUDGET.XLS ∪ BUDGET EASY SET.XLS | pełny BOM: bom.md | BEZ CEN]
 
 # Części zamienne — BDJ BUDGET
 
 Ten katalog dotyczy wyłącznie maszyny **BDJ BUDGET**. Nie mieszaj części z innych modeli.
-Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
+Dane zaimportowane 1:1 z **BUDGET.XLS ∪ BUDGET EASY SET.XLS** (108 pozycji).
 
 ## 1. Oponki / gumki na rolkę
 [MODEL MASZYNY: BDJ BUDGET]
@@ -21,7 +21,24 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 
 ---
 
-## 2. Uszczelki na rurkę / mikrorurkę
+## 2. Uszczelki na kabel
+[MODEL MASZYNY: BDJ BUDGET]
+
+| Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
+| :--- | :--- | :---: | :--- |
+| UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 | BDJ BUDGET |
+| UK-D25X5-1 | Uszczelka na kabel D25x5 fi 1 (1 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-2 | Uszczelka na kabel D25x5 fi 2 (2 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-3 | Uszczelka na kabel D25x5 fi 3 (3 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 | BDJ BUDGET |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 | BDJ BUDGET |
+
+---
+
+## 3. Uszczelki na rurkę / mikrorurkę
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -38,16 +55,17 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 
 ---
 
-## 3. Uszczelki (inne)
+## 4. Uszczelki (inne)
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | ORG-10-KOM-0,56 | Organizer 10-komorowy 0,56 l- na uszczelki | 1 | BDJ BUDGET |
+| USZ-HYD-3/8 | Uszczelka hydrauliczna G3/8 | 1 | BDJ BUDGET |
 
 ---
 
-## 4. Tuleje / wstawki / mocowania głowicy
+## 5. Tuleje / wstawki / mocowania głowicy
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -65,10 +83,17 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 | BUD-MOC-LOZ-RUC | BUDGET - Mocowanie łożyska ruchome | 1 | BDJ BUDGET |
 | BUD-MOC-POK | BUDGET - Mocowanie pokrętła | 1 | BDJ BUDGET |
 | TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 4 | BDJ BUDGET |
+| BUD-GLO-WST-4 | BUDGET - Głowica wstawka - 4 | 1 | BDJ BUDGET |
+| BUD-GLO-WST-5 | BUDGET - Głowica wstawka - 5 | 1 | BDJ BUDGET |
+| BUD-GLO-WST-8.3 | BUDGET - Głowica wstawka - 8.3 | 1 | BDJ BUDGET |
+| BUD-MOC-POD | BUDGET - Mocowanie podajnika | 2 | BDJ BUDGET |
+| BUD-TUL-PRO-2 | BUDGET - Tulejka prowadząca - 2 | 2 | BDJ BUDGET |
+| BUD-TUL-PRO-5 | BUDGET - Tulejka prowadząca - 5 | 2 | BDJ BUDGET |
+| BUD-TUL-PRO-8.3 | BUDGET - Tulejka prowadząca - 8 | 2 | BDJ BUDGET |
 
 ---
 
-## 5. Głowica — korpusy i elementy
+## 6. Głowica — korpusy i elementy
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -76,10 +101,13 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 | BUD-GLO-DZI-CEO | BUDGET - Głowica dzielona - Ceownik | 1 | BDJ BUDGET |
 | BUD-GLO-DZI-KOR-DOL | BUDGET - Głowica dzielona - Korpus dolny | 1 | BDJ BUDGET |
 | BUD-GLO-DZI-KOR-GOR | BUDGET - Głowica dzielona - Korpus górny | 1 | BDJ BUDGET |
+| BUD-GLO-PRZ | BUDGET - Głowica Przód | 1 | BDJ BUDGET |
+| BUD-GLO-ZAM | BUDGET - Głowica Zamknięcie | 1 | BDJ BUDGET |
+| BUD-KLU-WIE | BUDGET - Klucz (Klucz do głowicy wielowymiarowy) / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 1 | BDJ BUDGET |
 
 ---
 
-## 6. Rolki / wałki
+## 7. Rolki / wałki
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -89,10 +117,11 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 | BUD-WAL-NAP | BUDGET - Wałek do napedu | 1 | BDJ BUDGET |
 | BUD-WAL-SWO | BUDGET - Wałek swobodny | 1 | BDJ BUDGET |
 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 | BDJ BUDGET |
+| BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 | BDJ BUDGET |
 
 ---
 
-## 7. Łożyska
+## 8. Łożyska
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -108,7 +137,7 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 
 ---
 
-## 8. Pneumatyka / szybkozłącza
+## 9. Pneumatyka / szybkozłącza
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -118,10 +147,19 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 | BDJ BUDGET |
 | SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 | BDJ BUDGET |
 | ZAW-KUL-1/4-GWGZ | Zawór kulowy G1/4'' (WW) Eco-Line 25bar | 1 | BDJ BUDGET |
+| BUD-SZY-TOC-4 | BUDGET - Szybkozłącze Toczone - 4 | 1 | BDJ BUDGET |
+| BUD-SZY-TOC-5 | BUDGET - Szybkozłącze Toczone - 5 | 1 | BDJ BUDGET |
+| BUD-SZY-TOC-8.3 | BUDGET - Szybkozłącze Toczone - 8.3 | 1 | BDJ BUDGET |
+| SZY-DO-MIK-PNE-10MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 10mm Gwint 3/8' | 1 | BDJ BUDGET |
+| SZY-DO-MIK-PNE-12MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 12mm Gwint 3/8' | 1 | BDJ BUDGET |
+| SZY-DO-MIK-PNE-14MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 14mm Gwint 3/8' | 1 | BDJ BUDGET |
+| SZY-DO-MIK-PNE-16MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 16mm Gwint 3/8' | 1 | BDJ BUDGET |
+| SZY-DO-MIK-PNE-5MM-G1/4 | Szybkozłączka do mikrorurek (pneumatyczne) 5mm Gwint 1/4' | 1 | BDJ BUDGET |
+| SZY-NW7.2-BEZ-ZAW-ZAM-3/8 | Szybkozłącze żeńskie Gwint 3/8'' Typ 21 DN 7.2 – bez zaworu zamykającego | 1 | BDJ BUDGET |
 
 ---
 
-## 9. Skrzynka / organizer / akcesoria
+## 10. Skrzynka / organizer / akcesoria
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -134,10 +172,14 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 | ZAS-MIK-RUR-10 | Zaślepka mikrorurek 10mm | 1 | BDJ BUDGET |
 | ZAS-MIK-RUR-5 | Zaślepka mikrorurek 5mm | 1 | BDJ BUDGET |
 | ZAS-MIK-RUR-7 | Zaślepka mikroruek 7mm | 1 | BDJ BUDGET |
+| BUD-ZWY-PIANKA | Pianka do skrzynki Budget zwykły | 1 | BDJ BUDGET |
+| ZAS-MIK-RUR-12 | Zaślepka mikrorurek 12mm | 1 | BDJ BUDGET |
+| ZAS-MIK-RUR-14 | Zaślepka mikrorurek 14mm | 1 | BDJ BUDGET |
+| ZAS-MIK-RUR-16 | Zaślepka mikrorurek 16mm | 1 | BDJ BUDGET |
 
 ---
 
-## 10. Pozostałe części
+## 11. Pozostałe części
 [MODEL MASZYNY: BDJ BUDGET]
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
@@ -153,5 +195,12 @@ Dane zaimportowane 1:1 z **BUDGET.XLS** (67 pozycji).
 | POK-VCT-50B-M10-C9 | Pokrętło VCT 50B-M10-C9 | 1 | BDJ BUDGET |
 | SRU-DOC-GN903-18-M10 | Śruba dociskowa (budget z gł. dzielona) | 1 | BDJ BUDGET |
 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 | BDJ BUDGET |
+| BUD-SRU-MOC-MAS-M12 | BUDGET - Śruba mocująca maszynę M12 | 1 | BDJ BUDGET |
+| BUD-WPR-KAB | BUDGET - Wprowadzenie kabla | 1 | BDJ BUDGET |
+| GAM-STO-BDGN-POD | Podstawa stojaka do wdmuchiwarki BDJ Budget Easyset | 1 | BDJ BUDGET |
+| GAM-STO-BDGN-TYC | Tyczka stojaka do wdmuchiwarki Budget Easyset | 1 | BDJ BUDGET |
+| WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 | BDJ BUDGET |
+| ZLA-RED-10-7 | Złączka redukcyjna z 10 na 7 | 1 | BDJ BUDGET |
+| ZLA-RED-GZ3/8-GW1/4 | Złączka redukcyjna, G3/8(GZ)-G1/4(GW), 16 bar, mosiądz niklowany | 1 | BDJ BUDGET |
 
 ---

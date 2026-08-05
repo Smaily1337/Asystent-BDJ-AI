@@ -115,7 +115,7 @@ def _parse_czesci_file(path: Path, machine_tag: str) -> list[PartRow]:
 
 @lru_cache(maxsize=1)
 def load_catalog() -> dict[str, list[PartRow]]:
-    """machine_tag (lower) → lista części (+ MACHINE_BOM_INHERITS)."""
+    """machine_tag (lower) → lista części (+ MACHINE_BOM_INHERITS / UNION_PAIRS)."""
     root = ROOT_DIR / "knowledge" / "maszyny"
     out: dict[str, list[PartRow]] = {}
     if not root.exists():

@@ -2,12 +2,12 @@
 [KATALOG CZĘŚCI EKSPLOATACYJNYCH — GŁÓWNE ŹRÓDŁO SKU DLA BDJ BUDGET PLUS]
 [ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z poniższych tabel. Zakaz wymyślania SKU.]
 [ALIAZY MODELU: BDJ BUDGET PLUS / BUDGET PLUS]
-[ŹRÓDŁO DANYCH: BUDGET PLUS.XLS | pełny BOM: bom.md | BEZ CEN]
+[ŹRÓDŁO DANYCH: BUDGET PLUS.XLS ∪ BUDGET PLUS EASY SET.XLS | pełny BOM: bom.md | BEZ CEN]
 
 # Części zamienne — BDJ BUDGET PLUS
 
 Ten katalog dotyczy wyłącznie maszyny **BDJ BUDGET PLUS**. Nie mieszaj części z innych modeli.
-Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
+Dane zaimportowane 1:1 z **BUDGET PLUS.XLS ∪ BUDGET PLUS EASY SET.XLS** (70 pozycji).
 
 ## 1. Oponki / gumki na rolkę
 [MODEL MASZYNY: BDJ BUDGET PLUS]
@@ -89,6 +89,7 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 | BUD-WAL-NAP | BUDGET - Wałek do napedu | 1 | BDJ BUDGET PLUS |
 | BUD-WAL-SWO | BUDGET - Wałek swobodny | 1 | BDJ BUDGET PLUS |
 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 | BDJ BUDGET PLUS |
+| BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 | BDJ BUDGET PLUS |
 
 ---
 
@@ -117,6 +118,7 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 | BDJ BUDGET PLUS |
 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 | BDJ BUDGET PLUS |
 | ZAW-KUL-1/4-GWGZ | Zawór kulowy G1/4'' (WW) Eco-Line 25bar | 1 | BDJ BUDGET PLUS |
+| SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 | BDJ BUDGET PLUS |
 
 ---
 
@@ -152,5 +154,7 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 | SRU-DOC-GN903-18-M10 | Śruba dociskowa (budget z gł. dzielona) | 1 | BDJ BUDGET PLUS |
 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 | BDJ BUDGET PLUS |
 | POK-VCT-50B-M10-C5 | Pokrętło VCT.50 B-M10-C5 | 1 | BDJ BUDGET PLUS |
+| BUD-SRU-MOC-MAS-M12 | BUDGET - Śruba mocująca maszynę M12 | 1 | BDJ BUDGET PLUS |
+| WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 | BDJ BUDGET PLUS |
 
 ---

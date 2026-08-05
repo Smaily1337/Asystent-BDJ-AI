@@ -2,12 +2,12 @@
 [KATALOG CZĘŚCI EKSPLOATACYJNYCH — GŁÓWNE ŹRÓDŁO SKU DLA BDJ BUDGET PLUS EASY SET]
 [ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z poniższych tabel. Zakaz wymyślania SKU.]
 [ALIAZY MODELU: BDJ BUDGET PLUS EASY SET / BUDGET PLUS EASY SET]
-[ŹRÓDŁO DANYCH: BUDGET PLUS EASY SET.XLS | pełny BOM: bom.md | BEZ CEN]
+[ŹRÓDŁO DANYCH: BUDGET PLUS.XLS ∪ BUDGET PLUS EASY SET.XLS | pełny BOM: bom.md | BEZ CEN]
 
 # Części zamienne — BDJ BUDGET PLUS EASY SET
 
 Ten katalog dotyczy wyłącznie maszyny **BDJ BUDGET PLUS EASY SET**. Nie mieszaj części z innych modeli.
-Dane zaimportowane 1:1 z **BUDGET PLUS EASY SET.XLS** (69 pozycji).
+Dane zaimportowane 1:1 z **BUDGET PLUS.XLS ∪ BUDGET PLUS EASY SET.XLS** (70 pozycji).
 
 ## 1. Oponki / gumki na rolkę
 [MODEL MASZYNY: BDJ BUDGET PLUS EASY SET]
@@ -84,11 +84,12 @@ Dane zaimportowane 1:1 z **BUDGET PLUS EASY SET.XLS** (69 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| BUD-ROL | BUDGET - Rolka Alu v1.1 | 5 | BDJ BUDGET PLUS EASY SET |
-| BUD-ROL-WYS-RAN | BUDGET - Rolka Alu wysoki rant v1.1 | 2 | BDJ BUDGET PLUS EASY SET |
-| BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 | BDJ BUDGET PLUS EASY SET |
+| BUD-ROL | BUDGET - Rolka Alu | 5 | BDJ BUDGET PLUS EASY SET |
+| BUD-ROL-WYS-RAN | BUDGET - Rolka Alu wysoki rant | 2 | BDJ BUDGET PLUS EASY SET |
+| BUD-WAL-NAP | BUDGET - Wałek do napedu | 1 | BDJ BUDGET PLUS EASY SET |
 | BUD-WAL-SWO | BUDGET - Wałek swobodny | 1 | BDJ BUDGET PLUS EASY SET |
 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 | BDJ BUDGET PLUS EASY SET |
+| BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 | BDJ BUDGET PLUS EASY SET |
 
 ---
 
@@ -116,8 +117,8 @@ Dane zaimportowane 1:1 z **BUDGET PLUS EASY SET.XLS** (69 pozycji).
 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6 (6 mm)(mosiądz niklowany) | 2 | BDJ BUDGET PLUS EASY SET |
 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 | BDJ BUDGET PLUS EASY SET |
 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 | BDJ BUDGET PLUS EASY SET |
-| SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 | BDJ BUDGET PLUS EASY SET |
 | ZAW-KUL-1/4-GWGZ | Zawór kulowy G1/4'' (WW) Eco-Line 25bar | 1 | BDJ BUDGET PLUS EASY SET |
+| SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 | BDJ BUDGET PLUS EASY SET |
 
 ---
 
@@ -127,7 +128,7 @@ Dane zaimportowane 1:1 z **BUDGET PLUS EASY SET.XLS** (69 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | BUD-DZIEL-PIANKA | Pianka do skrzynki Budget dzielony | 1 | BDJ BUDGET PLUS EASY SET |
-| BUD-SKRZYNKA | Skrzynka do wdmuchiwarki BDJ budget WP 42x10x33 cm, flight cases, Con-Pearl gr. 7 mm, niebieska z grawerem | 1 | BDJ BUDGET PLUS EASY SET |
+| BUD-SKRZYNKA | Skrzynka do wdmuchiwarki BDJ budget WP 42x10x33 cm, flight cases, Con-Pearl gr. 7 mm, niebieska | 1 | BDJ BUDGET PLUS EASY SET |
 | NOZ-OBC-DO-MIK | NÓŻ/OBCINAK DO MIKRORUREK 0-25mm | 1 | BDJ BUDGET PLUS EASY SET |
 | PRELUBE | PŁYN POŚLIZGOWY DO ŚWIATŁOWODÓW PRELUBE 5000 0,24L | 1 | BDJ BUDGET PLUS EASY SET |
 | PUD-NA-KUL-KAL | Pudełko na kulki kalibrujące/ organizer typu kasetka z 6 pokrywkami 80x60 | 1 | BDJ BUDGET PLUS EASY SET |
@@ -146,14 +147,14 @@ Dane zaimportowane 1:1 z **BUDGET PLUS EASY SET.XLS** (69 pozycji).
 | BUD-OBU | BUDGET - Obudowa | 1 | BDJ BUDGET PLUS EASY SET |
 | BUD-POKRETLO | BUDGET - Pokrętło | 1 | BDJ BUDGET PLUS EASY SET |
 | BUD-POKRYWA | BUDGET - Pokrywa | 1 | BDJ BUDGET PLUS EASY SET |
-| BUD-SRU-MOC-MAS-M12 | BUDGET - Śruba mocująca maszynę M12 | 1 | BDJ BUDGET PLUS EASY SET |
 | BUD-SRU-REG-WYS | BUDGET - Śruba regulacji wysokości | 1 | BDJ BUDGET PLUS EASY SET |
 | KLU-IMB-DLU-2.5MM | Klucz imbusowy typu "L" długi 2,5 mm | 1 | BDJ BUDGET PLUS EASY SET |
 | KLU-IMB-DLU-4MM | Klucz imbusowy długi 4mm | 1 | BDJ BUDGET PLUS EASY SET |
 | KOL-MOS-1/4GWGZ | Kolano gwintowane 90°, G1/4(GW)-R1/4(GZ), 16 bar, mosiądz niklowany | 1 | BDJ BUDGET PLUS EASY SET |
-| POK-VCT-50B-M10-C5 | Pokrętło VCT.50 B-M10-C5 | 1 | BDJ BUDGET PLUS EASY SET |
 | SRU-DOC-GN903-18-M10 | Śruba dociskowa (budget z gł. dzielona) | 1 | BDJ BUDGET PLUS EASY SET |
 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 | BDJ BUDGET PLUS EASY SET |
+| POK-VCT-50B-M10-C5 | Pokrętło VCT.50 B-M10-C5 | 1 | BDJ BUDGET PLUS EASY SET |
+| BUD-SRU-MOC-MAS-M12 | BUDGET - Śruba mocująca maszynę M12 | 1 | BDJ BUDGET PLUS EASY SET |
 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 | BDJ BUDGET PLUS EASY SET |
 
 ---

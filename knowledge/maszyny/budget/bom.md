@@ -1,11 +1,11 @@
 [MODEL MASZYNY: BDJ BUDGET]
 [BOM PRODUKCYJNY DLA BDJ BUDGET]
-[ŹRÓDŁO: BUDGET.XLS — import 1:1, bez cen]
+[ŹRÓDŁO: BUDGET.XLS ∪ BUDGET EASY SET.XLS — import 1:1, bez cen]
 [ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
 # BOM — BDJ BUDGET
 
-Pełna lista pozycji z pliku **BUDGET.XLS** (67 SKU).
+Pełna lista pozycji z pliku **BUDGET.XLS ∪ BUDGET EASY SET.XLS** (108 SKU).
 
 | Lp | Kod SKU | Nazwa | Ilość |
 | :---: | :--- | :--- | :---: |
@@ -76,3 +76,44 @@ Pełna lista pozycji z pliku **BUDGET.XLS** (67 SKU).
 | 65 | ZAS-MIK-RUR-5 | Zaślepka mikrorurek 5mm | 1 |
 | 66 | ZAS-MIK-RUR-7 | Zaślepka mikroruek 7mm | 1 |
 | 67 | ZAW-KUL-1/4-GWGZ | Zawór kulowy G1/4'' (WW) Eco-Line 25bar | 1 |
+| 68 | BUD-GLO-PRZ | BUDGET - Głowica Przód | 1 |
+| 69 | BUD-GLO-WST-4 | BUDGET - Głowica wstawka - 4 | 1 |
+| 70 | BUD-GLO-WST-5 | BUDGET - Głowica wstawka - 5 | 1 |
+| 71 | BUD-GLO-WST-8.3 | BUDGET - Głowica wstawka - 8.3 | 1 |
+| 72 | BUD-GLO-ZAM | BUDGET - Głowica Zamknięcie | 1 |
+| 73 | BUD-KLU-WIE | BUDGET - Klucz (Klucz do głowicy wielowymiarowy) / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 1 |
+| 74 | BUD-MOC-POD | BUDGET - Mocowanie podajnika | 2 |
+| 75 | BUD-SRU-MOC-MAS-M12 | BUDGET - Śruba mocująca maszynę M12 | 1 |
+| 76 | BUD-SZY-TOC-4 | BUDGET - Szybkozłącze Toczone - 4 | 1 |
+| 77 | BUD-SZY-TOC-5 | BUDGET - Szybkozłącze Toczone - 5 | 1 |
+| 78 | BUD-SZY-TOC-8.3 | BUDGET - Szybkozłącze Toczone - 8.3 | 1 |
+| 79 | BUD-TUL-PRO-2 | BUDGET - Tulejka prowadząca - 2 | 2 |
+| 80 | BUD-TUL-PRO-5 | BUDGET - Tulejka prowadząca - 5 | 2 |
+| 81 | BUD-TUL-PRO-8.3 | BUDGET - Tulejka prowadząca - 8 | 2 |
+| 82 | BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 |
+| 83 | BUD-WPR-KAB | BUDGET - Wprowadzenie kabla | 1 |
+| 84 | BUD-ZWY-PIANKA | Pianka do skrzynki Budget zwykły | 1 |
+| 85 | GAM-STO-BDGN-POD | Podstawa stojaka do wdmuchiwarki BDJ Budget Easyset | 1 |
+| 86 | GAM-STO-BDGN-TYC | Tyczka stojaka do wdmuchiwarki Budget Easyset | 1 |
+| 87 | SZY-DO-MIK-PNE-10MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 10mm Gwint 3/8' | 1 |
+| 88 | SZY-DO-MIK-PNE-12MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 12mm Gwint 3/8' | 1 |
+| 89 | SZY-DO-MIK-PNE-14MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 14mm Gwint 3/8' | 1 |
+| 90 | SZY-DO-MIK-PNE-16MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 16mm Gwint 3/8' | 1 |
+| 91 | SZY-DO-MIK-PNE-5MM-G1/4 | Szybkozłączka do mikrorurek (pneumatyczne) 5mm Gwint 1/4' | 1 |
+| 92 | SZY-NW7.2-BEZ-ZAW-ZAM-3/8 | Szybkozłącze żeńskie Gwint 3/8'' Typ 21 DN 7.2 – bez zaworu zamykającego | 1 |
+| 93 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 |
+| 94 | UK-D25X5-1 | Uszczelka na kabel D25x5 fi 1 (1 mm) | 1 |
+| 95 | UK-D25X5-2 | Uszczelka na kabel D25x5 fi 2 (2 mm) | 1 |
+| 96 | UK-D25X5-3 | Uszczelka na kabel D25x5 fi 3 (3 mm) | 1 |
+| 97 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 |
+| 98 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 |
+| 99 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 |
+| 100 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 |
+| 101 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 |
+| 102 | USZ-HYD-3/8 | Uszczelka hydrauliczna G3/8 | 1 |
+| 103 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 |
+| 104 | ZAS-MIK-RUR-12 | Zaślepka mikrorurek 12mm | 1 |
+| 105 | ZAS-MIK-RUR-14 | Zaślepka mikrorurek 14mm | 1 |
+| 106 | ZAS-MIK-RUR-16 | Zaślepka mikrorurek 16mm | 1 |
+| 107 | ZLA-RED-10-7 | Złączka redukcyjna z 10 na 7 | 1 |
+| 108 | ZLA-RED-GZ3/8-GW1/4 | Złączka redukcyjna, G3/8(GZ)-G1/4(GW), 16 bar, mosiądz niklowany | 1 |

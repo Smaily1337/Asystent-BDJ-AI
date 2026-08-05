@@ -234,21 +234,24 @@ def write_dragonair_stub() -> None:
     (d / "czesci.md").write_text(note, encoding="utf-8")
 
 
-# Child slug → parent slug(s): union head-family parts at import time.
-# Mirror of app.rag.machines.MACHINE_BOM_INHERITS (Dual Head shares Extended head).
+# Mirrors of app.rag.machines — Dual Head ← Extended head; Easy Set ≡ base full union.
 BOM_INHERITS: dict[str, list[str]] = {
     "max_dual_head": ["extended"],
 }
+BOM_UNION_PAIRS: list[tuple[str, str]] = [
+    ("budget", "budget_easy_set"),
+    ("budget_plus", "budget_plus_easy_set"),
+]
 
 
 def main(downloads: Path) -> None:
     # Import lokalny — skrypt może iść bez pełnego PYTHONPATH app/
     try:
-        from app.rag.bom_inherit import merge_excel_rows
+        from app.rag.bom_inherit import merge_excel_rows, merge_excel_rows_full
         from app.rag.catalog import normalize_fi_mm_in_name
     except ImportError:
         sys.path.insert(0, str(ROOT))
-        from app.rag.bom_inherit import merge_excel_rows
+        from app.rag.bom_inherit import merge_excel_rows, merge_excel_rows_full
         from app.rag.catalog import normalize_fi_mm_in_name
 
     if OUT.exists():
@@ -259,7 +262,7 @@ def main(downloads: Path) -> None:
 
     SRC_COPY.mkdir(parents=True, exist_ok=True)
 
-    # Najpierw wczytaj wszystkie Excelle, potem dziedziczenie, potem zapis
+    # Najpierw wczytaj wszystkie Excelle, potem dziedziczenie/union, potem zapis
     loaded: dict[str, tuple[str, list[str], list[tuple[str, str, str]], str, list[tuple[str, str, str]]]] = {}
     for filename, slug, tag, aliases in MAPPING:
         src = downloads / filename
@@ -278,29 +281,51 @@ def main(downloads: Path) -> None:
             raise RuntimeError(f"Pusty Excel: {filename}")
         loaded[slug] = (tag, aliases, rows, filename, raw_rows)
 
-    total = 0
-    fi_mm_names = 0
+    # Mutable working copies + source notes
+    work_rows: dict[str, list[tuple[str, str, str]]] = {s: list(v[2]) for s, v in loaded.items()}
+    source_notes: dict[str, str] = {s: v[3] for s, v in loaded.items()}
     names_changed = 0
-    for slug, (tag, aliases, rows, filename, raw_rows) in loaded.items():
+    for slug, (_tag, _aliases, rows, _filename, raw_rows) in loaded.items():
         names_changed += sum(
             1 for (_, raw_n, _), (_, new_n, _) in zip(raw_rows, rows) if raw_n != new_n
         )
-        parents = BOM_INHERITS.get(slug, [])
+
+    for slug, parents in BOM_INHERITS.items():
+        if slug not in work_rows:
+            continue
         for parent_slug in parents:
-            if parent_slug not in loaded:
+            if parent_slug not in work_rows:
                 print(f"WARN  {slug}: brak rodzica {parent_slug} do dziedziczenia")
                 continue
-            before = len(rows)
-            rows = merge_excel_rows(rows, loaded[parent_slug][2])
-            added = len(rows) - before
+            before = len(work_rows[slug])
+            work_rows[slug] = merge_excel_rows(work_rows[slug], work_rows[parent_slug])
+            added = len(work_rows[slug]) - before
             if added:
                 print(f"INHERIT {slug} ← {parent_slug} head-family +{added} SKU")
+                source_notes[slug] = f"{source_notes[slug]} ∪ head-family from {parent_slug}"
 
+    for left, right in BOM_UNION_PAIRS:
+        if left not in work_rows or right not in work_rows:
+            print(f"WARN  UNION {left} ↔ {right}: brak jednej ze stron")
+            continue
+        before_l, before_r = len(work_rows[left]), len(work_rows[right])
+        unioned = merge_excel_rows_full(work_rows[left], work_rows[right])
+        work_rows[left] = list(unioned)
+        work_rows[right] = list(unioned)
+        added_l = len(work_rows[left]) - before_l
+        added_r = len(work_rows[right]) - before_r
+        print(f"UNION  {left} ↔ {right}  +{added_l}/+{added_r} → {len(unioned)} SKU")
+        note = f"{loaded[left][3]} ∪ {loaded[right][3]}"
+        source_notes[left] = note
+        source_notes[right] = note
+
+    total = 0
+    fi_mm_names = 0
+    for slug, (tag, aliases, _rows, _filename, _raw_rows) in loaded.items():
+        rows = work_rows[slug]
         out_dir = OUT / slug
         out_dir.mkdir(parents=True, exist_ok=True)
-        source_note = filename
-        if parents:
-            source_note = f"{filename} ∪ head-family from {', '.join(parents)}"
+        source_note = source_notes[slug]
         write_bom(out_dir / "bom.md", tag, source_note, rows)
         write_czesci(out_dir / "czesci.md", tag, source_note, aliases, rows)
         total += len(rows)
@@ -320,6 +345,7 @@ def main(downloads: Path) -> None:
     print(f"One-shot MD name fixes: {md_fixed}")
     print(f"Kopie Excel: {SRC_COPY}")
     print(f"Dziedziczenie głowicy: {BOM_INHERITS}")
+    print(f"Union Easy Set: {BOM_UNION_PAIRS}")
 
 
 if __name__ == "__main__":

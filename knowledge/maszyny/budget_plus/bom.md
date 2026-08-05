@@ -1,11 +1,11 @@
 [MODEL MASZYNY: BDJ BUDGET PLUS]
 [BOM PRODUKCYJNY DLA BDJ BUDGET PLUS]
-[ŹRÓDŁO: BUDGET PLUS.XLS — import 1:1, bez cen]
+[ŹRÓDŁO: BUDGET PLUS.XLS ∪ BUDGET PLUS EASY SET.XLS — import 1:1, bez cen]
 [ZASADA ANTY-HALUCYNACJA: Wolno przepisywać WYŁĄCZNIE wiersze z tej tabeli. Zakaz wymyślania SKU.]
 
 # BOM — BDJ BUDGET PLUS
 
-Pełna lista pozycji z pliku **BUDGET PLUS.XLS** (66 SKU).
+Pełna lista pozycji z pliku **BUDGET PLUS.XLS ∪ BUDGET PLUS EASY SET.XLS** (70 SKU).
 
 | Lp | Kod SKU | Nazwa | Ilość |
 | :---: | :--- | :--- | :---: |
@@ -75,3 +75,7 @@ Pełna lista pozycji z pliku **BUDGET PLUS.XLS** (66 SKU).
 | 64 | ZAS-MIK-RUR-7 | Zaślepka mikroruek 7mm | 1 |
 | 65 | ZAW-KUL-1/4-GWGZ | Zawór kulowy G1/4'' (WW) Eco-Line 25bar | 1 |
 | 66 | POK-VCT-50B-M10-C5 | Pokrętło VCT.50 B-M10-C5 | 1 |
+| 67 | BUD-SRU-MOC-MAS-M12 | BUDGET - Śruba mocująca maszynę M12 | 1 |
+| 68 | BUD-WAL-NAP-B | BUDGET - Wałek do napedu B | 1 |
+| 69 | SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 |
+| 70 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 |
