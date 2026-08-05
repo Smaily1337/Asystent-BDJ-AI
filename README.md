@@ -41,7 +41,7 @@ Na Renderze ustaw te same klucze w **Environment** (Dashboard → serwis → Env
 | `DEEPSEEK_API_KEY` | tak | chat / RAG |
 | `RESEND_API_KEY` | tak (Render) | wysyłka maili przez API (działa na Free) |
 | `RESEND_FROM` | nie | domyślnie `Dragon AI <onboarding@resend.dev>` |
-| `OFFER_RECIPIENTS` | nie | domyślnie `info@gamm-bud.com` |
+| `OFFER_RECIPIENTS` | nie | domyślnie `info@gamm-bud.pl` |
 | `SMTP_LOGIN` | lokalnie | konto SMTP (na Render Free **nie działa**) |
 | `SMTP_PASSWORD` | lokalnie | hasło aplikacji Gmail |
 | `ADMIN_USER` / `ADMIN_PASSWORD` | zalecane | panel `/admin` |

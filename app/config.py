@@ -45,7 +45,7 @@ class Settings:
             r.strip()
             for r in os.getenv(
                 "OFFER_RECIPIENTS",
-                "info@gamm-bud.com",
+                "info@gamm-bud.pl",
             ).split(",")
             if r.strip()
         )
