@@ -59,7 +59,12 @@
             overflow: hidden !important;
         }
         html.embed-mode #fab-btn { z-index: 2147483646; }
-        html.embed-mode #chat-widget { z-index: 2147483645; }
+        html.embed-mode #chat-widget {
+            z-index: 2147483645;
+            background: rgba(255, 255, 255, 0.96) !important;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+        }
         html.embed-mode .fab-tooltip { z-index: 2147483644; }
         html.embed-mode .modal-overlay { z-index: 2147483647; }
 
@@ -1929,11 +1934,33 @@ const BDJChatApp = (() => {
 
     const closeModal = () => { DOM.modal.style.display = 'none'; };
 
+    const isEmbed = document.documentElement.classList.contains('embed-mode');
+    const notifyEmbedParent = () => {
+        if (!isEmbed || window.parent === window) return;
+        const open = DOM.widget.classList.contains('open');
+        const tooltip = !open && DOM.tooltip && DOM.tooltip.classList.contains('show');
+        try {
+            window.parent.postMessage({ type: 'bdj-ai-resize', open, tooltip }, '*');
+        } catch (_) { /* ignore */ }
+    };
+
+    const setChatOpen = (open) => {
+        DOM.widget.classList.toggle('open', open);
+        DOM.fab.classList.toggle('open', open);
+        if (open) {
+            DOM.tooltip.classList.remove('show');
+            DOM.input.focus();
+        }
+        notifyEmbedParent();
+    };
+
     const bindEvents = () => {
+        notifyEmbedParent();
         // Po 3 sekundach pokazujemy zachęcającą chmurkę nad FAB
         setTimeout(() => {
             if (!DOM.widget.classList.contains('open')) {
                 DOM.tooltip.classList.add('show');
+                notifyEmbedParent();
             }
         }, 3000);
 
@@ -1941,23 +1968,17 @@ const BDJChatApp = (() => {
             if (e.target.id === 'tooltip-close') {
                 e.stopPropagation();
                 DOM.tooltip.classList.remove('show');
+                notifyEmbedParent();
             } else {
-                DOM.tooltip.classList.remove('show');
-                DOM.widget.classList.add('open');
-                DOM.fab.classList.add('open');
-                DOM.input.focus();
+                setChatOpen(true);
             }
         });
 
         DOM.fab.addEventListener('click', () => {
-            DOM.tooltip.classList.remove('show');
-            DOM.widget.classList.toggle('open');
-            DOM.fab.classList.toggle('open');
-            if(DOM.widget.classList.contains('open')) DOM.input.focus();
+            setChatOpen(!DOM.widget.classList.contains('open'));
         });
         DOM.btnClose.addEventListener('click', () => {
-            DOM.widget.classList.remove('open');
-            DOM.fab.classList.remove('open');
+            setChatOpen(false);
         });
 
         DOM.btnReset.addEventListener('click', resetSession);
