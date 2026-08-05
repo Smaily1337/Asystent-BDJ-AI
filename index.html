@@ -1369,7 +1369,11 @@ const BDJChatApp = (() => {
             if (name) {
                 const nameEl = document.createElement('div');
                 nameEl.className = 'part-card-name';
-                nameEl.textContent = name;
+                // fi 32 → fi 32 (32 mm); nie dubluj gdy mm już jest
+                nameEl.textContent = name.replace(
+                    /\bfi\s*(\d+(?:[.,]\d+)?)(?!\d)(?![.,]\d)(?!\s*mm\b)(?!\s*\(\s*\d+(?:[.,]\d+)?\s*mm\s*\))/gi,
+                    (m, n) => `${m} (${n} mm)`
+                );
                 card.appendChild(nameEl);
             }
 
