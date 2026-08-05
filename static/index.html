@@ -190,50 +190,6 @@
             backdrop-filter: blur(8px);
         }
 
-        .changelog-bar {
-            flex-shrink: 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.22);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        .changelog-toggle {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            padding: 10px 20px;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-align: left;
-        }
-        .changelog-toggle:hover { color: var(--text-dark); background: rgba(255,255,255,0.28); }
-        .changelog-toggle .chevron {
-            flex-shrink: 0;
-            transition: transform 0.2s;
-            font-size: 0.9rem;
-            color: #94a3b8;
-        }
-        .changelog-bar.open .changelog-toggle .chevron { transform: rotate(180deg); }
-        .changelog-body {
-            display: none;
-            padding: 0 20px 14px;
-            font-size: 0.76rem;
-            line-height: 1.45;
-            color: var(--text-muted);
-        }
-        .changelog-bar.open .changelog-body { display: block; }
-        .changelog-body ul {
-            margin: 0;
-            padding-left: 18px;
-        }
-        .changelog-body li { margin-bottom: 5px; }
-        .changelog-body strong { color: var(--text-dark); font-weight: 700; }
         
         .header-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
         .btn-reset { 
@@ -1001,7 +957,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">prealpha 0.0.7</span>
+                <span class="app-version">0.0.7</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1012,25 +968,6 @@
             <button class="btn-close" id="btn-close">&times;</button>
         </div>
     </header>
-
-    <div class="changelog-bar" id="changelog-bar">
-        <button type="button" class="changelog-toggle" id="changelog-toggle" aria-expanded="false">
-            <span>Spis zmian — 5 sie 2026 · prealpha 0.0.7</span>
-            <span class="chevron">▾</span>
-        </button>
-        <div class="changelog-body">
-            <ul>
-                <li><strong>Katalog deterministyczny:</strong> SKU tylko z BOM — bez halucynacji LLM; hybryda: sloty intencji + katalog.</li>
-                <li><strong>MAX vs MAX Dual Head:</strong> poprawne rozpoznanie modelu; Dual Head dziedziczy głowicę Extended (UM/UK).</li>
-                <li><strong>Listy części:</strong> „pokaż listę uszczelek” bez wymiaru mm; follow-up po rozmowie o uszczelki.</li>
-                <li><strong>Budget / Easy Set:</strong> union katalogów (Budget↔Easy Set, Plus↔Plus Easy Set); Plus dziedziczy UK z Budget.</li>
-                <li><strong>Nazwy w BOM:</strong> <code>fi 50 (50 mm)</code> przy imporcie — lepsze wyszukiwanie po mm i fi.</li>
-                <li><strong>Synonimy:</strong> koło napędowe → oponka; oponka płaska nie myli się z uszczelką po wcześniejszej sesji.</li>
-                <li><strong>UI:</strong> chipy Hydro Multi Tube / DragonAir; spis zmian domyślnie zwinięty; błąd maila gdy brak SMTP.</li>
-                <li><strong>Render:</strong> HEAD /health — stabilniejszy deploy.</li>
-            </ul>
-        </div>
-    </div>
 
     <main id="chat-history">
         <!-- Renderowane przez JS -->
@@ -1048,7 +985,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </div>
-        <div class="disclaimer-text">System automatycznego doboru komponentów BDJ. Weryfikuj wymiary przed zamówieniem.</div>
+        <div class="disclaimer-text">System automatycznego doboru komponentów BDJ. Weryfikuj wymiary przed zamówieniem.<br><strong>Rozwiązanie eksperymentalne</strong> — asystent może popełniać błędy; zawsze sprawdź SKU i wymiary przed zamówieniem.</div>
     </footer>
 </div>
 
@@ -2008,15 +1945,6 @@ const BDJChatApp = (() => {
             DOM.widget.classList.remove('open');
             DOM.fab.classList.remove('open');
         });
-
-        const changelogBar = document.getElementById('changelog-bar');
-        const changelogToggle = document.getElementById('changelog-toggle');
-        if (changelogBar && changelogToggle) {
-            changelogToggle.addEventListener('click', () => {
-                changelogBar.classList.toggle('open');
-                changelogToggle.setAttribute('aria-expanded', changelogBar.classList.contains('open'));
-            });
-        }
 
         DOM.btnReset.addEventListener('click', resetSession);
 
