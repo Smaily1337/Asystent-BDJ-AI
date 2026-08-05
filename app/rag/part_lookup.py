@@ -25,7 +25,10 @@ _DIM_TOKEN_RE = re.compile(r"\bd\d+x\d+\b", re.I)
 # uszczelka / uszczelki / uszczelek (D.lm) / uszczelkę …
 _USZCZELKA_RE = re.compile(r"\b(uszczel\w*|gumk\w*|o-?ring|oring)\b", re.I)
 _TULEJA_RE = re.compile(r"\b(tulejk\w*|tulej\w*|wstawk\w*)\b", re.I)
-_PAS_RE = re.compile(r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|ta[sś]m\w*)\b", re.I)
+_PAS_RE = re.compile(
+    r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*)\b",
+    re.I,
+)
 _OPONKA_RE = re.compile(r"\b(oponk\w*|gumk\w*\s+(?:jezdn|na\s+(?:rolk|ko)))\b", re.I)
 # mikrorurka / mikrorur / mikro rur / do mikrorur / na mikrorurk*
 _MIKRORURKA_RE = re.compile(
@@ -74,7 +77,8 @@ _PARTS_INTENT_RE = re.compile(
     r"\b("
     r"uszczel\w*|gumk\w*|o-?ring|oring|"
     r"tulejk\w*|tulej\w*|wstawk\w*|"
-    r"pasek|paski|pas\s+nap|pas\s+czerw|ta[sś]m\w*|"
+    # «pas napędowy»: \w* zjada ę; bare «pas» / «pasy» — nie «pasowana» (brak \b po pas)
+    r"pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*|"
     r"oponk\w*|"
     r"śrub\w*|srub\w*|"
     r"rolk\w*|kółk\w*|kolk\w*|"
@@ -164,7 +168,7 @@ def _ask_diameter(display: str, part_label: str) -> LookupResult:
     return LookupResult(
         answer=(
             f"Dla modelu **{display}** napisz tylko średnicę w mm "
-            f"(np. «7 mm» albo «10 mm») dla {part_label}. "
+            f"(np. «7 mm» albo «10 mm») — chodzi o {part_label}. "
             f"**Kod SKU dobiorę sam z katalogu** — potem możesz od razu "
             f"kliknąć «Zapytaj o wycenę». Nie musisz znać numeru części."
         ),
@@ -205,20 +209,34 @@ def is_gasket_list_followup(question: str, prior_reason: str | None = None) -> b
     return _is_list_intent(q, prior_reason=prior_reason)
 
 
+def _name_mentions_tube(name_l: str) -> bool:
+    """rurka / rurek / mikrorurka — «rurek» nie zawiera podciągu «rurk»."""
+    return bool(
+        re.search(r"mikro\s*rur|mikrorur|rurk|rurek|rurce|\brur\b", name_l, re.I)
+    )
+
+
 def _list_tube_gaskets(parts: list[PartRow]) -> list[PartRow]:
-    """Wszystkie uszczelki na rurkę/mikrorurkę (UM/UGD/WST-RUR) — bez UK."""
+    """Wszystkie uszczelki na rurkę/mikrorurkę (UM/UGD/WST-RUR + Hydro) — bez UK."""
     gaskets = [p for p in parts if p.kind == "uszczelka" and not _is_cable_gasket_sku(p)]
     tube: list[PartRow] = []
     for p in gaskets:
         name_l = p.name.lower()
+        sku_u = p.sku.upper()
         if (
             _is_ugd_um(p)
             or _is_wst_rur_gasket(p)
             or "mikrorurk" in name_l
             or "na rurk" in name_l
-            or ("rurk" in name_l and "wstaw" in name_l)
+            or (_name_mentions_tube(name_l) and "wstaw" in name_l)
+            # Hydro Multi Tube: GLO-*-USZ-*, USZ-*-RUR*, sznur silikonowy
+            or (sku_u.startswith("GLO-") and "USZ" in sku_u)
+            or (sku_u.startswith("USZ") and ("RUR" in sku_u or "SIL" in sku_u or "GUM" in sku_u))
         ):
             tube.append(p)
+    # Katalogi bez UM/UGD (np. Multi Tube) — pokaż wszystkie nie-UK uszczelki
+    if not tube and gaskets:
+        tube = list(gaskets)
     out: list[PartRow] = []
     seen: set[str] = set()
     for p in sorted(tube, key=lambda x: (x.sku.upper(), x.name)):
@@ -538,8 +556,15 @@ def _is_ugd_um(p: PartRow) -> bool:
 
 
 def _is_wst_rur_gasket(p: PartRow) -> bool:
+    """USZ-WST-RUR… oraz Hydro USZ-…-WST-…-RUR… / WST-PRO-RUR."""
     u = p.sku.upper()
-    return "USZ-WST-RUR" in u or "WST-RUR" in u
+    if "USZ-WST-RUR" in u or "WST-RUR" in u:
+        return True
+    if "WST" in u and "RUR" in u and (
+        u.startswith("USZ") or "USZ" in u or "GLO" in u
+    ):
+        return True
+    return False
 
 
 def _is_cable_gasket_sku(p: PartRow) -> bool:
@@ -581,7 +606,12 @@ def _filter_tube_gaskets(
             p for p in gaskets
             if p.fi_mm is not None
             and _almost_eq(p.fi_mm, asked_mm)
-            and ("rurk" in p.name.lower() or "mikro" in p.name.lower() or "rurk" in p.section.lower())
+            and (
+                _name_mentions_tube(p.name.lower())
+                or "mikro" in p.name.lower()
+                or _name_mentions_tube(p.section.lower())
+                or _is_wst_rur_gasket(p)
+            )
         ]
         return other[:1]
 
@@ -603,12 +633,18 @@ def _filter_tube_gaskets(
     if wst:
         return wst[:1]
 
-    # 4) Inne uszczelki „na rurkę/mikro” z exact fi
+    # 4) Inne uszczelki „na rurkę/mikro” / Hydro GLO-USZ z exact fi
     other = [
         p for p in gaskets
         if p.fi_mm is not None
         and _almost_eq(p.fi_mm, asked_mm)
-        and ("rurk" in p.name.lower() or "mikro" in p.name.lower() or "rurk" in p.section.lower())
+        and (
+            _name_mentions_tube(p.name.lower())
+            or "mikro" in p.name.lower()
+            or _name_mentions_tube(p.section.lower())
+            or (p.sku.upper().startswith("GLO-") and "USZ" in p.sku.upper())
+            or p.sku.upper().startswith("USZ")
+        )
     ]
     return other[:1]
 

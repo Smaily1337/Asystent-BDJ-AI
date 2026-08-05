@@ -48,7 +48,10 @@ _MIKRORURKA_RE = re.compile(
 )
 _KABEL_RE = re.compile(r"\b(kabel|kabla|kablu|kable|światłowod\w*|swiatlowod\w*)\b", re.I)
 _TULEJA_RE = re.compile(r"\b(tulejk\w*|tulej\w*|wstawk\w*)\b", re.I)
-_PAS_RE = re.compile(r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|ta[sś]m\w*)\b", re.I)
+_PAS_RE = re.compile(
+    r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*)\b",
+    re.I,
+)
 _MANOMETR_RE = re.compile(r"\b(manometr\w*|zegar|wska[zź]nik\s+ci[sś]nieni)\b", re.I)
 _LIST_RE = re.compile(
     r"\b("
@@ -73,7 +76,7 @@ _SAME_BUT_RE = re.compile(
 _PARTS_HINT_RE = re.compile(
     r"\b("
     r"uszczel\w*|gumk\w*|o-?ring|tulej\w*|wstawk\w*|"
-    r"pasek|paski|pas\s+nap|manometr|zegar|rolk\w*|śrub\w*|"
+    r"pasek|paski|pas\s+nap|pas\s+czerw|pas(?:y|ów|ow)?|ta[sś]m\w*|manometr|zegar|rolk\w*|śrub\w*|"
     r"częś[cć]\w*|sku|katalog|bom|oponk\w*|fi\s*\d|"
     r"kabel|mikrorur|rurk"
     r")\b",
@@ -236,7 +239,8 @@ def _slots_from_rules(
                 m = re.search(
                     r"\b(budget\s+plus\s+easy\s+set|budget\s+easy\s+set|budget\s+plus|"
                     r"budget|mini\s*c\s*plus|mini|nexta?|extended|max\s+dual\s+head|"
-                    r"max|hydro\s+chain(?:\s+multi\s+tube|\s+cable)?|dragonair)\b",
+                    r"max|hydro\s+chain(?:\s+multi\s+tube|\s+cable)?|"
+                    r"multi\s*tube|dragonair)\b",
                     blob,
                     re.I,
                 )
@@ -291,7 +295,8 @@ def _slots_from_rules(
     m_now = re.search(
         r"\b(budget\s+plus\s+easy\s+set|budget\s+easy\s+set|budget\s+plus|"
         r"budget|mini\s*c\s*plus|mini|nexta?|extended|max\s+dual\s+head|"
-        r"max|hydro\s+chain(?:\s+multi\s+tube|\s+cable)?|dragonair)\b",
+        r"max|hydro\s+chain(?:\s+multi\s+tube|\s+cable)?|"
+        r"multi\s*tube|dragonair)\b",
         q,
         re.I,
     )
@@ -303,7 +308,7 @@ def _slots_from_rules(
         if not machine and not chip_machine:
             # spróbuj jeszcze z combined
             if not re.search(
-                r"\b(budget|mini|next|extended|max|hydro|dragonair)\b",
+                r"\b(budget|mini|next|extended|max|hydro|multi\s*tube|dragonair)\b",
                 combined_for_machine,
                 re.I,
             ):

@@ -720,6 +720,68 @@ def test_hybrid_engine_vague_followup_no_invented_sku():
         assert sku.upper() in allowed
 
 
+def test_bare_pas_is_parts_intent_and_lookup():
+    """«pas do Next» / «pas napędowy» — nie spadać do LLM (wcześniej \b psuło napędowy)."""
+    from app.rag.part_lookup import is_parts_intent, try_deterministic_lookup
+
+    assert is_parts_intent("pas do Next")
+    assert is_parts_intent("pas napędowy do Next")
+    # «pasowana» (śruba) nie może odpalać ścieżki pasa
+    from app.rag.part_lookup import _PAS_RE
+
+    assert not _PAS_RE.search("śruba pasowana M8")
+    assert not _PAS_RE.search("pasowana tuleja")
+
+    r = try_deterministic_lookup("pas do Next")
+    assert r is not None
+    assert r.reason == "pas"
+    assert any(p.sku.upper().startswith("PNE-PAS") for p in r.parts)
+
+    r2 = try_deterministic_lookup("pas do hydro chain", chip_machine="BDJ HYDRO CHAIN CABLE")
+    assert r2 is not None
+    assert r2.reason == "pas"
+    assert any("PAS" in p.sku.upper() for p in r2.parts)
+
+
+def test_hydro_multi_tube_gasket_list_and_size():
+    """Multi Tube: lista uszczelek + fi z WST-PRO-RUR (nie miss przez «rurek»)."""
+    from app.rag.machines import resolve_machine_from_query
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    assert resolve_machine_from_query("lista uszczelek multi tube") == "bdj hydro chain multi tube"
+    assert resolve_machine_from_query(
+        "uszczelka", chip_machine="BDJ HYDRO CHAIN MULTI TUBE"
+    ) == "bdj hydro chain multi tube"
+    assert resolve_machine_from_query(
+        "uszczelka", chip_machine="BDJ Hydro Chain"
+    ) == "bdj hydro chain cable"
+
+    listed = try_deterministic_lookup("lista uszczelek multi tube")
+    assert listed is not None
+    assert listed.reason == "uszczelka_list"
+    assert len(listed.parts) >= 3
+    assert any("WST-PRO-RUR" in p.sku.upper() or "USZ" in p.sku.upper() for p in listed.parts)
+    assert "[GET_QUOTE:" in listed.answer
+
+    sized = try_deterministic_lookup("uszczelka multi tube fi 10")
+    assert sized is not None
+    assert sized.reason == "uszczelka"
+    assert any("7XFI10" in p.sku.upper() or (p.fi_mm and abs(p.fi_mm - 10) < 0.1) for p in sized.parts)
+
+
+def test_ui_machine_chips_cover_hydro_and_dragonair():
+    """Chip picker musi mieć Multi Tube + DragonAir (wcześniej brakowało w UI)."""
+    from pathlib import Path
+
+    html = (Path(__file__).resolve().parents[1] / "static" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    assert "BDJ HYDRO CHAIN MULTI TUBE" in html
+    assert "BDJ HYDRO CHAIN CABLE" in html
+    assert "BDJ DRAGONAIR" in html
+    assert "Hydro Multi Tube" in html
+
+
 if __name__ == "__main__":
     tests = [v for k, v in globals().items() if k.startswith("test_") and callable(v)]
     failed = 0

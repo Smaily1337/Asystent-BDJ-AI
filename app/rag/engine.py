@@ -121,17 +121,21 @@ class SessionChatManager:
 
         prior_reason = self._last_part_reason.get(sid)
         history = self._recent_history(sid, n=4)
+        # Chip z UI LUB model wykryty w tekście — sloty nie mogą zgubić maszyny
+        chip_for_lookup = machine or (
+            machine_display_name(resolved) if resolved else None
+        )
 
         # (1) Lekka ekstrakcja intencji/slotów — LLM lub reguły; bez SKU
         slots = extract_part_slots(
             question,
             history=history,
-            chip_machine=machine,
+            chip_machine=chip_for_lookup,
             prior_reason=prior_reason,
             llm=self._llm,
             use_llm=True,
         )
-        slots = with_chip_machine(slots, machine)
+        slots = with_chip_machine(slots, chip_for_lookup)
 
         wants_parts = (
             is_parts_intent(q)
@@ -148,7 +152,7 @@ class SessionChatManager:
             deterministic = lookup_from_slots(
                 slots,
                 q,
-                chip_machine=machine,
+                chip_machine=chip_for_lookup,
                 prior_reason=prior_reason,
                 llm=self._llm,
             )
@@ -156,19 +160,19 @@ class SessionChatManager:
                 deterministic = lookup_from_slots(
                     slots,
                     question,
-                    chip_machine=machine,
+                    chip_machine=chip_for_lookup,
                     prior_reason=prior_reason,
                     llm=self._llm,
                 )
             if deterministic is None:
                 deterministic = try_deterministic_lookup(
-                    q, chip_machine=machine, prior_reason=prior_reason
+                    q, chip_machine=chip_for_lookup, prior_reason=prior_reason
                 )
             if deterministic is not None:
                 self._last_part_reason[sid] = deterministic.reason
                 # (3) Odpowiedź katalogowa — sanitize na wszelki wypadek
                 answer = sanitize_answer_skus(
-                    deterministic.answer, q, chip_machine=machine
+                    deterministic.answer, q, chip_machine=chip_for_lookup
                 )
                 self._remember(sid, "user", question)
                 self._remember(sid, "assistant", answer)
@@ -182,7 +186,7 @@ class SessionChatManager:
             self._remember(sid, "assistant", fallback)
             return fallback
 
-        query = rewrite_query(q, chip_machine=machine)
+        query = rewrite_query(q, chip_machine=chip_for_lookup)
         engine = self.get_engine(sid)
         try:
             raw = str(engine.chat(query))
@@ -190,7 +194,7 @@ class SessionChatManager:
             self.reset(sid)
             engine = self.get_engine(sid)
             raw = str(engine.chat(query))
-        answer = sanitize_answer_skus(raw, q, chip_machine=machine)
+        answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
         self._remember(sid, "user", question)
         self._remember(sid, "assistant", answer)
         return answer

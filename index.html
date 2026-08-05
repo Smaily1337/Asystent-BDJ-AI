@@ -1218,7 +1218,9 @@ const BDJChatApp = (() => {
             { id: 'BDJ Extended', label: 'Extended' },
             { id: 'BDJ Max Dual Head', label: 'Max Dual Head' },
             { id: 'BDJ Max', label: 'Max' },
-            { id: 'Hydro Chain', label: 'Hydro Chain' },
+            { id: 'BDJ HYDRO CHAIN CABLE', label: 'Hydro Chain Cable' },
+            { id: 'BDJ HYDRO CHAIN MULTI TUBE', label: 'Hydro Multi Tube' },
+            { id: 'BDJ DRAGONAIR', label: 'DragonAir' },
         ];
         const chips = models.map(m =>
             `<button type="button" class="model-chip" data-model="${m.id}">${m.label}</button>`
@@ -1695,6 +1697,8 @@ const BDJChatApp = (() => {
         const patterns = [
             // Dłuższe / bardziej specyficzne wzorce pierwsze; Max ≠ Max Dual Head
             ['BDJ Max Dual Head', /\bmax\s*dual(?:\s*head)?\b/gi],
+            ['BDJ HYDRO CHAIN MULTI TUBE', /\b(?:hydro\s*(?:chain\s*)?)?multi\s*tube\b/gi],
+            ['BDJ HYDRO CHAIN CABLE', /\bhydro\s*(?:chain|belt)(?:\s*cable)?\b/gi],
             ['BDJ Budget Plus Easy Set', /\bbudget\s+plus\s+easy(?:\s*set)?\b/gi],
             ['BDJ Budget Easy Set', /\bbudget\s+easy(?:\s*set)?\b/gi],
             ['BDJ Budget Plus', /\bbudget\s+plus\b/gi],
@@ -1703,8 +1707,7 @@ const BDJChatApp = (() => {
             ['BDJ Max', /\bmax\b(?!\s*dual)/gi],
             ['BDJ Budget', /\bbudget\b(?!\s*(?:plus|easy))/gi],
             ['BDJ Extended', /\bextended\b/gi],
-            ['BDJ Dragonair', /\bdragonair\b/gi],
-            ['Hydro Chain', /\bhydro\s*(?:chain|belt)\b/gi],
+            ['BDJ DRAGONAIR', /\bdragonair\b/gi],
         ];
 
         let last = null;
