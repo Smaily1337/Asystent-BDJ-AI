@@ -14,9 +14,9 @@ Dane zaimportowane 1:1 z **BUDGET EASY SET.XLS** (82 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 | 2 | BDJ BUDGET EASY SET |
-| BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 | 2 | BDJ BUDGET EASY SET |
-| BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 85 shA | 2 | BDJ BUDGET EASY SET |
+| BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 (2 mm) | 2 | BDJ BUDGET EASY SET |
+| BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 (4 mm) | 2 | BDJ BUDGET EASY SET |
+| BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 (6 mm) 85 shA | 2 | BDJ BUDGET EASY SET |
 | BUD-GUM-PLA | Gumka na koło napędowe płaska/ oponka płaska 31,5x39,5x8 bez rowka | 1 | BDJ BUDGET EASY SET |
 
 ---
@@ -27,14 +27,14 @@ Dane zaimportowane 1:1 z **BUDGET EASY SET.XLS** (82 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-1 | Uszczelka na kabel D25x5 fi 1 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-2 | Uszczelka na kabel D25x5 fi 2 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-3 | Uszczelka na kabel D25x5 fi 3 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 1 | BDJ BUDGET EASY SET |
-| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-1 | Uszczelka na kabel D25x5 fi 1 (1 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-2 | Uszczelka na kabel D25x5 fi 2 (2 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-3 | Uszczelka na kabel D25x5 fi 3 (3 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 | BDJ BUDGET EASY SET |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 | BDJ BUDGET EASY SET |
 
 ---
 
@@ -63,7 +63,7 @@ Dane zaimportowane 1:1 z **BUDGET EASY SET.XLS** (82 pozycji).
 | BUD-TUL-PRO-2 | BUDGET - Tulejka prowadząca - 2 | 2 | BDJ BUDGET EASY SET |
 | BUD-TUL-PRO-5 | BUDGET - Tulejka prowadząca - 5 | 2 | BDJ BUDGET EASY SET |
 | BUD-TUL-PRO-8.3 | BUDGET - Tulejka prowadząca - 8 | 2 | BDJ BUDGET EASY SET |
-| TUL-H6/12 | Tuleja zaciskowa fi 4 do węża technicznego h6/12 | 4 | BDJ BUDGET EASY SET |
+| TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 4 | BDJ BUDGET EASY SET |
 
 ---
 
@@ -115,9 +115,9 @@ Dane zaimportowane 1:1 z **BUDGET EASY SET.XLS** (82 pozycji).
 | BUD-SZY-TOC-4 | BUDGET - Szybkozłącze Toczone - 4 | 1 | BDJ BUDGET EASY SET |
 | BUD-SZY-TOC-5 | BUDGET - Szybkozłącze Toczone - 5 | 1 | BDJ BUDGET EASY SET |
 | BUD-SZY-TOC-8.3 | BUDGET - Szybkozłącze Toczone - 8.3 | 1 | BDJ BUDGET EASY SET |
-| KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 | BDJ BUDGET EASY SET |
+| KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6 (6 mm)(mosiądz niklowany) | 2 | BDJ BUDGET EASY SET |
 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 | BDJ BUDGET EASY SET |
-| KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 | BDJ BUDGET EASY SET |
+| KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 | BDJ BUDGET EASY SET |
 | SZY-DO-MIK-PNE-10MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 10mm Gwint 3/8' | 1 | BDJ BUDGET EASY SET |
 | SZY-DO-MIK-PNE-12MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 12mm Gwint 3/8' | 1 | BDJ BUDGET EASY SET |
 | SZY-DO-MIK-PNE-14MM-G3/8 | Szybkozłączka do mikrorurek (pneumatyczne) 14mm Gwint 3/8' | 1 | BDJ BUDGET EASY SET |

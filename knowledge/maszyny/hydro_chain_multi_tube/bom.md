@@ -18,11 +18,11 @@ Pełna lista pozycji z pliku **HYDROCHAIN MULTITUBE.XLS** (74 SKU).
 | 7 | GLO-DUZ-UCH-ZAC-32 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 32 | 2 |
 | 8 | GLO-DUZ-UCH-ZAC-40 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 40 | 2 |
 | 9 | GLO-DUZ-UCH-ZAC-50 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 50 | 2 |
-| 10 | GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 |
-| 11 | GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 |
-| 12 | GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 |
-| 13 | GLO-DUZ-WST-PRO-RUR-A10 | Głowica DUŻA - Wstawka prowadz rurek A fi 10 | 1 |
-| 14 | GLO-DUZ-WST-PRO-RUR-B10 | Głowica DUŻA - Wstawka prowadz rurek B fi 10 | 1 |
+| 10 | GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 |
+| 11 | GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 |
+| 12 | GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 |
+| 13 | GLO-DUZ-WST-PRO-RUR-A10 | Głowica DUŻA - Wstawka prowadz rurek A fi 10 (10 mm) | 1 |
+| 14 | GLO-DUZ-WST-PRO-RUR-B10 | Głowica DUŻA - Wstawka prowadz rurek B fi 10 (10 mm) | 1 |
 | 15 | GLO-DUZ-ZAS-WST-RUR-10 | Głowica Duża - Zaślepka wstawki na rurkę 10 | 7 |
 | 16 | HYD-CHA- SKRZYNKA | Skrzynka do wdmuchiwarki Hydrochain 85x35x45 skl.9mm niebieska PCV | 1 |
 | 17 | HYD-CHA-BLO-LOZ | HydroChain - Blokada łożyska v1.0 | 2 |
@@ -54,10 +54,10 @@ Pełna lista pozycji z pliku **HYDROCHAIN MULTITUBE.XLS** (74 SKU).
 | 43 | HYD-DO-SIL | Hydraulika do silników | 1 |
 | 44 | KLU-NAS-13 | Klucz nasadowy kątowy z rękojeścią 13 mm | 1 |
 | 45 | KOL-LAN-08B-2-14Z | HydroChain-Koło łańcuchowe 08B-2 z14 z obróbką otwór z rowkiem na wpust | 2 |
-| 46 | KOL-LAN-08B-2-14Z-POD-LOZ | HydroChain-Koło łańcuchowe 08B-2 z14 z obróbką pod łożyska fi35 | 2 |
+| 46 | KOL-LAN-08B-2-14Z-POD-LOZ | HydroChain-Koło łańcuchowe 08B-2 z14 z obróbką pod łożyska fi35 (35 mm) | 2 |
 | 47 | KOL-POM-LIC-20CM-4MM | Koło pomiarowe licznika 20cm - 4mm v1.0 | 1 |
-| 48 | KOL-WAL-DIN6325-8X24 | Kołek walcowy DIN 6325 fi8. x24 | 2 |
-| 49 | KOL-WAL-DIN6325-8X70 | Kołek walcowy DIN 6325 fi8. x70 | 2 |
+| 48 | KOL-WAL-DIN6325-8X24 | Kołek walcowy DIN 6325 fi8 (8 mm). x24 | 2 |
+| 49 | KOL-WAL-DIN6325-8X70 | Kołek walcowy DIN 6325 fi8 (8 mm). x70 | 2 |
 | 50 | LAN-WDM-RUR-5/10 | Łańcuch do wdmuchiwania rurek 5/10 | 2 |
 | 51 | LICZ-MECH | Licznik mechaniczny obrotów z resetowaniem | 1 |
 | 52 | LOZ-6003 | Łożysko kulkowe 6003 RS 17x35x10 mm | 6 |

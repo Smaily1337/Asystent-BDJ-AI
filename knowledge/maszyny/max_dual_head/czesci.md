@@ -34,22 +34,22 @@ Dane zaimportowane 1:1 z **MAX DH.XLS ∪ head-family from extended** (192 pozyc
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 | BDJ MAX DUAL HEAD |
-| UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 | BDJ MAX DUAL HEAD |
-| UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 | BDJ MAX DUAL HEAD |
-| UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 | 1 | BDJ MAX DUAL HEAD |
-| UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 | 1 | BDJ MAX DUAL HEAD |
-| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 | BDJ MAX DUAL HEAD |
-| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 | BDJ MAX DUAL HEAD |
-| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 | 1 | BDJ MAX DUAL HEAD |
-| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 3 | BDJ MAX DUAL HEAD |
-| UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 | 1 | BDJ MAX DUAL HEAD |
+| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 (13 mm) | 2 | BDJ MAX DUAL HEAD |
+| UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 (14 mm) | 2 | BDJ MAX DUAL HEAD |
+| UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 (15 mm) | 2 | BDJ MAX DUAL HEAD |
+| UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 (2,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 (3,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 | BDJ MAX DUAL HEAD |
+| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 (8,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 3 | BDJ MAX DUAL HEAD |
+| UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 (9,5 mm) | 1 | BDJ MAX DUAL HEAD |
 
 ---
 
@@ -58,13 +58,13 @@ Dane zaimportowane 1:1 z **MAX DH.XLS ∪ head-family from extended** (192 pozyc
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 | 1 | BDJ MAX DUAL HEAD |
-| UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 | 1 | BDJ MAX DUAL HEAD |
-| UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 | 1 | BDJ MAX DUAL HEAD |
-| UM-D35X5-19,5 | Uszczelka na mikrorurkę D35x5 fi 19,5 | 1 | BDJ MAX DUAL HEAD |
-| UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 | 1 | BDJ MAX DUAL HEAD |
-| UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 | 1 | BDJ MAX DUAL HEAD |
-| UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 (11,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 (13,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 (15,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-19,5 | Uszczelka na mikrorurkę D35x5 fi 19,5 (19,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 (4,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 (6,5 mm) | 1 | BDJ MAX DUAL HEAD |
+| UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 (9,5 mm) | 1 | BDJ MAX DUAL HEAD |
 
 ---
 
@@ -73,16 +73,16 @@ Dane zaimportowane 1:1 z **MAX DH.XLS ∪ head-family from extended** (192 pozyc
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 | BDJ MAX DUAL HEAD |
-| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 | BDJ MAX DUAL HEAD |
-| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 | BDJ MAX DUAL HEAD |
 | ORG-10-KOM-0,56 | Organizer 10-komorowy 0,56 l- na uszczelki | 2 | BDJ MAX DUAL HEAD |
 | ORI-NBR70-15X2 | Oring (70NBR) 15x2 | 4 | BDJ MAX DUAL HEAD |
 | ORI-NBR70-22X2 | Oring (70NBR) 22x2 | 7 | BDJ MAX DUAL HEAD |
 | USZ-SZN-SIL-FI3,5 | Sznur silikonowy (uszczelka liniowa) transparent fi 3,5 mm lity | 0.2 | BDJ MAX DUAL HEAD |
 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 | BDJ MAX DUAL HEAD |
-| ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 | BDJ MAX DUAL HEAD |
-| ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 | BDJ MAX DUAL HEAD |
+| ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (10 mm) (oring) | 4 | BDJ MAX DUAL HEAD |
+| ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (10 mm) (oring) | 4 | BDJ MAX DUAL HEAD |
 
 ---
 
@@ -93,10 +93,10 @@ Dane zaimportowane 1:1 z **MAX DH.XLS ∪ head-family from extended** (192 pozyc
 | :--- | :--- | :---: | :--- |
 | ELE-BLA-210-1 | Pomiar odległości - mocowanie licznika mechanicznego v1.2 | 1 | BDJ MAX DUAL HEAD |
 | GLO-DUZ-MOC-DO-RAM-V3 | Głowica DUŻA - Mocowanie do ramy v3.0 | 1 | BDJ MAX DUAL HEAD |
-| GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 | 2 | BDJ MAX DUAL HEAD |
-| GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 | 2 | BDJ MAX DUAL HEAD |
-| GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 | 2 | BDJ MAX DUAL HEAD |
-| GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 | 2 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 (10 mm) | 2 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 (12 mm) | 2 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 (16 mm) | 2 | BDJ MAX DUAL HEAD |
+| GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 (20 mm) | 2 | BDJ MAX DUAL HEAD |
 | GLO-POW-MOC-ZAM-DOL | GŁOWICA POW - Mocowanie zamknięcia dół v1.0 | 2 | BDJ MAX DUAL HEAD |
 | GLO-POW-MOC-ZAM-GOR | GŁOWICA POW - Mocowanie zamknięcia góra v1.0 | 2 | BDJ MAX DUAL HEAD |
 | GLO-POW-TUL-MOC-RUR-10 | GŁOWICA POW - Tuleja mocująca rurkę połówka - 10 v1.1 | 2 | BDJ MAX DUAL HEAD |
@@ -159,7 +159,7 @@ Dane zaimportowane 1:1 z **MAX DH.XLS ∪ head-family from extended** (192 pozyc
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | WAL-CEO-TRZ-ORG | WALIZKA - Ceownik trzymający organizer v1.0 / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 | BDJ MAX DUAL HEAD |
-| WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 | BDJ MAX DUAL HEAD |
+| WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 (12 mm) -222 mm | 2 | BDJ MAX DUAL HEAD |
 
 ---
 
@@ -275,8 +275,8 @@ Dane zaimportowane 1:1 z **MAX DH.XLS ∪ head-family from extended** (192 pozyc
 | SRU-OCZ-HAK-8473-M5X30 | Śruba oczkowa hakowa, naciągowa nierdzewna M5x30 (Art 8473) | 1 | BDJ MAX DUAL HEAD |
 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 | BDJ MAX DUAL HEAD |
 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 | BDJ MAX DUAL HEAD |
-| TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 | BDJ MAX DUAL HEAD |
-| UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 | BDJ MAX DUAL HEAD |
+| TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 (10 mm) | 2 | BDJ MAX DUAL HEAD |
+| UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 (22 mm) forma A wersja L APP-L22 | 2 | BDJ MAX DUAL HEAD |
 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 | BDJ MAX DUAL HEAD |
 | WAZ-10M-HIL-1,5 | WĄŻ POWIETRZNY DO WDMUCHIWARKI 1,5 CAL Przewód Hilcoflex DN38 Lc=10m; 2x GW Rd55x1/6" + adaptor GZ Rd55x1/6" / GZ1.1/2" BSP | 1 | BDJ MAX DUAL HEAD |
 | WAZ-10M-RED-X-3/4 | RED-X- wąż 3/4" (WĄŻ 10M) | 1 | BDJ MAX DUAL HEAD |

@@ -23,9 +23,9 @@ Pełna lista pozycji z pliku **BUDGET PLUS EASY SET.XLS** (69 SKU).
 | 12 | BUD-GLO-DZI-WST-4 | BUDGET - Głowica dzielona - Wstawka połówka - 4 | 2 |
 | 13 | BUD-GLO-DZI-WST-5 | BUDGET - Głowica dzielona - Wstawka połówka - 5 | 2 |
 | 14 | BUD-GLO-DZI-WST-8.3 | BUDGET - Głowica dzielona - Wstawka połówka - 8.3 | 2 |
-| 15 | BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 | 2 |
-| 16 | BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 | 2 |
-| 17 | BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 85 shA | 2 |
+| 15 | BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 (2 mm) | 2 |
+| 16 | BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 (4 mm) | 2 |
+| 17 | BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 (6 mm) 85 shA | 2 |
 | 18 | BUD-GUM-PLA | Gumka na koło napędowe płaska/ oponka płaska 31,5x39,5x8 bez rowka | 1 |
 | 19 | BUD-MOC-LOZ | BUDGET - Mocowanie łożyska dolne | 1 |
 | 20 | BUD-MOC-LOZ-RUC | BUDGET - Mocowanie łożyska ruchome | 1 |
@@ -43,9 +43,9 @@ Pełna lista pozycji z pliku **BUDGET PLUS EASY SET.XLS** (69 SKU).
 | 32 | KLU-IMB-DLU-2.5MM | Klucz imbusowy typu "L" długi 2,5 mm | 1 |
 | 33 | KLU-IMB-DLU-4MM | Klucz imbusowy długi 4mm | 1 |
 | 34 | KOL-MOS-1/4GWGZ | Kolano gwintowane 90°, G1/4(GW)-R1/4(GZ), 16 bar, mosiądz niklowany | 1 |
-| 35 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 |
+| 35 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6 (6 mm)(mosiądz niklowany) | 2 |
 | 36 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 |
-| 37 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 |
+| 37 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 |
 | 38 | KUL-LOZ-10 | Kulka łożyskowa 10mm | 2 |
 | 39 | KUL-LOZ-3 | Kulka łożyskowa 3mm | 2 |
 | 40 | KUL-LOZ-5 | Kulka łożyskowa 5mm | 2 |
@@ -61,16 +61,16 @@ Pełna lista pozycji z pliku **BUDGET PLUS EASY SET.XLS** (69 SKU).
 | 50 | PUD-NA-KUL-KAL | Pudełko na kulki kalibrujące/ organizer typu kasetka z 6 pokrywkami 80x60 | 1 |
 | 51 | SRU-DOC-GN903-18-M10 | Śruba dociskowa (budget z gł. dzielona) | 1 |
 | 52 | SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 |
-| 53 | TUL-H6/12 | Tuleja zaciskowa fi 4 do węża technicznego h6/12 | 4 |
-| 54 | UGD-D13X5-1 | Uszczelka D13x5 fi 1 do głowicy dzielonej | 1 |
-| 55 | UGD-D13X5-2 | Uszczelka D13x5 fi 2 do głowicy dzielonej | 1 |
-| 56 | UGD-D13X5-3 | Uszczelka D13x5 fi 3 do głowicy dzielonej | 1 |
-| 57 | UGD-D13X5-4 | Uszczelka D13x5 fi 4 do głowicy dzielonej | 1 |
-| 58 | UGD-D13X5-5 | Uszczelka D13x5 fi 5 do głowicy dzielonej | 1 |
-| 59 | UGD-D13X5-6 | Uszczelka D13x5 fi 6 do głowicy dzielonej | 1 |
-| 60 | UGD-D22X5-4.5 | Uszczelka D22x5 fi 4,5 do głowicy dzielonej | 1 |
-| 61 | UGD-D22X5-6.5 | Uszczelka D22x5 fi 6,5 do głowicy dzielonej | 1 |
-| 62 | UGD-D22X5-9.5 | Uszczelka D22x5 fi 9,5 do głowicy dzielonej | 1 |
+| 53 | TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 4 |
+| 54 | UGD-D13X5-1 | Uszczelka D13x5 fi 1 (1 mm) do głowicy dzielonej | 1 |
+| 55 | UGD-D13X5-2 | Uszczelka D13x5 fi 2 (2 mm) do głowicy dzielonej | 1 |
+| 56 | UGD-D13X5-3 | Uszczelka D13x5 fi 3 (3 mm) do głowicy dzielonej | 1 |
+| 57 | UGD-D13X5-4 | Uszczelka D13x5 fi 4 (4 mm) do głowicy dzielonej | 1 |
+| 58 | UGD-D13X5-5 | Uszczelka D13x5 fi 5 (5 mm) do głowicy dzielonej | 1 |
+| 59 | UGD-D13X5-6 | Uszczelka D13x5 fi 6 (6 mm) do głowicy dzielonej | 1 |
+| 60 | UGD-D22X5-4.5 | Uszczelka D22x5 fi 4,5 (4,5 mm) do głowicy dzielonej | 1 |
+| 61 | UGD-D22X5-6.5 | Uszczelka D22x5 fi 6,5 (6,5 mm) do głowicy dzielonej | 1 |
+| 62 | UGD-D22X5-9.5 | Uszczelka D22x5 fi 9,5 (9,5 mm) do głowicy dzielonej | 1 |
 | 63 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 |
 | 64 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 |
 | 65 | WKR-GSR-BOSCH | Wkrętarka akum. do BDJ Budget - Bosch GSR 12V-15FC | 1 |

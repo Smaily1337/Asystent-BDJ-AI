@@ -32,16 +32,16 @@ Dane zaimportowane 1:1 z **HYDRO BELT CABLE.XLS** (84 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 2 | BDJ HYDRO CHAIN CABLE |
-| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 (13 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 (14 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 (15 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 2 | BDJ HYDRO CHAIN CABLE |
 
 ---
 
@@ -50,9 +50,9 @@ Dane zaimportowane 1:1 z **HYDRO BELT CABLE.XLS** (84 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 | BDJ HYDRO CHAIN CABLE |
-| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 | BDJ HYDRO CHAIN CABLE |
-| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 | BDJ HYDRO CHAIN CABLE |
 | ORG-10-KOM-0,56 | Organizer 10-komorowy 0,56 l- na uszczelki | 1 | BDJ HYDRO CHAIN CABLE |
 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 | BDJ HYDRO CHAIN CABLE |
 
@@ -63,10 +63,10 @@ Dane zaimportowane 1:1 z **HYDRO BELT CABLE.XLS** (84 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 | 2 | BDJ HYDRO CHAIN CABLE |
-| GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 | 2 | BDJ HYDRO CHAIN CABLE |
-| GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 | 2 | BDJ HYDRO CHAIN CABLE |
-| GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 | 2 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 (10 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 (12 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 (16 mm) | 2 | BDJ HYDRO CHAIN CABLE |
+| GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 (20 mm) | 2 | BDJ HYDRO CHAIN CABLE |
 | HYD-KAT-MOC-OSL | HYD-KAT-MOC-OSL HydroPasKable - Kątownik mocowania osłony | 1 | BDJ HYDRO CHAIN CABLE |
 | PRO-KAB-TUL-DWU-MAX | PROWADZENIE KABLA - Tuleja dwudzielna połówka v1.0 (16) | 4 | BDJ HYDRO CHAIN CABLE |
 | PRO-KAB-UCH-TUL-POD-PLY | PROWADZENIE KABLA - Uchwyt tulejki podst - uchylna do plyty | 1 | BDJ HYDRO CHAIN CABLE |
@@ -100,7 +100,7 @@ Dane zaimportowane 1:1 z **HYDRO BELT CABLE.XLS** (84 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| WAL-WRB20-249 | Wałek nierdzewny prowadzący FI20 WRB20-249 | 2 | BDJ HYDRO CHAIN CABLE |
+| WAL-WRB20-249 | Wałek nierdzewny prowadzący FI20 (20 mm) WRB20-249 | 2 | BDJ HYDRO CHAIN CABLE |
 
 ---
 

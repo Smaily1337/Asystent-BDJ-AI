@@ -14,9 +14,9 @@ Dane zaimportowane 1:1 z **HYDROCHAIN MULTITUBE.XLS** (74 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 | BDJ HYDRO CHAIN MULTI TUBE |
-| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 | BDJ HYDRO CHAIN MULTI TUBE |
-| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 | BDJ HYDRO CHAIN MULTI TUBE |
+| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 | BDJ HYDRO CHAIN MULTI TUBE |
+| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 | BDJ HYDRO CHAIN MULTI TUBE |
+| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 | BDJ HYDRO CHAIN MULTI TUBE |
 | USZ-GLO-DUZ-WST-PRO-RUR-7XFI10 | Głowica DUŻA - Wstawka prowadz rurek USZCZELKA 7xfi10 | 1 | BDJ HYDRO CHAIN MULTI TUBE |
 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 | BDJ HYDRO CHAIN MULTI TUBE |
 
@@ -28,8 +28,8 @@ Dane zaimportowane 1:1 z **HYDROCHAIN MULTITUBE.XLS** (74 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | GLO-DUZ-TUL-PRO-RUR-LAN | Głowica DUŻA - Tuleja prowadząca rurki - łańcuch | 1 | BDJ HYDRO CHAIN MULTI TUBE |
-| GLO-DUZ-WST-PRO-RUR-A10 | Głowica DUŻA - Wstawka prowadz rurek A fi 10 | 1 | BDJ HYDRO CHAIN MULTI TUBE |
-| GLO-DUZ-WST-PRO-RUR-B10 | Głowica DUŻA - Wstawka prowadz rurek B fi 10 | 1 | BDJ HYDRO CHAIN MULTI TUBE |
+| GLO-DUZ-WST-PRO-RUR-A10 | Głowica DUŻA - Wstawka prowadz rurek A fi 10 (10 mm) | 1 | BDJ HYDRO CHAIN MULTI TUBE |
+| GLO-DUZ-WST-PRO-RUR-B10 | Głowica DUŻA - Wstawka prowadz rurek B fi 10 (10 mm) | 1 | BDJ HYDRO CHAIN MULTI TUBE |
 | GLO-DUZ-ZAS-WST-RUR-10 | Głowica Duża - Zaślepka wstawki na rurkę 10 | 7 | BDJ HYDRO CHAIN MULTI TUBE |
 | HYD-CHA-KAT-MOC-OSL-RUC | HydroChain - Kątownik mocowania osłony Ruchomy / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 | BDJ HYDRO CHAIN MULTI TUBE |
 | HYD-CHA-KAT-MOC-OSL-STA | HydroChain - Kątownik mocowania osłony Stały / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 | BDJ HYDRO CHAIN MULTI TUBE |
@@ -68,8 +68,8 @@ Dane zaimportowane 1:1 z **HYDROCHAIN MULTITUBE.XLS** (74 pozycji).
 | :--- | :--- | :---: | :--- |
 | HYD-CHA-WAL-NAC | HydroChain - Wałek naciągu v1.0 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
 | HYD-CHA-WAL-NAP | HydroChain - Wałek napędu v1.0 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
-| KOL-WAL-DIN6325-8X24 | Kołek walcowy DIN 6325 fi8. x24 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
-| KOL-WAL-DIN6325-8X70 | Kołek walcowy DIN 6325 fi8. x70 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
+| KOL-WAL-DIN6325-8X24 | Kołek walcowy DIN 6325 fi8 (8 mm). x24 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
+| KOL-WAL-DIN6325-8X70 | Kołek walcowy DIN 6325 fi8 (8 mm). x70 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
 | WAL-WRB20-295 | Wałek prowadzący nierdzewny WRB20295 ( multitube) | 2 | BDJ HYDRO CHAIN MULTI TUBE |
 
 ---
@@ -80,7 +80,7 @@ Dane zaimportowane 1:1 z **HYDROCHAIN MULTITUBE.XLS** (74 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | HYD-CHA-BLO-LOZ | HydroChain - Blokada łożyska v1.0 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
-| KOL-LAN-08B-2-14Z-POD-LOZ | HydroChain-Koło łańcuchowe 08B-2 z14 z obróbką pod łożyska fi35 | 2 | BDJ HYDRO CHAIN MULTI TUBE |
+| KOL-LAN-08B-2-14Z-POD-LOZ | HydroChain-Koło łańcuchowe 08B-2 z14 z obróbką pod łożyska fi35 (35 mm) | 2 | BDJ HYDRO CHAIN MULTI TUBE |
 | LOZ-6003 | Łożysko kulkowe 6003 RS 17x35x10 mm | 6 | BDJ HYDRO CHAIN MULTI TUBE |
 | LOZ-LIN-OBU-SMA20GUU-L | Łożysko liniowe w obudowie wydłużonej SMA20 LGUU | 2 | BDJ HYDRO CHAIN MULTI TUBE |
 

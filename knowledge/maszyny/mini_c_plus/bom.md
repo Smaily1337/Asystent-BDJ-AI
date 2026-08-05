@@ -31,7 +31,7 @@ Pełna lista pozycji z pliku **MINI C PLUS.XLS** (117 SKU).
 | 20 | KOL-POM-LIC-20CM-4MM | Koło pomiarowe licznika 20cm - 4mm v1.0 | 1 |
 | 21 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 |
 | 22 | KRO-SZY-NW7.2-3/8-GZ | Króciec szybkozłącza NW7,2, G3/8" GZ mosiądz | 1 |
-| 23 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 |
+| 23 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 |
 | 24 | KUL-LOZ-10 | Kulka łożyskowa 10mm | 2 |
 | 25 | KUL-LOZ-3 | Kulka łożyskowa 3mm | 2 |
 | 26 | KUL-LOZ-5 | Kulka łożyskowa 5mm | 2 |
@@ -95,25 +95,25 @@ Pełna lista pozycji z pliku **MINI C PLUS.XLS** (117 SKU).
 | 84 | SZY-NW7.2-3/8-GW | Szybkozłączka NW7,2 G3/8" GW | 2 |
 | 85 | SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 |
 | 86 | TUL-DYS-NIE-12-17-5 | Tuleja dystansowa ze stali nierdzewnej | 2 |
-| 87 | TUL-H6/12 | Tuleja zaciskowa fi 4 do węża technicznego h6/12 | 2 |
+| 87 | TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 2 |
 | 88 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 |
-| 89 | UK-D25X5-1,5 | Uszczelka na kabel D25x5 fi 1,5 | 1 |
-| 90 | UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 | 1 |
-| 91 | UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 | 1 |
-| 92 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 |
-| 93 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 |
-| 94 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 1 |
-| 95 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 1 |
-| 96 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 1 |
-| 97 | UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 | 1 |
-| 98 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 1 |
-| 99 | UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 | 1 |
-| 100 | UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 | 1 |
-| 101 | UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 | 1 |
-| 102 | UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 | 1 |
-| 103 | UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 | 1 |
-| 104 | UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 | 1 |
-| 105 | UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 | 1 |
+| 89 | UK-D25X5-1,5 | Uszczelka na kabel D25x5 fi 1,5 (1,5 mm) | 1 |
+| 90 | UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 (2,5 mm) | 1 |
+| 91 | UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 (3,5 mm) | 1 |
+| 92 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 |
+| 93 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 |
+| 94 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 |
+| 95 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 |
+| 96 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 |
+| 97 | UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 (8,5 mm) | 1 |
+| 98 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 1 |
+| 99 | UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 (9,5 mm) | 1 |
+| 100 | UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 (11,5 mm) | 1 |
+| 101 | UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 (13,5 mm) | 1 |
+| 102 | UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 (15,5 mm) | 1 |
+| 103 | UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 (4,5 mm) | 1 |
+| 104 | UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 (6,5 mm) | 1 |
+| 105 | UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 (9,5 mm) | 1 |
 | 106 | USZ-SZN-SIL-FI3,5 | Sznur silikonowy (uszczelka liniowa) transparent fi 3,5 mm lity | 0.2 |
 | 107 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 |
 | 108 | ZAS-MIK-RUR-10 | Zaślepka mikrorurek 10mm | 1 |

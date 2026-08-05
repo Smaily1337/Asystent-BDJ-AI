@@ -12,7 +12,13 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Any
 
-from app.rag.catalog import PartRow, format_parts_markdown, load_catalog, parts_for_machine
+from app.rag.catalog import (
+    PartRow,
+    format_part_name_display,
+    format_parts_markdown,
+    load_catalog,
+    parts_for_machine,
+)
 from app.rag.intent import PartSlots, slots_to_lookup_question
 from app.rag.machines import machine_display_name, resolve_machine_from_query
 from app.rag.query_rewrite import apply_colloquial_aliases
@@ -351,6 +357,11 @@ def _distinctive_tokens(norm: str) -> set[str]:
         val = m.group(1).replace(",", ".")
         tokens.add(f"fi{val}")
         tokens.add(val)
+    # „50mm” / „50 mm” ≡ fi 50 — żeby search mm trafiał w nazwy z fi (i odwrotnie)
+    for m in _EXPLICIT_MM_RE.finditer(norm):
+        val = m.group(1).replace(",", ".")
+        tokens.add(f"fi{val}")
+        tokens.add(val)
     for m in re.finditer(r"\bmikrorurk\w*", norm):
         tokens.add("mikrorurk")
     for m in re.finditer(r"\bkabel\w*", norm):
@@ -377,18 +388,29 @@ def _name_match_score(query_norm: str, part: PartRow) -> float:
     if sku_n and (sku_n in query_norm or query_norm.replace(" ", "") == sku_n.replace(" ", "")):
         return 0.92
 
-    # jawne fi w query → wymagaj tego samego fi w części
+    # jawne fi / mm w query → wymagaj tego samego wymiaru w części
     q_fi = _FI_RE.search(query_norm)
+    q_mm = _EXPLICIT_MM_RE.search(query_norm)
+    q_size_raw = None
     if q_fi:
-        q_fi_val = _parse_mm(q_fi.group(1))
-        if q_fi_val is not None and part.fi_mm is not None and not _almost_eq(part.fi_mm, q_fi_val):
+        q_size_raw = q_fi.group(1)
+    elif q_mm:
+        q_size_raw = q_mm.group(1)
+    if q_size_raw is not None:
+        q_size_val = _parse_mm(q_size_raw)
+        if q_size_val is not None and part.fi_mm is not None and not _almost_eq(part.fi_mm, q_size_val):
             return 0.0
-        # nazwa bez fi vs z fi — jeśli reszta nazwy się zgadza
+        # nazwa bez fi/mm vs query bez fi/mm — jeśli reszta nazwy się zgadza (wklejony tytuł)
         name_core = _FI_RE.sub(" ", name_n)
+        name_core = _EXPLICIT_MM_RE.sub(" ", name_core)
+        name_core = re.sub(r"[()]", " ", name_core)
         query_core = _FI_RE.sub(" ", query_norm)
+        query_core = _EXPLICIT_MM_RE.sub(" ", query_core)
         name_core = re.sub(r"\s+", " ", name_core).strip()
         query_core = re.sub(r"\s+", " ", query_core).strip()
-        if name_core and (name_core in query_core or query_core in name_core):
+        if name_core and len(name_core) >= 12 and (
+            name_core in query_core or (len(query_core) >= 12 and query_core in name_core)
+        ):
             return 0.9
 
     q_tok = _distinctive_tokens(query_norm)
@@ -484,7 +506,7 @@ def _found_elsewhere(display: str, hits: list[PartRow]) -> LookupResult:
 
     blocks: list[str] = []
     for sku_u, rows in by_sku.items():
-        name = rows[0].name
+        name = format_part_name_display(rows[0].name)
         sku = rows[0].sku
         machines = sorted({machine_display_name(r.machine_tag) or r.machine for r in rows})
         machines_str = ", ".join(f"**{m}**" for m in machines)
@@ -1011,6 +1033,9 @@ def try_deterministic_lookup(
                             f" Dla rurki {_fmt_mm(size)} mm "
                             f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm)."
                         )
+            if not matched:
+                # uszczelki „inne” (np. gumowa tuleja fi 50) — po fi/mm w nazwie źródłowej
+                matched = _filter_by_kind_and_size(parts, "uszczelka", size)[:3]
         reason = "uszczelka"
         if not matched:
             return _miss_or_elsewhere(f"uszczelka {_fmt_mm(size)} mm")
@@ -1019,6 +1044,15 @@ def try_deterministic_lookup(
         if size is None:
             return _ask_diameter(display, "tulejkę")
         matched = _filter_by_kind_and_size(parts, "tuleja", size)[:2]
+        if not matched:
+            # BOM często nazywa „uszczelka … tuleja fi N” → kind=uszczelka
+            matched = [
+                p
+                for p in parts
+                if p.fi_mm is not None
+                and _almost_eq(p.fi_mm, size)
+                and "tulej" in p.name.lower()
+            ][:2]
         reason = "tuleja"
         if not matched:
             return _miss_or_elsewhere(f"tulejka {_fmt_mm(size)} mm")
@@ -1056,7 +1090,14 @@ def try_deterministic_lookup(
             return _miss_or_elsewhere(detail)
 
     if reason == "uszczelka":
-        matched = [p for p in matched if p.kind == "uszczelka" and "tulej" not in p.name.lower()]
+        # Nie myl z tulejką mocującą (TUL-MOC), ale zostaw „uszczelka … tuleja fi N”.
+        matched = [
+            p
+            for p in matched
+            if p.kind == "uszczelka"
+            and "tul-moc" not in p.sku.lower()
+            and not re.search(r"tulejk?\w*\s+mocuj", p.name, re.I)
+        ]
         if not matched:
             return _miss_or_elsewhere("uszczelka")
 

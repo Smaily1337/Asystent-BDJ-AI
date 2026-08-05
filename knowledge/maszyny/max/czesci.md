@@ -34,15 +34,15 @@ Dane zaimportowane 1:1 z **MAX.XLS** (126 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 2 | BDJ MAX |
-| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 2 | BDJ MAX |
-| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 2 | BDJ MAX |
-| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 2 | BDJ MAX |
-| UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 | BDJ MAX |
-| UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 | BDJ MAX |
-| UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 | BDJ MAX |
-| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 2 | BDJ MAX |
-| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 2 | BDJ MAX |
-| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 2 | BDJ MAX |
+| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 2 | BDJ MAX |
+| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 2 | BDJ MAX |
+| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 2 | BDJ MAX |
+| UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 (13 mm) | 2 | BDJ MAX |
+| UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 (14 mm) | 2 | BDJ MAX |
+| UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 (15 mm) | 2 | BDJ MAX |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 2 | BDJ MAX |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 2 | BDJ MAX |
+| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 2 | BDJ MAX |
 
 ---
 
@@ -51,13 +51,13 @@ Dane zaimportowane 1:1 z **MAX.XLS** (126 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 | BDJ MAX |
-| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 | BDJ MAX |
-| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 | BDJ MAX |
+| GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 | BDJ MAX |
+| GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 | BDJ MAX |
+| GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 | BDJ MAX |
 | ORG-10-KOM-0,56 | Organizer 10-komorowy 0,56 l- na uszczelki | 1 | BDJ MAX |
 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 | BDJ MAX |
-| ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 | BDJ MAX |
-| ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 | BDJ MAX |
+| ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (10 mm) (oring) | 4 | BDJ MAX |
+| ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (10 mm) (oring) | 4 | BDJ MAX |
 
 ---
 
@@ -68,10 +68,10 @@ Dane zaimportowane 1:1 z **MAX.XLS** (126 pozycji).
 | :--- | :--- | :---: | :--- |
 | ELE-BLA-210-1 | Pomiar odległości - mocowanie licznika mechanicznego v1.2 | 1 | BDJ MAX |
 | GLO-DUZ-MOC-DO-RAM-V3 | Głowica DUŻA - Mocowanie do ramy v3.0 | 1 | BDJ MAX |
-| GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 | 2 | BDJ MAX |
-| GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 | 2 | BDJ MAX |
-| GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 | 2 | BDJ MAX |
-| GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 | 2 | BDJ MAX |
+| GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 (10 mm) | 2 | BDJ MAX |
+| GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 (12 mm) | 2 | BDJ MAX |
+| GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 (16 mm) | 2 | BDJ MAX |
+| GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 (20 mm) | 2 | BDJ MAX |
 | PNE-KAT-MOC-OSL | PNEUMATIC - Kątownik mocowania osłony v1.0/ Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 | BDJ MAX |
 | PRO-KAB-TUL-DWU-MAX | PROWADZENIE KABLA - Tuleja dwudzielna połówka v1.0 (16) | 4 | BDJ MAX |
 | PRO-KAB-UCH-TUL-POD-PLY | PROWADZENIE KABLA - Uchwyt tulejki podst - uchylna do plyty | 1 | BDJ MAX |
@@ -110,7 +110,7 @@ Dane zaimportowane 1:1 z **MAX.XLS** (126 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | KOL-WAL-A2-DIN7-6X18 | Kołek walcowy A1 DIN7 6x18 | 2 | BDJ MAX |
-| WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 | BDJ MAX |
+| WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 (12 mm) -222 mm | 2 | BDJ MAX |
 
 ---
 
@@ -207,8 +207,8 @@ Dane zaimportowane 1:1 z **MAX.XLS** (126 pozycji).
 | SRU-NIE-OCZ-A2-DIN444-M8X90 | Śruba oczkowa DIN444 A2 M8x90 | 6 | BDJ MAX |
 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 | BDJ MAX |
 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 | BDJ MAX |
-| TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 | BDJ MAX |
-| UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 | BDJ MAX |
+| TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 (10 mm) | 2 | BDJ MAX |
+| UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 (22 mm) forma A wersja L APP-L22 | 2 | BDJ MAX |
 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 | BDJ MAX |
 | WAZ-10M-HIL-1,5 | WĄŻ POWIETRZNY DO WDMUCHIWARKI 1,5 CAL Przewód Hilcoflex DN38 Lc=10m; 2x GW Rd55x1/6" + adaptor GZ Rd55x1/6" / GZ1.1/2" BSP | 1 | BDJ MAX |
 | WKR-PZ1X75 | Wkrętak krzyżakowy PZ1x75 mm 60933 VOREL | 1 | BDJ MAX |

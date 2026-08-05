@@ -20,16 +20,16 @@ Pełna lista pozycji z pliku **MAX DH.XLS ∪ head-family from extended** (192 S
 | 9 | GLO-DUZ-PLY-DYS-2 | Głowica DUŻA - Płytki dystansowe v1.1 (208-3) - 2mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 2 |
 | 10 | GLO-DUZ-POD-V3 | Głowica DUŻA - Podpora v3.0a | 2 |
 | 11 | GLO-DUZ-POD-ZAB | Głowica DUŻA - Podkładka zabezpieczająca v1.1 (208-4) - 2mm / Bl.nierdzewna / Szlif-TAK / Gięcie-NIE / Folia-TAK | 6 |
-| 12 | GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 | 2 |
-| 13 | GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 | 2 |
-| 14 | GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 | 2 |
-| 15 | GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 | 2 |
+| 12 | GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 (10 mm) | 2 |
+| 13 | GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 (12 mm) | 2 |
+| 14 | GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 (16 mm) | 2 |
+| 15 | GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 (20 mm) | 2 |
 | 16 | GLO-DUZ-UCH-ZAC-32 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 32 | 2 |
 | 17 | GLO-DUZ-UCH-ZAC-40 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 40 | 2 |
 | 18 | GLO-DUZ-UCH-ZAC-50 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 50 | 2 |
-| 19 | GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 |
-| 20 | GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 |
-| 21 | GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 |
+| 19 | GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 |
+| 20 | GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 |
+| 21 | GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 |
 | 22 | GLO-POW-KOR-DOL | GŁOWICA POW - Korpus dolny v1.0 | 1 |
 | 23 | GLO-POW-KOR-GOR | GŁOWICA POW - Korpus górny v1.0 | 1 |
 | 24 | GLO-POW-MOC-ZAM-DOL | GŁOWICA POW - Mocowanie zamknięcia dół v1.0 | 2 |
@@ -136,39 +136,39 @@ Pełna lista pozycji z pliku **MAX DH.XLS ∪ head-family from extended** (192 S
 | 125 | TLU-SIL-PNE-1/4-GZ | Tłumik silnika pneumatycznego 1/4"GZ | 2 |
 | 126 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 |
 | 127 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 |
-| 128 | TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 |
+| 128 | TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 (10 mm) | 2 |
 | 129 | TUL-DYS-6X3,2X30 | Tulejka dystansowa mosiądz niklowany 6x3,2x30 DR316/3.2X30 | 1 |
 | 130 | TUL-SLI-IGUS-A500SM-0608-08 | Tuleja ślizgowa 6x8x8 mm IGUS A500SM-0608-08 | 6 |
-| 131 | UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 |
+| 131 | UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 (22 mm) forma A wersja L APP-L22 | 2 |
 | 132 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 |
 | 133 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 3 |
-| 134 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 3 |
-| 135 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 3 |
-| 136 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 3 |
-| 137 | UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 |
-| 138 | UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 |
-| 139 | UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 |
-| 140 | UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 | 1 |
-| 141 | UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 | 1 |
-| 142 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 |
-| 143 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 |
-| 144 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 3 |
-| 145 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 3 |
-| 146 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 3 |
-| 147 | UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 | 1 |
-| 148 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 3 |
-| 149 | UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 | 1 |
-| 150 | UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 | 1 |
-| 151 | UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 | 1 |
-| 152 | UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 | 1 |
-| 153 | UM-D35X5-19,5 | Uszczelka na mikrorurkę D35x5 fi 19,5 | 1 |
-| 154 | UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 | 1 |
-| 155 | UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 | 1 |
-| 156 | UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 | 1 |
+| 134 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 3 |
+| 135 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 3 |
+| 136 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 3 |
+| 137 | UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 (13 mm) | 2 |
+| 138 | UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 (14 mm) | 2 |
+| 139 | UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 (15 mm) | 2 |
+| 140 | UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 (2,5 mm) | 1 |
+| 141 | UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 (3,5 mm) | 1 |
+| 142 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 |
+| 143 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 |
+| 144 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 3 |
+| 145 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 3 |
+| 146 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 3 |
+| 147 | UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 (8,5 mm) | 1 |
+| 148 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 3 |
+| 149 | UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 (9,5 mm) | 1 |
+| 150 | UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 (11,5 mm) | 1 |
+| 151 | UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 (13,5 mm) | 1 |
+| 152 | UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 (15,5 mm) | 1 |
+| 153 | UM-D35X5-19,5 | Uszczelka na mikrorurkę D35x5 fi 19,5 (19,5 mm) | 1 |
+| 154 | UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 (4,5 mm) | 1 |
+| 155 | UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 (6,5 mm) | 1 |
+| 156 | UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 (9,5 mm) | 1 |
 | 157 | USZ-SZN-SIL-FI3,5 | Sznur silikonowy (uszczelka liniowa) transparent fi 3,5 mm lity | 0.2 |
 | 158 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 |
 | 159 | WAL-CEO-TRZ-ORG | WALIZKA - Ceownik trzymający organizer v1.0 / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 |
-| 160 | WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 |
+| 160 | WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 (12 mm) -222 mm | 2 |
 | 161 | WAZ-10M-HIL-1,5 | WĄŻ POWIETRZNY DO WDMUCHIWARKI 1,5 CAL Przewód Hilcoflex DN38 Lc=10m; 2x GW Rd55x1/6" + adaptor GZ Rd55x1/6" / GZ1.1/2" BSP | 1 |
 | 162 | WAZ-10M-RED-X-3/4 | RED-X- wąż 3/4" (WĄŻ 10M) | 1 |
 | 163 | WKR-PZ1X75 | Wkrętak krzyżakowy PZ1x75 mm 60933 VOREL | 1 |
@@ -188,8 +188,8 @@ Pełna lista pozycji z pliku **MAX DH.XLS ∪ head-family from extended** (192 S
 | 177 | ZES-REG-WYS-WSP-12G-LEW | Zespół regulacji wysokości - wspornik 12G v1.0 z lewym gwintem | 1 |
 | 178 | ZES-REG-WYS-WSP-12L | Zespół regulacji wysokości - wspornik 12L v1.0 | 1 |
 | 179 | ZES-REG-WYS-WSP-12U | Zespół regulacji wysokości - wspornik 12U v1.0 | 4 |
-| 180 | ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 |
-| 181 | ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 |
+| 180 | ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (10 mm) (oring) | 4 |
+| 181 | ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (10 mm) (oring) | 4 |
 | 182 | ZLA-KLO-1/2-GZ | Złącze kłowe G1/2" GZ, rozstaw 42 | 1 |
 | 183 | ZLA-KLO-3/4-NA-WAZ-Z-BLO | Złącze Kłowe 3/4" na wąż z blokadą MU-1756 | 2 |
 | 184 | ZPP-CAM-MC1-VM | Zestaw montażowy | 2 |

@@ -406,6 +406,73 @@ def test_format_parts_markdown_has_gfm_table():
     assert lines[header_idx - 1].strip() == ""
 
 
+def test_format_part_name_display_fi_mm():
+    """Normalizacja fi→mm: dodaje (N mm), idempotentna gdy mm już jest."""
+    from app.rag.catalog import (
+        PartRow,
+        format_part_name_display,
+        format_parts_markdown,
+        normalize_fi_mm_in_name,
+    )
+
+    assert normalize_fi_mm_in_name("tuleja fi 32") == "tuleja fi 32 (32 mm)"
+    assert normalize_fi_mm_in_name("fi 40") == "fi 40 (40 mm)"
+    assert normalize_fi_mm_in_name("fi50") == "fi50 (50 mm)"
+    assert normalize_fi_mm_in_name("fi 13,5") == "fi 13,5 (13,5 mm)"
+    assert normalize_fi_mm_in_name("transparent fi 4 mm lity") == "transparent fi 4 mm lity"
+    assert normalize_fi_mm_in_name("transparent fi 3,5 mm lity") == "transparent fi 3,5 mm lity"
+    assert normalize_fi_mm_in_name("fi 32 mm") == "fi 32 mm"
+    assert normalize_fi_mm_in_name("fi 32mm") == "fi 32mm"
+    # już znormalizowane — bez podwajania / bez rozbijania przecinka
+    assert normalize_fi_mm_in_name("tuleja fi 32 (32 mm)") == "tuleja fi 32 (32 mm)"
+    assert normalize_fi_mm_in_name("fi 2,5 (2,5 mm)") == "fi 2,5 (2,5 mm)"
+    assert format_part_name_display is normalize_fi_mm_in_name
+    once = normalize_fi_mm_in_name("tuleja fi 13,5")
+    assert once == "tuleja fi 13,5 (13,5 mm)"
+    assert format_part_name_display(once) == once
+    assert normalize_fi_mm_in_name(once) == once
+
+    row = PartRow(
+        sku="GLO-DUZ-USZ-GUM-32",
+        name="Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm)",
+        qty="1",
+        machine="BDJ MAX",
+        machine_tag="bdj max",
+        section="test",
+        fi_mm=32.0,
+        kind="uszczelka",
+    )
+    md = format_parts_markdown([row], "Intro.", "BDJ MAX")
+    assert "fi 32 (32 mm)" in md
+    assert "fi 32 (32 mm) (32 mm)" not in md
+
+
+def test_catalog_source_names_have_fi_and_mm():
+    """Źródłowe nazwy w katalogu (czesci.md) mają fi + mm; lookup 50mm i fi 50 działa na MAX."""
+    from app.rag.catalog import load_catalog, parts_for_machine
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    load_catalog.cache_clear()
+    parts = parts_for_machine("bdj max")
+    gum50 = [p for p in parts if p.sku.upper() == "GLO-DUZ-USZ-GUM-50"]
+    assert gum50, "GLO-DUZ-USZ-GUM-50 musi być w katalogu BDJ MAX"
+    name = gum50[0].name
+    assert re.search(r"(?i)\bfi\s*50\b", name), name
+    assert "50 mm" in name, name
+
+    by_fi = try_deterministic_lookup("uszczelka fi 50", chip_machine="BDJ Max")
+    assert by_fi is not None
+    assert any(p.sku.upper() == "GLO-DUZ-USZ-GUM-50" for p in by_fi.parts)
+
+    by_mm = try_deterministic_lookup("uszczelka 50mm", chip_machine="BDJ Max")
+    assert by_mm is not None
+    assert any(p.sku.upper() == "GLO-DUZ-USZ-GUM-50" for p in by_mm.parts)
+
+    by_tuleja_mm = try_deterministic_lookup("tuleja 50mm", chip_machine="BDJ Max")
+    assert by_tuleja_mm is not None
+    assert any(p.sku.upper() == "GLO-DUZ-USZ-GUM-50" for p in by_tuleja_mm.parts)
+
+
 def test_sanitize_invented_sku():
     from app.rag.sku_validate import sanitize_answer_skus
 

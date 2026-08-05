@@ -33,19 +33,19 @@ Dane zaimportowane 1:1 z **NEXT.XLS** (153 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 | BDJ NEXT |
-| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 1 | BDJ NEXT |
-| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 1 | BDJ NEXT |
-| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 1 | BDJ NEXT |
-| UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 | 1 | BDJ NEXT |
-| UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 | 1 | BDJ NEXT |
-| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 | BDJ NEXT |
-| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 | BDJ NEXT |
-| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 1 | BDJ NEXT |
-| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 1 | BDJ NEXT |
-| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 1 | BDJ NEXT |
-| UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 | 1 | BDJ NEXT |
-| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 1 | BDJ NEXT |
-| UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 | 1 | BDJ NEXT |
+| UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 1 | BDJ NEXT |
+| UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 1 | BDJ NEXT |
+| UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 1 | BDJ NEXT |
+| UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 (2,5 mm) | 1 | BDJ NEXT |
+| UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 (3,5 mm) | 1 | BDJ NEXT |
+| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 | BDJ NEXT |
+| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 | BDJ NEXT |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 | BDJ NEXT |
+| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 | BDJ NEXT |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 | BDJ NEXT |
+| UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 (8,5 mm) | 1 | BDJ NEXT |
+| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 1 | BDJ NEXT |
+| UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 (9,5 mm) | 1 | BDJ NEXT |
 
 ---
 
@@ -72,8 +72,8 @@ Dane zaimportowane 1:1 z **NEXT.XLS** (153 pozycji).
 | GLO-M-USZ-WST-KAB | Głowica M - uszczelka wstawki kabla v1.2 #4 SILIKON 60ShA | 10 | BDJ NEXT |
 | ORI-NBR70-15X2 | Oring (70NBR) 15x2 | 5 | BDJ NEXT |
 | ORI-NBR70-22X2 | Oring (70NBR) 22x2 | 6 | BDJ NEXT |
-| ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 | BDJ NEXT |
-| ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 | BDJ NEXT |
+| ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (10 mm) (oring) | 4 | BDJ NEXT |
+| ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (10 mm) (oring) | 4 | BDJ NEXT |
 
 ---
 
@@ -133,7 +133,7 @@ Dane zaimportowane 1:1 z **NEXT.XLS** (153 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | WAL-CEO-TRZ-ORG | WALIZKA - Ceownik trzymający organizer v1.0 / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 | BDJ NEXT |
-| WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 | BDJ NEXT |
+| WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 (12 mm) -222 mm | 2 | BDJ NEXT |
 
 ---
 
@@ -241,8 +241,8 @@ Dane zaimportowane 1:1 z **NEXT.XLS** (153 pozycji).
 | SRU-OCZ-HAK-8473-M5X30 | Śruba oczkowa hakowa, naciągowa nierdzewna M5x30 (Art 8473) | 1 | BDJ NEXT |
 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 | BDJ NEXT |
 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 | BDJ NEXT |
-| TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 | BDJ NEXT |
-| UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 | BDJ NEXT |
+| TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 (10 mm) | 2 | BDJ NEXT |
+| UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 (22 mm) forma A wersja L APP-L22 | 2 | BDJ NEXT |
 | UCH-SWI-26MM | UCHWYT ŚWIETLÓWKI 26 MM METALOWY | 2 | BDJ NEXT |
 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 | BDJ NEXT |
 | WAZ-10M-RED-X-3/4 | RED-X- wąż 3/4" (WĄŻ 10M) | 1 | BDJ NEXT |

@@ -92,6 +92,56 @@ def read_excel(path: Path) -> list[tuple[str, str, str]]:
     return rows
 
 
+def _normalize_row_names(
+    rows: list[tuple[str, str, str]],
+    normalize_fn,
+) -> list[tuple[str, str, str]]:
+    return [(sku, normalize_fn(name), qty) for sku, name, qty in rows]
+
+
+def normalize_md_file_names(path: Path, normalize_fn) -> int:
+    """One-shot: rewrite bare `fi N` → `fi N (N mm)` in name columns of bom/czesci tables."""
+    if not path.exists():
+        return 0
+    lines = path.read_text(encoding="utf-8").splitlines()
+    changed = 0
+    out: list[str] = []
+    for line in lines:
+        if not line.startswith("|"):
+            out.append(line)
+            continue
+        if re.match(r"^\|\s*[-:]+", line) or "Kod SKU" in line or "Nazwa" in line or re.match(
+            r"^\|\s*Lp\b", line, re.I
+        ):
+            out.append(line)
+            continue
+        parts = line.split("|")
+        if len(parts) < 4:
+            out.append(line)
+            continue
+        inner = parts[1:-1]
+        first = inner[0].strip()
+        # bom: Lp | SKU | Name | Qty  — czesci: SKU | Name | Qty | Machine
+        if first.isdigit() and len(inner) >= 3:
+            name_idx = 2
+        elif re.match(r"^[A-Za-z0-9]", first) and len(inner) >= 2:
+            name_idx = 1
+        else:
+            out.append(line)
+            continue
+        old = inner[name_idx].strip()
+        new = normalize_fn(old)
+        if new != old:
+            changed += 1
+            inner[name_idx] = f" {new} "
+            out.append("|" + "|".join(inner) + "|")
+        else:
+            out.append(line)
+    if changed:
+        path.write_text("\n".join(out) + "\n", encoding="utf-8")
+    return changed
+
+
 def section_for(sku: str, name: str) -> str:
     blob = f"{sku} {name}"
     for title, pat in SECTION_RULES:
@@ -195,9 +245,11 @@ def main(downloads: Path) -> None:
     # Import lokalny — skrypt może iść bez pełnego PYTHONPATH app/
     try:
         from app.rag.bom_inherit import merge_excel_rows
+        from app.rag.catalog import normalize_fi_mm_in_name
     except ImportError:
         sys.path.insert(0, str(ROOT))
         from app.rag.bom_inherit import merge_excel_rows
+        from app.rag.catalog import normalize_fi_mm_in_name
 
     if OUT.exists():
         # usuń stare katalogi maszyn — pełny rebuild
@@ -208,7 +260,7 @@ def main(downloads: Path) -> None:
     SRC_COPY.mkdir(parents=True, exist_ok=True)
 
     # Najpierw wczytaj wszystkie Excelle, potem dziedziczenie, potem zapis
-    loaded: dict[str, tuple[str, list[str], list[tuple[str, str, str]], str]] = {}
+    loaded: dict[str, tuple[str, list[str], list[tuple[str, str, str]], str, list[tuple[str, str, str]]]] = {}
     for filename, slug, tag, aliases in MAPPING:
         src = downloads / filename
         if not src.exists():
@@ -220,13 +272,19 @@ def main(downloads: Path) -> None:
         if src.resolve() != dest_xls.resolve():
             shutil.copy2(src, dest_xls)
 
-        rows = read_excel(dest_xls if dest_xls.exists() else src)
+        raw_rows = read_excel(dest_xls if dest_xls.exists() else src)
+        rows = _normalize_row_names(raw_rows, normalize_fi_mm_in_name)
         if not rows:
             raise RuntimeError(f"Pusty Excel: {filename}")
-        loaded[slug] = (tag, aliases, rows, filename)
+        loaded[slug] = (tag, aliases, rows, filename, raw_rows)
 
     total = 0
-    for slug, (tag, aliases, rows, filename) in loaded.items():
+    fi_mm_names = 0
+    names_changed = 0
+    for slug, (tag, aliases, rows, filename, raw_rows) in loaded.items():
+        names_changed += sum(
+            1 for (_, raw_n, _), (_, new_n, _) in zip(raw_rows, rows) if raw_n != new_n
+        )
         parents = BOM_INHERITS.get(slug, [])
         for parent_slug in parents:
             if parent_slug not in loaded:
@@ -246,10 +304,20 @@ def main(downloads: Path) -> None:
         write_bom(out_dir / "bom.md", tag, source_note, rows)
         write_czesci(out_dir / "czesci.md", tag, source_note, aliases, rows)
         total += len(rows)
+        fi_mm_names += sum(1 for _, name, _ in rows if " mm)" in name and re.search(r"(?i)\bfi\b", name))
         print(f"OK  {slug:24} {len(rows):4} SKU  ← {source_note}")
 
     write_dragonair_stub()
+
+    # One-shot: any leftover bare fi in md (e.g. stubs / files outside Excel mapping).
+    md_fixed = 0
+    for md in sorted(OUT.rglob("*.md")):
+        md_fixed += normalize_md_file_names(md, normalize_fi_mm_in_name)
+
     print(f"\nGotowe: {len(MAPPING)} maszyn + stub DragonAir, łącznie {total} pozycji SKU.")
+    print(f"Nazwy zmienione (fi→mm) przy imporcie: {names_changed}")
+    print(f"Nazwy z fi+(mm) w zapisanych BOM: {fi_mm_names}")
+    print(f"One-shot MD name fixes: {md_fixed}")
     print(f"Kopie Excel: {SRC_COPY}")
     print(f"Dziedziczenie głowicy: {BOM_INHERITS}")
 

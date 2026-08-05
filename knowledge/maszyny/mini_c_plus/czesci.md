@@ -36,17 +36,17 @@ Dane zaimportowane 1:1 z **MINI C PLUS.XLS** (117 pozycji).
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 | BDJ MINI C PLUS |
-| UK-D25X5-1,5 | Uszczelka na kabel D25x5 fi 1,5 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 1 | BDJ MINI C PLUS |
-| UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 | 1 | BDJ MINI C PLUS |
+| UK-D25X5-1,5 | Uszczelka na kabel D25x5 fi 1,5 (1,5 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 (2,5 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 (3,5 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 (8,5 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 1 | BDJ MINI C PLUS |
+| UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 (9,5 mm) | 1 | BDJ MINI C PLUS |
 
 ---
 
@@ -55,12 +55,12 @@ Dane zaimportowane 1:1 z **MINI C PLUS.XLS** (117 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 | 1 | BDJ MINI C PLUS |
-| UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 | 1 | BDJ MINI C PLUS |
-| UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 | 1 | BDJ MINI C PLUS |
-| UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 | 1 | BDJ MINI C PLUS |
-| UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 | 1 | BDJ MINI C PLUS |
-| UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 | 1 | BDJ MINI C PLUS |
+| UM-D35X5-11,5 | Uszczelka na mikrorurkę D35x5 fi 11,5 (11,5 mm) | 1 | BDJ MINI C PLUS |
+| UM-D35X5-13,5 | Uszczelka na mikrorurkę D35x5 fi 13,5 (13,5 mm) | 1 | BDJ MINI C PLUS |
+| UM-D35X5-15,5 | Uszczelka na mikrorurkę D35x5 fi 15,5 (15,5 mm) | 1 | BDJ MINI C PLUS |
+| UM-D35X5-4,5 | Uszczelka na mikrorurkę D35x5 fi 4,5 (4,5 mm) | 1 | BDJ MINI C PLUS |
+| UM-D35X5-6,5 | Uszczelka na mikrorurkę D35x5 fi 6,5 (6,5 mm) | 1 | BDJ MINI C PLUS |
+| UM-D35X5-9,5 | Uszczelka na mikrorurkę D35x5 fi 9,5 (9,5 mm) | 1 | BDJ MINI C PLUS |
 
 ---
 
@@ -108,7 +108,7 @@ Dane zaimportowane 1:1 z **MINI C PLUS.XLS** (117 pozycji).
 | MINI-TUL-Z-GWI | MINI - Tuleja z gwintem | 1 | BDJ MINI C PLUS |
 | ORG-PRO-NOR12 | Organizer Prosperplast NOR 12 PP-13550- na tulejki | 1 | BDJ MINI C PLUS |
 | TUL-DYS-NIE-12-17-5 | Tuleja dystansowa ze stali nierdzewnej | 2 | BDJ MINI C PLUS |
-| TUL-H6/12 | Tuleja zaciskowa fi 4 do węża technicznego h6/12 | 2 | BDJ MINI C PLUS |
+| TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 2 | BDJ MINI C PLUS |
 
 ---
 
@@ -177,7 +177,7 @@ Dane zaimportowane 1:1 z **MINI C PLUS.XLS** (117 pozycji).
 | :--- | :--- | :---: | :--- |
 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 | BDJ MINI C PLUS |
 | KRO-SZY-NW7.2-3/8-GZ | Króciec szybkozłącza NW7,2, G3/8" GZ mosiądz | 1 | BDJ MINI C PLUS |
-| KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 | BDJ MINI C PLUS |
+| KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 | BDJ MINI C PLUS |
 | MINI-BLO-SZY-KOS | MINI - Blokada szybkozłącza kostka | 1 | BDJ MINI C PLUS |
 | SZY-NW7.2-3/8-GW | Szybkozłączka NW7,2 G3/8" GW | 2 | BDJ MINI C PLUS |
 | SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 | BDJ MINI C PLUS |

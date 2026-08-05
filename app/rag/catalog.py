@@ -17,6 +17,11 @@ _ROW_RE = re.compile(
 _FI_RE = re.compile(r"(?:fi|ø|⌀)\s*([0-9]+(?:[.,][0-9]+)?)", re.I)
 _SIZE_TAIL_RE = re.compile(r"(?:^|[\s\-_/])([0-9]+(?:[.,][0-9]+)?)(?:\s*mm)?\s*$", re.I)
 _SKU_SIZE_RE = re.compile(r"(?:-|_)(\d+(?:[.,]\d+)?)(?:\s*$)", re.I)
+# Append "(N mm)" after fi diameter. Skip if mm or "(… mm)" already follows the number.
+# (?!\d)(?![.,]\d) blocks backtracking that would split "fi 3,5 mm" into "fi 3 …".
+_FI_NORMALIZE_RE = re.compile(
+    r"(?i)\bfi\s*(\d+(?:[.,]\d+)?)(?!\d)(?![.,]\d)(?!\s*mm\b)(?!\s*\(\s*\d+(?:[.,]\d+)?\s*mm\s*\))"
+)
 
 
 @dataclass(frozen=True)
@@ -142,6 +147,26 @@ def parts_for_machine(machine_tag: str | None) -> list[PartRow]:
     return []
 
 
+def normalize_fi_mm_in_name(name: str) -> str:
+    """
+    Append mm equivalent next to fi diameter in part names (source + display).
+    Keeps the original `fi …` token so pastes still substring-match.
+    Idempotent: skips when `mm` or `(… mm)` already follows the number.
+    """
+    if not name:
+        return name
+
+    def _repl(m: re.Match[str]) -> str:
+        num = m.group(1)
+        return f"{m.group(0)} ({num} mm)"
+
+    return _FI_NORMALIZE_RE.sub(_repl, name)
+
+
+# Alias — safety-net for UI / markdown formatting of any leftover raw names.
+format_part_name_display = normalize_fi_mm_in_name
+
+
 def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str) -> str:
     lines = [
         intro.strip(),
@@ -150,7 +175,8 @@ def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str
         "| :--- | :--- | :---: | :--- |",
     ]
     for p in parts:
-        lines.append(f"| {p.sku} | {p.name} | {p.qty} | {p.machine or machine_display} |")
+        display_name = format_part_name_display(p.name)
+        lines.append(f"| {p.sku} | {display_name} | {p.qty} | {p.machine or machine_display} |")
     lines.append("")
     lines.append(f"[GET_QUOTE: {machine_display}]")
     return "\n".join(lines)

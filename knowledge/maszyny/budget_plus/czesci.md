@@ -14,9 +14,9 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 | 2 | BDJ BUDGET PLUS |
-| BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 | 2 | BDJ BUDGET PLUS |
-| BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 85 shA | 2 | BDJ BUDGET PLUS |
+| BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 (2 mm) | 2 | BDJ BUDGET PLUS |
+| BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 (4 mm) | 2 | BDJ BUDGET PLUS |
+| BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 (6 mm) 85 shA | 2 | BDJ BUDGET PLUS |
 | BUD-GUM-PLA | Gumka na koło napędowe płaska/ oponka płaska 31,5x39,5x8 bez rowka | 1 | BDJ BUDGET PLUS |
 
 ---
@@ -26,15 +26,15 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| UGD-D13X5-1 | Uszczelka D13x5 fi 1 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D13X5-2 | Uszczelka D13x5 fi 2 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D13X5-3 | Uszczelka D13x5 fi 3 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D13X5-4 | Uszczelka D13x5 fi 4 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D13X5-5 | Uszczelka D13x5 fi 5 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D13X5-6 | Uszczelka D13x5 fi 6 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D22X5-4.5 | Uszczelka D22x5 fi 4,5 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D22X5-6.5 | Uszczelka D22x5 fi 6,5 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
-| UGD-D22X5-9.5 | Uszczelka D22x5 fi 9,5 do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D13X5-1 | Uszczelka D13x5 fi 1 (1 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D13X5-2 | Uszczelka D13x5 fi 2 (2 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D13X5-3 | Uszczelka D13x5 fi 3 (3 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D13X5-4 | Uszczelka D13x5 fi 4 (4 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D13X5-5 | Uszczelka D13x5 fi 5 (5 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D13X5-6 | Uszczelka D13x5 fi 6 (6 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D22X5-4.5 | Uszczelka D22x5 fi 4,5 (4,5 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D22X5-6.5 | Uszczelka D22x5 fi 6,5 (6,5 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
+| UGD-D22X5-9.5 | Uszczelka D22x5 fi 9,5 (9,5 mm) do głowicy dzielonej | 1 | BDJ BUDGET PLUS |
 
 ---
 
@@ -64,7 +64,7 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 | BUD-MOC-LOZ | BUDGET - Mocowanie łożyska dolne | 1 | BDJ BUDGET PLUS |
 | BUD-MOC-LOZ-RUC | BUDGET - Mocowanie łożyska ruchome | 1 | BDJ BUDGET PLUS |
 | BUD-MOC-POK | BUDGET - Mocowanie pokrętła | 1 | BDJ BUDGET PLUS |
-| TUL-H6/12 | Tuleja zaciskowa fi 4 do węża technicznego h6/12 | 4 | BDJ BUDGET PLUS |
+| TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 4 | BDJ BUDGET PLUS |
 
 ---
 
@@ -113,9 +113,9 @@ Dane zaimportowane 1:1 z **BUDGET PLUS.XLS** (66 pozycji).
 
 | Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |
 | :--- | :--- | :---: | :--- |
-| KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 | BDJ BUDGET PLUS |
+| KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6 (6 mm)(mosiądz niklowany) | 2 | BDJ BUDGET PLUS |
 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 | BDJ BUDGET PLUS |
-| KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 | BDJ BUDGET PLUS |
+| KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 | BDJ BUDGET PLUS |
 | ZAW-KUL-1/4-GWGZ | Zawór kulowy G1/4'' (WW) Eco-Line 25bar | 1 | BDJ BUDGET PLUS |
 
 ---

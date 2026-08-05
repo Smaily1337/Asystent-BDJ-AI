@@ -117,29 +117,29 @@ Pełna lista pozycji z pliku **NEXT.XLS** (153 SKU).
 | 106 | TLU-SIL-PNE-1/4-GZ | Tłumik silnika pneumatycznego 1/4"GZ | 2 |
 | 107 | TRO-MOS-NIK-1/4-GW | Trójnik G1/4(GW), 16 bar, mosiądz niklowany (smart) | 1 |
 | 108 | TRO-NIE-1/2-GW | Trójnik Rp 1/2"(GW), 16 bar, stal nierdzewna | 3 |
-| 109 | TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 | 2 |
+| 109 | TRO-WTY-Y-FI10 | Trójnik wtykowy Y fi10 (10 mm) | 2 |
 | 110 | TUL-DYS-6X3,2X30 | Tulejka dystansowa mosiądz niklowany 6x3,2x30 DR316/3.2X30 | 1 |
 | 111 | TUL-SLI-IGUS-JSM-0608-06 | Tuleja ślizgowa 6x8x6 mm IGUS JSM-0608-06 | 4 |
-| 112 | UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 forma A wersja L APP-L22 | 2 |
+| 112 | UCH-POJ-APP-L22 | Uchwyt pojedynczy fi22 (22 mm) forma A wersja L APP-L22 | 2 |
 | 113 | UCH-SWI-26MM | UCHWYT ŚWIETLÓWKI 26 MM METALOWY | 2 |
 | 114 | UCH-WDM-RUR | Rura nierdzewna 25x1,5 mm szlifowana długość 315mm | 1 |
 | 115 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 |
-| 116 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 1 |
-| 117 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 1 |
-| 118 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 1 |
-| 119 | UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 | 1 |
-| 120 | UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 | 1 |
-| 121 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 |
-| 122 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 |
-| 123 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 1 |
-| 124 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 1 |
-| 125 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 1 |
-| 126 | UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 | 1 |
-| 127 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 1 |
-| 128 | UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 | 1 |
+| 116 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 1 |
+| 117 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 1 |
+| 118 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 1 |
+| 119 | UK-D25X5-2,5 | Uszczelka na kabel D25x5 fi 2,5 (2,5 mm) | 1 |
+| 120 | UK-D25X5-3,5 | Uszczelka na kabel D25x5 fi 3,5 (3,5 mm) | 1 |
+| 121 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 |
+| 122 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 |
+| 123 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 |
+| 124 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 |
+| 125 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 |
+| 126 | UK-D25X5-8,5 | Uszczelka na kabel D25x5 fi 8,5 (8,5 mm) | 1 |
+| 127 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 1 |
+| 128 | UK-D25X5-9,5 | Uszczelka na kabel D25x5 fi 9,5 (9,5 mm) | 1 |
 | 129 | WAL-CEO-TRZ-ORG | WALIZKA - Ceownik trzymający organizer v1.0 / Grubość 1.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-TAK / Folia-NIE | 1 |
 | 130 | WAL-QUAD-23SA099 | Walizka Quadrios 23SA099 (D x S x W) 31.5 x 26 x 7 cm - do głowicy M | 1 |
-| 131 | WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 -222 mm | 2 |
+| 131 | WAL-WRB12-222 | WAŁEK PROWADZĄCY WRB FI 12 (12 mm) -222 mm | 2 |
 | 132 | WAZ-10M-RED-X-3/4 | RED-X- wąż 3/4" (WĄŻ 10M) | 1 |
 | 133 | ZAS-MIK-RUR-10 | Zaślepka mikrorurek 10mm | 1 |
 | 134 | ZAS-MIK-RUR-12 | Zaślepka mikrorurek 12mm | 1 |
@@ -154,8 +154,8 @@ Pełna lista pozycji z pliku **NEXT.XLS** (153 SKU).
 | 143 | ZES-REG-WYS-WSP-12G-LEW | Zespół regulacji wysokości - wspornik 12G v1.0 z lewym gwintem | 1 |
 | 144 | ZES-REG-WYS-WSP-12L | Zespół regulacji wysokości - wspornik 12L v1.0 | 1 |
 | 145 | ZES-REG-WYS-WSP-12U | Zespół regulacji wysokości - wspornik 12U v1.0 | 4 |
-| 146 | ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (oring) | 4 |
-| 147 | ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (oring) | 4 |
+| 146 | ZLA-KAT-WTY-1/4-GZ-FI10 | Złączka kątowa wtykowa G1/4 FI 10 (10 mm) (oring) | 4 |
+| 147 | ZLA-KAT-WTY-1/8-GZ-FI10 | Złączka kątowa wtykowa G1/8 FI 10 (10 mm) (oring) | 4 |
 | 148 | ZLA-KLO-1/2-GZ | Złącze kłowe G1/2" GZ, rozstaw 42 | 1 |
 | 149 | ZLA-KLO-3/4-NA-WAZ-Z-BLO | Złącze Kłowe 3/4" na wąż z blokadą MU-1756 | 2 |
 | 150 | ZPP-CAM-MC1-VM | Zestaw montażowy | 2 |

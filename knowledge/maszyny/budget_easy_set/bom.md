@@ -15,9 +15,9 @@ Pełna lista pozycji z pliku **BUDGET EASY SET.XLS** (82 SKU).
 | 4 | BUD-GLO-WST-5 | BUDGET - Głowica wstawka - 5 | 1 |
 | 5 | BUD-GLO-WST-8.3 | BUDGET - Głowica wstawka - 8.3 | 1 |
 | 6 | BUD-GLO-ZAM | BUDGET - Głowica Zamknięcie | 1 |
-| 7 | BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 | 2 |
-| 8 | BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 | 2 |
-| 9 | BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 85 shA | 2 |
+| 7 | BUD-GUM-FI2-R1 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-1 fi 2 (2 mm) | 2 |
+| 8 | BUD-GUM-FI4-R2 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-2 fi 4 (4 mm) | 2 |
+| 9 | BUD-GUM-FI6-R3 | Gumka na koło napędowe/ oponka płaska 31,5x39,5x8 z rowkiem R-3 fi 6 (6 mm) 85 shA | 2 |
 | 10 | BUD-GUM-PLA | Gumka na koło napędowe płaska/ oponka płaska 31,5x39,5x8 bez rowka | 1 |
 | 11 | BUD-KLU-WIE | BUDGET - Klucz (Klucz do głowicy wielowymiarowy) / Grubość 2.0mm / Bl.nierdzewna / Szlif-NIE / Gięcie-NIE / Folia-NIE | 1 |
 | 12 | BUD-MOC-LOZ | BUDGET - Mocowanie łożyska dolne | 1 |
@@ -46,9 +46,9 @@ Pełna lista pozycji z pliku **BUDGET EASY SET.XLS** (82 SKU).
 | 35 | GAM-STO-BDGN-TYC | Tyczka stojaka do wdmuchiwarki Budget Easyset | 1 |
 | 36 | KLU-IMB-DLU-2.5MM | Klucz imbusowy długi 2,5 mm | 1 |
 | 37 | KLU-IMB-DLU-4MM | Klucz imbusowy długi 4mm | 1 |
-| 38 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6(mosiądz niklowany) | 2 |
+| 38 | KRO-NA-WAZ-1/4-GZ | Króciec na wąż GZ 1/4 fi 6 (6 mm)(mosiądz niklowany) | 2 |
 | 39 | KRO-SZY-NW7.2-1/4-GZ | Króciec szybkozłącza NW7,2, G1/4" GZ | 1 |
-| 40 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 NW 7,2 mosiądz | 1 |
+| 40 | KRO-SZY-NW7.2-FI6 | Króciec szybkozłącza fi6 (6 mm) NW 7,2 mosiądz | 1 |
 | 41 | KUL-LOZ-10 | Kulka łożyskowa 10mm | 2 |
 | 42 | KUL-LOZ-3 | Kulka łożyskowa 3mm | 2 |
 | 43 | KUL-LOZ-5 | Kulka łożyskowa 5mm | 2 |
@@ -68,16 +68,16 @@ Pełna lista pozycji z pliku **BUDGET EASY SET.XLS** (82 SKU).
 | 57 | SZY-DO-MIK-PNE-5MM-G1/4 | Szybkozłączka do mikrorurek (pneumatyczne) 5mm Gwint 1/4' | 1 |
 | 58 | SZY-NW7.2-BEZ-ZAW-ZAM-3/8 | Szybkozłącze żeńskie Gwint 3/8'' Typ 21 DN 7.2 – bez zaworu zamykającego | 1 |
 | 59 | SZY-NW7.2-FI6 | Szybkozłączka NW7,2, do przewodu 6 | 1 |
-| 60 | TUL-H6/12 | Tuleja zaciskowa fi 4 do węża technicznego h6/12 | 4 |
+| 60 | TUL-H6/12 | Tuleja zaciskowa fi 4 (4 mm) do węża technicznego h6/12 | 4 |
 | 61 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 1 |
-| 62 | UK-D25X5-1 | Uszczelka na kabel D25x5 fi 1 | 1 |
-| 63 | UK-D25X5-2 | Uszczelka na kabel D25x5 fi 2 | 1 |
-| 64 | UK-D25X5-3 | Uszczelka na kabel D25x5 fi 3 | 1 |
-| 65 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 | 1 |
-| 66 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 | 1 |
-| 67 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 1 |
-| 68 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 1 |
-| 69 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 1 |
+| 62 | UK-D25X5-1 | Uszczelka na kabel D25x5 fi 1 (1 mm) | 1 |
+| 63 | UK-D25X5-2 | Uszczelka na kabel D25x5 fi 2 (2 mm) | 1 |
+| 64 | UK-D25X5-3 | Uszczelka na kabel D25x5 fi 3 (3 mm) | 1 |
+| 65 | UK-D25X5-4 | Uszczelka na kabel D25x5 fi 4 (4 mm) | 1 |
+| 66 | UK-D25X5-5 | Uszczelka na kabel D25x5 fi 5 (5 mm) | 1 |
+| 67 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 1 |
+| 68 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 1 |
+| 69 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 1 |
 | 70 | USZ-HYD-3/8 | Uszczelka hydrauliczna G3/8 | 1 |
 | 71 | WAL-WRB6-75 | Wałek nierdzewny prowadzący WRB6-75 | 2 |
 | 72 | WAZ-TECH-6X2,5 | Wąż techniczny 6x2,5 | 10 |

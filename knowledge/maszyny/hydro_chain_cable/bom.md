@@ -13,16 +13,16 @@ Pełna lista pozycji z pliku **HYDRO BELT CABLE.XLS** (84 SKU).
 | 2 | GLO-DUZ-KOR-GOR-V3 | Głowica DUŻA - Korpus górny v3.1 | 1 |
 | 3 | GLO-DUZ-KOR-UCH-V3 | Głowica DUŻA - Korpus uchwyt v3.1 | 1 |
 | 4 | GLO-DUZ-POD-ZAB | Głowica DUŻA - Podkładka zabezpieczająca v1.0 - 2mm / Bl.nierdzewna / Szlif-TAK / Gięcie-NIE / Folia-TAK | 6 |
-| 5 | GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 | 2 |
-| 6 | GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 | 2 |
-| 7 | GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 | 2 |
-| 8 | GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 | 2 |
+| 5 | GLO-DUZ-TUL-PRO-MIK-10 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v1.0 - fi 10 (10 mm) | 2 |
+| 6 | GLO-DUZ-TUL-PRO-MIK-12 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 12 (12 mm) | 2 |
+| 7 | GLO-DUZ-TUL-PRO-MIK-16 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 16 (16 mm) | 2 |
+| 8 | GLO-DUZ-TUL-PRO-MIK-20 | Głowica DUŻA - Tuleja prowadząca mikrokable połówka v 1.0 - fi 20 (20 mm) | 2 |
 | 9 | GLO-DUZ-UCH-ZAC-32 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 32 | 2 |
 | 10 | GLO-DUZ-UCH-ZAC-40 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 40 | 2 |
 | 11 | GLO-DUZ-UCH-ZAC-50 | Głowica DUŻA - Uchwyt zaciskowy połówka v1.1 - 50 | 2 |
-| 12 | GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 | 1 |
-| 13 | GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 | 1 |
-| 14 | GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 | 1 |
+| 12 | GLO-DUZ-USZ-GUM-32 | Głowica Duża - Uszczelka gumowa duża v1.0- tuleja fi 32 (32 mm) | 1 |
+| 13 | GLO-DUZ-USZ-GUM-40 | Głowica Duża - Uszczelka gumowa duża v1.0 tuleja fi 40 (40 mm) | 1 |
+| 14 | GLO-DUZ-USZ-GUM-50 | Głowica duża - Uszczelka gumowa duża v 1.0 tuleja fi 50 (50 mm) | 1 |
 | 15 | HYD-DO-SIL | Hydraulika do silników | 1 |
 | 16 | HYD-KAT-MOC-OSL | HYD-KAT-MOC-OSL HydroPasKable - Kątownik mocowania osłony | 1 |
 | 17 | HYD-OSL-POL | HYD-OSL-POL HydroPasKable - Osłona poliwęglanowa | 1 |
@@ -75,18 +75,18 @@ Pełna lista pozycji z pliku **HYDRO BELT CABLE.XLS** (84 SKU).
 | 64 | SRU-PAS-M8-35-OCY | Śruba pasowana M8/10x35, kl. 12.9 DDIN 7379 - ocynkowana | 8 |
 | 65 | UCH-WDM-RUR-340 | Rura nierdzewna 25x1,5 mm szlifowana długość 340mm | 1 |
 | 66 | UK-D25X5-0 | Uszczelka na kabel D25x5 bez otworu | 2 |
-| 67 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 | 2 |
-| 68 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 | 2 |
-| 69 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 | 2 |
-| 70 | UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 | 2 |
-| 71 | UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 | 2 |
-| 72 | UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 | 2 |
-| 73 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 | 2 |
-| 74 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 | 2 |
-| 75 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 | 2 |
-| 76 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 | 2 |
+| 67 | UK-D25X5-10 | Uszczelka na kabel D25x5 fi 10 (10 mm) | 2 |
+| 68 | UK-D25X5-11 | Uszczelka na kabel D25x5 fi 11 (11 mm) | 2 |
+| 69 | UK-D25X5-12 | Uszczelka na kabel D25x5 fi 12 (12 mm) | 2 |
+| 70 | UK-D25X5-13 | Uszczelka na kabel D25x5 fi 13 (13 mm) | 2 |
+| 71 | UK-D25X5-14 | Uszczelka na kabel D25x5 fi 14 (14 mm) | 2 |
+| 72 | UK-D25X5-15 | Uszczelka na kabel D25x5 fi 15 (15 mm) | 2 |
+| 73 | UK-D25X5-6 | Uszczelka na kabel D25x5 fi 6 (6 mm) | 2 |
+| 74 | UK-D25X5-7 | Uszczelka na kabel D25x5 fi 7 (7 mm) | 2 |
+| 75 | UK-D25X5-8 | Uszczelka na kabel D25x5 fi 8 (8 mm) | 2 |
+| 76 | UK-D25X5-9 | Uszczelka na kabel D25x5 fi 9 (9 mm) | 2 |
 | 77 | USZ-SZN-SIL-FI4 | Sznur silikonowy (uszczelka liniowa) transparent fi 4 mm lity | 0.3 |
-| 78 | WAL-WRB20-249 | Wałek nierdzewny prowadzący FI20 WRB20-249 | 2 |
+| 78 | WAL-WRB20-249 | Wałek nierdzewny prowadzący FI20 (20 mm) WRB20-249 | 2 |
 | 79 | WAZ-10M-HIL-1,5 | WĄŻ POWIETRZNY DO WDMUCHIWARKI 1,5 CAL Przewód Hilcoflex DN38 Lc=10m; 2x GW Rd55x1/6" + adaptor GZ Rd55x1/6" / GZ1.1/2" BSP | 1 |
 | 80 | WAZ-HYD-Z-UKL-REG | Wąż hydrauliczny z układem regulacyjnym | 1 |
 | 81 | WKR-PZ1X75 | Wkrętak krzyżakowy PZ1x75 mm 60933 VOREL | 1 |
