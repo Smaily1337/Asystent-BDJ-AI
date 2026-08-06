@@ -81,6 +81,11 @@
     wantOpen = false;
   }
 
+  function sendOpen() {
+    if (!frame.contentWindow) return;
+    try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (e) {}
+  }
+
   function openChat() {
     wantOpen = true;
     showChat();
