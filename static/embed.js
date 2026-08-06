@@ -81,18 +81,20 @@
     wantOpen = false;
   }
 
-  function ensureFrame() {
-    if (loaded) return;
-    loaded = true;
-    frame.src = BASE + "/?embed=1";
-  }
-
   function openChat() {
     wantOpen = true;
+    showChat();
     ensureFrame();
-    if (ready) {
-      try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (e) {}
+    sendOpen();
+  }
+
+  function ensureFrame() {
+    if (loaded) {
+      sendOpen();
+      return;
     }
+    loaded = true;
+    frame.src = BASE + "/?embed=1&open=1";
   }
 
   function mount() {
@@ -102,6 +104,11 @@
     document.body.appendChild(wrap);
 
     setTimeout(ensureFrame, 500);
+    frame.addEventListener("load", function () {
+      if (wantOpen) {
+        setTimeout(function () { ready = true; sendOpen(); }, 80);
+      }
+    });
     setTimeout(function () {
       if (!wrap.classList.contains("is-open")) tip.style.display = "block";
     }, 3000);
@@ -130,8 +137,7 @@
         }
       }
       if (e.data.type === "bdj-ai-resize") {
-        if (e.data.open) showChat();
-        else hideChat();
+        if (e.data.open === false) hideChat();
       }
     });
   }
