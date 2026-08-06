@@ -1,33 +1,45 @@
 /**
- * Dragon AI — osadzenie na WordPress (bluedragonjet.com itd.)
- * WPCode: <script src="https://asystent-bdj-ai.onrender.com/embed.js" defer></script>
+ * Dragon AI — osadzenie WP (inline / embed.js)
+ * Przycisk montowany na document.body — poza stacking context stopki.
  */
 (function () {
   if (window.__bdjAiEmbedLoaded) return;
   window.__bdjAiEmbedLoaded = true;
 
-  var BASE = (document.currentScript && document.currentScript.src)
-    ? document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "")
-    : "https://asystent-bdj-ai.onrender.com";
+  var BASE = "https://asystent-bdj-ai.onrender.com";
+  try {
+    if (document.currentScript && document.currentScript.src) {
+      BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
+    }
+  } catch (e) {}
+
+  // Usuń stare atrapy z WPCode (w stopce)
+  ["bdj-ai-fab", "bdj-ai-tip", "bdj-ai-embed", "bdj-ai-widget"].forEach(function (id) {
+    var el = document.getElementById(id);
+    if (el) el.remove();
+  });
 
   var style = document.createElement("style");
   style.textContent = [
-    "#bdj-ai-fab{position:fixed;bottom:28px;right:28px;width:60px;height:60px;border:1px solid rgba(255,255,255,.18);border-radius:50%;",
-    "background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(30,41,59,.88));color:#fff;cursor:pointer;z-index:2147483647;",
-    "box-shadow:0 12px 32px rgba(15,23,42,.28),inset 0 1px 0 rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;padding:0;}",
-    "#bdj-ai-fab:hover{transform:translateY(-3px) scale(1.02);}",
+    "#bdj-ai-fab{position:fixed!important;bottom:28px!important;right:28px!important;width:60px!important;height:60px!important;",
+    "border:1px solid rgba(255,255,255,.18)!important;border-radius:50%!important;padding:0!important;margin:0!important;",
+    "background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(30,41,59,.88))!important;color:#fff!important;cursor:pointer!important;",
+    "z-index:2147483647!important;box-shadow:0 12px 32px rgba(15,23,42,.28)!important;",
+    "display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:auto!important;}",
     "#bdj-ai-fab svg{width:26px;height:26px;pointer-events:none;}",
-    "#bdj-ai-fab.is-loading{opacity:.7;pointer-events:none;}",
-    "#bdj-ai-tip{display:none;position:fixed;bottom:100px;right:28px;max-width:min(300px,calc(100vw - 100px));z-index:2147483647;",
-    "background:rgba(255,255,255,.95);border:1px solid rgba(15,23,42,.08);border-radius:18px;padding:12px 14px;",
-    "box-shadow:0 16px 36px rgba(15,23,42,.18);cursor:pointer;font-family:system-ui,-apple-system,sans-serif;}",
+    "#bdj-ai-tip{position:fixed!important;bottom:100px!important;right:28px!important;max-width:min(300px,calc(100vw - 100px));",
+    "z-index:2147483647!important;background:rgba(255,255,255,.95)!important;border:1px solid rgba(15,23,42,.08)!important;",
+    "border-radius:18px!important;padding:12px 14px!important;box-shadow:0 16px 36px rgba(15,23,42,.18)!important;",
+    "cursor:pointer!important;font-family:system-ui,sans-serif!important;pointer-events:auto!important;display:none;}",
     "#bdj-ai-tip strong{display:block;font-size:14px;color:#0f172a;}",
     "#bdj-ai-tip span{display:block;font-size:13px;color:#64748b;line-height:1.35;margin-top:2px;}",
-    "#bdj-ai-tip-close{background:none;border:none;font-size:18px;line-height:1;color:#94a3b8;cursor:pointer;padding:0 2px;}",
-    "#bdj-ai-embed{display:none;position:fixed;inset:0;z-index:2147483646;background:transparent;}",
-    "#bdj-ai-widget{width:100%;height:100%;border:0;background:transparent;}",
+    "#bdj-ai-tip-close{background:none;border:none;font-size:18px;color:#94a3b8;cursor:pointer;padding:0 2px;pointer-events:auto!important;}",
+    "#bdj-ai-embed{display:none;position:fixed!important;bottom:0!important;right:0!important;",
+    "width:min(450px,100vw)!important;height:min(780px,100dvh)!important;",
+    "z-index:2147483646!important;background:transparent!important;pointer-events:none!important;border:none!important;}",
+    "#bdj-ai-embed.is-open{display:block!important;pointer-events:auto!important;}",
+    "#bdj-ai-widget{width:100%!important;height:100%!important;border:0!important;background:transparent!important;}",
   ].join("");
-  document.head.appendChild(style);
 
   var fab = document.createElement("button");
   fab.id = "bdj-ai-fab";
@@ -47,20 +59,6 @@
   frame.allow = "clipboard-write";
   wrap.appendChild(frame);
 
-  function mount() {
-    // Usuń stare atrapy z WPCode (jeśli zostały)
-    ["bdj-ai-fab", "bdj-ai-tip", "bdj-ai-embed"].forEach(function (id) {
-      var old = document.getElementById(id);
-      if (old && old !== fab && old !== tip && old !== wrap) old.remove();
-    });
-    document.body.appendChild(fab);
-    document.body.appendChild(tip);
-    document.body.appendChild(wrap);
-  }
-
-  if (document.body) mount();
-  else document.addEventListener("DOMContentLoaded", mount);
-
   var ready = false;
   var wantOpen = false;
   var loaded = false;
@@ -70,14 +68,16 @@
   function showChat() {
     hideTip();
     fab.style.display = "none";
-    fab.classList.remove("is-loading");
+    wrap.classList.add("is-open");
     wrap.style.display = "block";
+    wrap.style.pointerEvents = "auto";
   }
 
   function hideChat() {
+    wrap.classList.remove("is-open");
     wrap.style.display = "none";
+    wrap.style.pointerEvents = "none";
     fab.style.display = "flex";
-    fab.classList.remove("is-loading");
     wantOpen = false;
   }
 
@@ -87,45 +87,55 @@
     frame.src = BASE + "/?embed=1";
   }
 
-  function requestOpen() {
+  function openChat() {
     wantOpen = true;
-    fab.classList.add("is-loading");
     ensureFrame();
     if (ready) {
       try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (e) {}
     }
   }
 
-  // Preload w tle (poza ekranem) — bez białego prostokąta
-  setTimeout(function () {
-    ensureFrame();
-  }, 800);
+  function mount() {
+    document.head.appendChild(style);
+    document.body.appendChild(fab);
+    document.body.appendChild(tip);
+    document.body.appendChild(wrap);
 
-  setTimeout(function () {
-    if (wrap.style.display !== "block") tip.style.display = "block";
-  }, 3000);
+    setTimeout(ensureFrame, 500);
+    setTimeout(function () {
+      if (!wrap.classList.contains("is-open")) tip.style.display = "block";
+    }, 3000);
 
-  fab.addEventListener("click", requestOpen);
-  tip.addEventListener("click", function (e) {
-    if (e.target && e.target.id === "bdj-ai-tip-close") {
+    fab.addEventListener("click", function (e) {
+      e.preventDefault();
       e.stopPropagation();
-      hideTip();
-      return;
-    }
-    requestOpen();
-  });
-
-  window.addEventListener("message", function (e) {
-    if (!e.data || typeof e.data !== "object") return;
-    if (e.data.type === "bdj-ai-ready") {
-      ready = true;
-      if (wantOpen) {
-        try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (err) {}
+      openChat();
+    });
+    tip.addEventListener("click", function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.target && e.target.id === "bdj-ai-tip-close") {
+        hideTip();
+        return;
       }
-    }
-    if (e.data.type === "bdj-ai-resize") {
-      if (e.data.open) showChat();
-      else hideChat();
-    }
-  });
+      openChat();
+    });
+
+    window.addEventListener("message", function (e) {
+      if (!e.data || typeof e.data !== "object") return;
+      if (e.data.type === "bdj-ai-ready") {
+        ready = true;
+        if (wantOpen) {
+          try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (err) {}
+        }
+      }
+      if (e.data.type === "bdj-ai-resize") {
+        if (e.data.open) showChat();
+        else hideChat();
+      }
+    });
+  }
+
+  if (document.body) mount();
+  else document.addEventListener("DOMContentLoaded", mount);
 })();
