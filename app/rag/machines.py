@@ -236,6 +236,26 @@ def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
     return mentions
 
 
+# User nie zna / pyta o model — nie dziedzicz chipa ani historii sesji.
+_MACHINE_UNKNOWN_RE = re.compile(
+    r"(?:"
+    r"nie\s+w[iy]em\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?(?:\s+mam)?\s*(?:model|maszyn)",
+    r"|nie\s+znam\s+(?:modelu|maszyny|jak[aą]\s+(?:to\s+)?maszyn)",
+    r"|nie\s+mam\s+poj[eę]cia\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?\s*(?:model|maszyn)",
+    r"|(?:jaki|jaka|jak[aą])\s+(?:to\s+)?(?:model|maszyn)\s+(?:mam|posiadam|u\s+mnie|to\s+jest)",
+    r")",
+    re.I,
+)
+
+
+def is_machine_unknown_message(text: str) -> bool:
+    """True gdy user mówi, że nie zna modelu / pyta jaki ma model."""
+    q = (text or "").strip()
+    if not q:
+        return False
+    return bool(_MACHINE_UNKNOWN_RE.search(q))
+
+
 # Follow-upy częściowe — wtedy można dziedziczyć model z wcześniejszych wiadomości USER.
 _PARTS_SESSION_REASONS = frozenset({
     "uszczelka",
@@ -270,6 +290,8 @@ def resolve_machine_for_parts_lookup(
     w trwającym flow częściowym. Nigdy z odpowiedzi asystenta ani z syntetycznego
     „Mam maszynę …” wzbogaconego pytania (tam LLM często domyśla Extended).
     """
+    if is_machine_unknown_message(message or ""):
+        return None
     m = resolve_machine_from_query(message or "", chip_machine=None)
     if m:
         return m
@@ -293,6 +315,9 @@ def resolve_machine_from_query(query: str, chip_machine: str | None = None) -> s
     q = re.sub(r"\bbudzet\b", "budget", q, flags=re.I)
     if not q:
         return _chip_to_tag(chip_machine)
+
+    if is_machine_unknown_message(q):
+        return None
 
     correction = _CORRECTION_PATTERN.search(q)
     if correction:

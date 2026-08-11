@@ -1020,6 +1020,43 @@ def test_sanitize_without_machine_strips_llm_sku():
     assert "MACHINE_CARDS" in out or "model maszyny" in out.lower()
 
 
+def test_unknown_machine_message_ignores_chip():
+    """«nie wiem jaki mam model» — nie zakładaj modelu z chipa UI."""
+    from app.rag.engine import SessionChatManager
+    from app.rag.machines import is_machine_unknown_message, resolve_machine_from_query
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    assert is_machine_unknown_message("nie wiem jaki mam model maszyny")
+    assert resolve_machine_from_query(
+        "nie wiem jaki mam model maszyny",
+        chip_machine="BDJ HYDRO CHAIN MULTI TUBE",
+    ) is None
+
+    result = try_deterministic_lookup(
+        "nie wiem jaki mam model maszyny",
+        chip_machine="BDJ HYDRO CHAIN MULTI TUBE",
+        prior_reason="need_size",
+    )
+    assert result is not None
+    assert result.reason == "need_machine"
+    assert "HYDRO CHAIN MULTI TUBE" not in result.answer
+
+    class _FakeRetriever:
+        pass
+
+    class _FakeLLM:
+        pass
+
+    mgr = SessionChatManager(retriever=_FakeRetriever(), llm=_FakeLLM())
+    out = mgr.chat(
+        "test-unknown-model",
+        "nie wiem jaki mam model maszyny",
+        machine="BDJ HYDRO CHAIN MULTI TUBE",
+    )
+    assert "HYDRO CHAIN MULTI TUBE" not in out
+    assert "model maszyny" in out.lower() or "MACHINE_CARDS" in out
+
+
 def test_machine_showcase_next():
     from app.rag.part_lookup import try_machine_showcase
 

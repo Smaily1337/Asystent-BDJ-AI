@@ -21,6 +21,7 @@ from app.rag.catalog import (
 )
 from app.rag.intent import PartSlots, slots_to_lookup_question
 from app.rag.machines import (
+    is_machine_unknown_message,
     machine_display_name,
     resolve_machine_for_parts_lookup,
     resolve_machine_from_query,
@@ -1009,6 +1010,8 @@ def lookup_from_slots(
     Soft inference (historia/kind/size) siedzi w slotach; SKU tylko z BOM.
     """
     q_orig = apply_colloquial_aliases((original_question or "").strip())
+    if is_machine_unknown_message(q_orig):
+        return _ask_machine()
     chip = chip_machine
     resolved = resolve_machine_for_parts_lookup(
         original_question or "",
@@ -1098,6 +1101,9 @@ def try_deterministic_lookup(
     q = apply_colloquial_aliases((question or "").strip())
     if not q or len(q) < 3:
         return None
+
+    if is_machine_unknown_message(q) or is_machine_unknown_message(question or ""):
+        return _ask_machine()
 
     list_intent = (
         _is_list_intent(q, prior_reason=prior_reason)

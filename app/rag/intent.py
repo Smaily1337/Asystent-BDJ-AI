@@ -15,6 +15,7 @@ from app.rag.machines import (
     machine_display_name,
     resolve_machine_for_parts_lookup,
     resolve_machine_from_query,
+    is_machine_unknown_message,
 )
 from app.rag.query_rewrite import apply_colloquial_aliases
 
@@ -230,6 +231,17 @@ def _slots_from_rules(
     prior_reason: str | None = None,
 ) -> PartSlots:
     q = apply_colloquial_aliases((message or "").strip())
+    if is_machine_unknown_message(q):
+        return PartSlots(
+            machine=None,
+            part_kind="unknown",
+            size_mm=None,
+            exact_fi=False,
+            list_all=False,
+            confidence=0.5,
+            needs_clarify="machine",
+        )
+
     hist = _history_blob(history)
     combined_for_machine = f"{hist}\n{q}" if hist else q
 
@@ -485,6 +497,16 @@ def _sanitize_slots_machine(
     prior_reason: str | None,
 ) -> PartSlots:
     """Usuwa z halucynacji LLM model, którego user/chip nie podał."""
+    if is_machine_unknown_message(message):
+        return replace(
+            slots,
+            machine=None,
+            part_kind="unknown",
+            size_mm=None,
+            exact_fi=False,
+            list_all=False,
+            needs_clarify="machine",
+        )
     tag = resolve_machine_for_parts_lookup(
         message,
         chip_machine=chip_machine,

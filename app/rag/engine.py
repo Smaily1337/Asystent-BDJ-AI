@@ -15,7 +15,7 @@ from llama_index.core.memory import ChatMemoryBuffer
 from app.config import settings
 from app.prompts import SYSTEM_PROMPT
 from app.rag.intent import extract_part_slots, with_chip_machine
-from app.rag.machines import machine_display_name, resolve_machine_from_query
+from app.rag.machines import machine_display_name, is_machine_unknown_message, resolve_machine_from_query
 from app.rag.part_lookup import (
     is_gasket_list_followup,
     is_parts_intent,
@@ -114,6 +114,16 @@ class SessionChatManager:
 
     def chat(self, session_id: str, question: str, machine: str | None = None) -> str:
         sid = session_id or "sess_default"
+
+        if is_machine_unknown_message(question):
+            from app.rag.part_lookup import ask_machine_message
+
+            self._last_part_reason[sid] = "need_machine"
+            answer = ask_machine_message()
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", answer)
+            return answer
+
         resolved = resolve_machine_from_query(question, chip_machine=machine)
         q = question
         if resolved:
