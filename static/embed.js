@@ -7,7 +7,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.7";
+  var EMBED_VERSION = "0.0.8";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");

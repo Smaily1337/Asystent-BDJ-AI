@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
+    <script>
+    (function () {
+        var NEED = '0.0.8';
+        if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
+        var p = new URLSearchParams(location.search);
+        if (p.get('v') === NEED) return;
+        p.set('v', NEED);
+        location.replace(location.pathname + '?' + p.toString());
+    })();
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
@@ -1181,7 +1191,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">0.0.7</span>
+                <span class="app-version">0.0.8</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1267,6 +1277,8 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
+    const UI_VERSION = '0.0.8';
+
     let state = {
         messages: [],
         pendingMachine: null,
@@ -1366,6 +1378,11 @@ const BDJChatApp = (() => {
     };
 
     const loadState = () => {
+        const storedUiVer = localStorage.getItem('bdj_ui_version');
+        if (storedUiVer !== UI_VERSION) {
+            localStorage.removeItem('bdj_chat_state');
+            localStorage.setItem('bdj_ui_version', UI_VERSION);
+        }
         const saved = localStorage.getItem('bdj_chat_state');
         if (saved) {
             try { state = JSON.parse(saved); } catch (e) { state.messages = []; }

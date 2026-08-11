@@ -2,11 +2,14 @@
 
 from __future__ import annotations
 
-from fastapi import FastAPI
+from urllib.parse import urlencode
+
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, Response
+from fastapi.responses import FileResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 
+from app import __version__
 from app.api import admin, chat, offer
 from app.config import settings
 from app.rag.engine import SessionChatManager
@@ -17,7 +20,7 @@ def create_app() -> FastAPI:
     application = FastAPI(
         title="Asystent BDJ AI",
         description="Chatbot doboru części zamiennych Blue Dragon Jet",
-        version="0.0.7",
+        version=__version__,
     )
 
     application.add_middleware(
@@ -49,12 +52,21 @@ def create_app() -> FastAPI:
     if not avatar_path.exists():
         avatar_path = settings.root_dir / "avatar.png"
 
+    no_cache_headers = {"Cache-Control": "no-cache, must-revalidate, max-age=0"}
+
     @application.get("/")
-    def read_index():
-        return FileResponse(
-            str(index_path),
-            headers={"Cache-Control": "no-cache, must-revalidate"},
-        )
+    def read_index(request: Request):
+        # Stary WPCode ładuje /?embed=1 bez v= — przeglądarka trzyma cache sprzed redesignu.
+        if request.query_params.get("embed") == "1":
+            if request.query_params.get("v") != __version__:
+                params = dict(request.query_params)
+                params["v"] = __version__
+                return RedirectResponse(
+                    url="/?" + urlencode(params),
+                    status_code=302,
+                    headers=no_cache_headers,
+                )
+        return FileResponse(str(index_path), headers=no_cache_headers)
 
     @application.head("/")
     def read_index_head():
@@ -77,7 +89,7 @@ def create_app() -> FastAPI:
         return FileResponse(
             str(embed_path),
             media_type="application/javascript; charset=utf-8",
-            headers={"Cache-Control": "public, max-age=300"},
+            headers={"Cache-Control": "no-cache, must-revalidate, max-age=0"},
         )
 
     @application.get("/api/machines")
@@ -90,7 +102,7 @@ def create_app() -> FastAPI:
     def health():
         return {
             "status": "ok",
-            "version": "0.0.7",
+            "version": __version__,
             "email_configured": bool(
                 settings.resend_api_key
                 or (settings.smtp_login and settings.smtp_password)
