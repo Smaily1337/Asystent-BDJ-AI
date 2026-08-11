@@ -5,7 +5,9 @@ from __future__ import annotations
 import re
 
 from app.rag.catalog import parts_for_machine
+from app.rag.machine_web import format_machine_cards_tag
 from app.rag.machines import machine_display_name, resolve_machine_from_query
+from app.rag.part_lookup import is_parts_intent
 
 # Typowy SKU BDJ: LITERY-SEGMENTY (min. 1 myślnik, 2+ segmenty)
 _SKU_RE = re.compile(r"\b([A-Z]{2,}(?:-[A-Z0-9][A-Z0-9\.,/]*)+)\b")
@@ -67,7 +69,26 @@ def sanitize_answer_skus(
     """
     machine = resolve_machine_from_query(question or "", chip_machine=chip_machine)
     if not machine:
-        return answer
+        # Bez modelu — usuń wymyślone SKU z odpowiedzi LLM (BM25 potrafi wkleić obce kody).
+        skus = extract_skus(answer)
+        if not skus:
+            return answer
+        cleaned = answer
+        for sku in skus:
+            cleaned = re.sub(re.escape(sku), "", cleaned)
+        cleaned = re.sub(r"\|\s*\|", "| — |", cleaned)
+        cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
+        cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+        cards = format_machine_cards_tag(["all"])
+        if is_parts_intent(question or ""):
+            return (
+                "Żeby podać **właściwy kod SKU z katalogu**, dopisz **model maszyny** "
+                "(np. Extended, Next, Budget Plus) albo wybierz go u góry czatu.\n\n"
+                f"{cards}"
+            )
+        if cards:
+            return f"{cleaned}\n\n{cards}".strip()
+        return cleaned
 
     allowed = catalog_sku_set(machine)
     if not allowed:

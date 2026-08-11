@@ -21,6 +21,7 @@ from app.rag.part_lookup import (
     is_parts_intent,
     lookup_from_slots,
     try_deterministic_lookup,
+    try_machine_showcase,
 )
 from app.rag.query_rewrite import rewrite_query
 from app.rag.sku_validate import sanitize_answer_skus
@@ -31,6 +32,8 @@ _PARTS_REASONS = frozenset({
     "uszczelka_list",
     "need_size",
     "need_machine",
+    "need_gasket_context",
+    "machine_showcase",
     "tuleja",
     "pas",
     "oponka",
@@ -127,6 +130,20 @@ class SessionChatManager:
             machine_display_name(resolved) if resolved else None
         )
 
+        showcase = try_machine_showcase(question, chip_machine=chip_for_lookup)
+        if showcase is not None and not (
+            is_parts_intent(q)
+            or is_parts_intent(question)
+            or is_gasket_list_followup(question, prior_reason)
+        ):
+            self._last_part_reason[sid] = showcase.reason
+            answer = sanitize_answer_skus(
+                showcase.answer, q, chip_machine=chip_for_lookup
+            )
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", answer)
+            return answer
+
         # (1) Lekka ekstrakcja intencji/slotów — LLM lub reguły; bez SKU
         slots = extract_part_slots(
             question,
@@ -156,6 +173,7 @@ class SessionChatManager:
                 chip_machine=chip_for_lookup,
                 prior_reason=prior_reason,
                 llm=self._llm,
+                history=history,
             )
             if deterministic is None:
                 deterministic = lookup_from_slots(
@@ -164,10 +182,15 @@ class SessionChatManager:
                     chip_machine=chip_for_lookup,
                     prior_reason=prior_reason,
                     llm=self._llm,
+                    history=history,
                 )
             if deterministic is None:
                 deterministic = try_deterministic_lookup(
-                    q, chip_machine=chip_for_lookup, prior_reason=prior_reason
+                    q,
+                    chip_machine=chip_for_lookup,
+                    prior_reason=prior_reason,
+                    machine_source=question,
+                    history=history,
                 )
             if deterministic is not None:
                 self._last_part_reason[sid] = deterministic.reason
@@ -179,10 +202,9 @@ class SessionChatManager:
                 self._remember(sid, "assistant", answer)
                 return answer
             self._last_part_reason[sid] = "need_clarify"
-            fallback = (
-                "Podaj proszę model maszyny oraz nazwę / wymiar części "
-                "(np. uszczelka mikrorurki 7 mm do Budget Plus)."
-            )
+            from app.rag.part_lookup import ask_machine_message
+
+            fallback = ask_machine_message()
             self._remember(sid, "user", question)
             self._remember(sid, "assistant", fallback)
             return fallback

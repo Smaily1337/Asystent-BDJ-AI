@@ -20,7 +20,12 @@ from app.rag.catalog import (
     parts_for_machine,
 )
 from app.rag.intent import PartSlots, slots_to_lookup_question
-from app.rag.machines import machine_display_name, resolve_machine_from_query
+from app.rag.machines import (
+    machine_display_name,
+    resolve_machine_for_parts_lookup,
+    resolve_machine_from_query,
+)
+from app.rag.machine_web import format_machine_card_tag, format_machine_cards_tag
 from app.rag.query_rewrite import apply_colloquial_aliases
 
 _EXPLICIT_MM_RE = re.compile(r"\b([0-9]+(?:[.,][0-9]+)?)\s*mm\b", re.I)
@@ -84,7 +89,17 @@ _GASKET_PRIOR_REASONS = frozenset({
     "uszczelka",
     "uszczelka_list",
     "need_size",
+    "need_gasket_context",
 })
+
+_MACHINE_SHOWCASE_RE = re.compile(
+    r"\b("
+    r"co to|czym jest|opisz|poka[zż]|informacj\w+ o|charakterystyk|"
+    r"parametr|specyfik|zasi[eę]g|jakie kable|jakie rur|"
+    r"do czego|jak dzia[lł]a|model maszyn"
+    r")\b",
+    re.I,
+)
 
 # Pytanie o dobór części → NIGDY nie puszczamy do LLM (halucynuje SKU)
 _PARTS_INTENT_RE = re.compile(
@@ -152,13 +167,62 @@ def _fmt_mm(val: float) -> str:
     return s.replace(".", ",")
 
 
+def is_machine_showcase_intent(question: str) -> bool:
+    """Pytanie o maszynę (nie o konkretną część) — karta produktu ze strony."""
+    q = question or ""
+    if is_parts_intent(q):
+        return False
+    return bool(_MACHINE_SHOWCASE_RE.search(q))
+
+
+def try_machine_showcase(
+    question: str,
+    chip_machine: str | None = None,
+) -> LookupResult | None:
+    """Krótka prezentacja modelu + zdjęcie/link ze strony BDJ."""
+    from app.rag.machine_web import machine_web_info
+
+    tag = resolve_machine_for_parts_lookup(question or "", chip_machine=chip_machine)
+    if not tag:
+        return None
+    info = machine_web_info(tag)
+    if not info:
+        return None
+
+    q = (question or "").strip()
+    mentioned = resolve_machine_from_query(q, chip_machine=None) is not None
+    short_query = len(q) < 45 and mentioned
+    if not is_machine_showcase_intent(q) and not short_query:
+        return None
+
+    intro = (
+        f"**{info.display}** — {info.tagline}\n\n"
+        f"Szczegóły techniczne i zdjęcia maszyny znajdziesz na stronie produktu. "
+        f"Do doboru **części zamiennej** napisz np.: "
+        f"«Mam {info.label}, potrzebuję uszczelkę mikrorurki 7 mm»."
+    )
+    card = format_machine_card_tag(tag)
+    return LookupResult(
+        answer=f"{intro}\n\n{card}" if card else intro,
+        parts=(),
+        reason="machine_showcase",
+    )
+
+
+def ask_machine_message() -> str:
+    """Publiczny komunikat need_machine (z kartami maszyn)."""
+    return _ask_machine().answer
+
+
 def _ask_machine() -> LookupResult:
+    cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
-            "Żeby dobrać część, wybierz **model maszyny** z listy "
+            "Żeby dobrać część, wybierz **model maszyny** u góry czatu "
             "(albo dopisz np. Extended / Next / Budget Plus). "
             "Potem napisz czego potrzebujesz i wymiar — **kod SKU podam ja**, "
             "a Ty klikasz «Zapytaj o wycenę»."
+            + (f"\n\n{cards}" if cards else "")
         ),
         parts=(),
         reason="need_machine",
@@ -166,15 +230,29 @@ def _ask_machine() -> LookupResult:
 
 
 def _ask_machine_for_list() -> LookupResult:
+    cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
             "Żeby wypisać listę uszczelek na rurkę/mikrorurkę, wybierz "
-            "**model maszyny** z listy (albo dopisz np. Extended / Max Dual Head / Next). "
+            "**model maszyny** u góry czatu (albo dopisz np. Extended / Max Dual Head / Next). "
             "Potem napisz ponownie «lista uszczelek na mikrorurkę» — pokażę pełny katalog "
             "dla tego modelu, bez dopytywania o rozmiar rurki."
+            + (f"\n\n{cards}" if cards else "")
         ),
         parts=(),
         reason="need_machine",
+    )
+
+
+def _ask_gasket_context(display: str) -> LookupResult:
+    return LookupResult(
+        answer=(
+            f"Dla modelu **{display}** doprecyzuj proszę: uszczelka na **kabel** "
+            f"czy na **mikrorurkę/rurkę**? (np. «na kabel 7 mm» albo «mikrorurka 7 mm»). "
+            f"**Kod SKU dobiorę sam z katalogu** — potem kliknij «Zapytaj o wycenę»."
+        ),
+        parts=(),
+        reason="need_gasket_context",
     )
 
 
@@ -871,8 +949,33 @@ def maybe_refine_with_candidates(
     parts = list(result.parts)[:5]
     if len(parts) == 1:
         return result
-    # jeden wyraźny faworyt po nazwie — bez LLM
     display = machine_display_name(parts[0].machine_tag) or parts[0].machine
+    # Twardy próg keyword — słabe trafienia → lista, bez LLM auto-pick
+    tokens = _keyword_tokens(question)
+    if tokens:
+        scored: list[tuple[int, PartRow]] = []
+        for p in parts:
+            blob = f"{p.sku} {p.name} {p.section}".lower()
+            hits = sum(1 for t in tokens if t in blob)
+            if hits > 0:
+                scored.append((hits, p))
+        scored.sort(key=lambda x: (-x[0], x[1].sku))
+        if scored and scored[0][0] >= 2 and (
+            len(scored) == 1 or scored[0][0] > scored[1][0]
+        ):
+            chosen = scored[0][1]
+            intro = (
+                f"Na podstawie katalogu części dla maszyny **{display}**, "
+                f"oto najlepiej pasująca pozycja: "
+                f"Zaznacz część i kliknij **«Zapytaj o wycenę»**."
+            )
+            return LookupResult(
+                answer=format_parts_markdown([chosen], intro, display),
+                parts=(chosen,),
+                reason="candidate_pick",
+            )
+        if not scored or scored[0][0] < 2:
+            return _candidates_short_list(parts, display, limit=5)
     picked = _llm_pick_candidate_index(question, parts, llm)
     if picked is not None:
         chosen = parts[picked]
@@ -899,34 +1002,52 @@ def lookup_from_slots(
     chip_machine: str | None = None,
     prior_reason: str | None = None,
     llm: Any = None,
+    history: list[tuple[str, str]] | None = None,
 ) -> LookupResult | None:
     """
     Hybryda: sloty → wzbogacone pytanie → wyłącznie katalog.
     Soft inference (historia/kind/size) siedzi w slotach; SKU tylko z BOM.
     """
     q_orig = apply_colloquial_aliases((original_question or "").strip())
+    chip = chip_machine
+    resolved = resolve_machine_for_parts_lookup(
+        original_question or "",
+        chip_machine=chip,
+        history=history,
+        prior_reason=prior_reason,
+    )
+    if slots.needs_clarify == "machine" and not resolved:
+        return _ask_machine_for_list() if slots.list_all else _ask_machine()
+
     if _OPONKA_RE.search(q_orig):
         # Nowa intencja oponki — nie ciągnij flow uszczelki z sesji
         direct = try_deterministic_lookup(
             original_question,
-            chip_machine=chip_machine,
+            chip_machine=chip,
             prior_reason=None,
+            machine_source=original_question,
+            history=None,
         )
         if direct is not None and direct.reason not in ("need_machine",):
             return direct
 
-    enriched = slots_to_lookup_question(slots, original_question)
-    chip = chip_machine or slots.machine
+    enriched = slots_to_lookup_question(
+        slots, original_question, chip_machine=chip
+    )
     result = try_deterministic_lookup(
         enriched,
         chip_machine=chip,
         prior_reason=prior_reason,
+        machine_source=original_question,
+        history=history,
     )
     if result is None and enriched != (original_question or "").strip():
         result = try_deterministic_lookup(
             original_question,
             chip_machine=chip,
             prior_reason=prior_reason,
+            machine_source=original_question,
+            history=history,
         )
     if result is None:
         return None
@@ -943,10 +1064,8 @@ def lookup_from_slots(
         )
 
     # miss + keyword na oryginale → krótka lista kandydatów zamiast pustki
-    if result.reason == "miss" and chip:
-        machine = resolve_machine_from_query(
-            enriched, chip_machine=chip
-        ) or resolve_machine_from_query(original_question or "", chip_machine=chip)
+    if result.reason == "miss" and chip and resolved:
+        machine = resolved
         if machine:
             local = parts_for_machine(machine)
             display = machine_display_name(machine)
@@ -967,6 +1086,8 @@ def try_deterministic_lookup(
     chip_machine: str | None = None,
     *,
     prior_reason: str | None = None,
+    machine_source: str | None = None,
+    history: list[tuple[str, str]] | None = None,
 ) -> LookupResult | None:
     """
     Dobór części wyłącznie z katalogu.
@@ -992,9 +1113,12 @@ def try_deterministic_lookup(
     if _is_rejection(q) or _is_rejection(question or ""):
         return _ask_clarify_after_reject()
 
-    machine = resolve_machine_from_query(q, chip_machine=chip_machine)
-    if not machine:
-        machine = resolve_machine_from_query(question or "", chip_machine=chip_machine)
+    machine = resolve_machine_for_parts_lookup(
+        machine_source if machine_source is not None else question,
+        chip_machine=chip_machine,
+        history=history,
+        prior_reason=prior_reason,
+    )
     if not machine:
         if list_intent:
             return _ask_machine_for_list()
@@ -1081,24 +1205,31 @@ def try_deterministic_lookup(
                     )
         elif kabel_ctx and not tube_ctx:
             matched = _filter_cable_gaskets(parts, size)
-        else:
+        elif tube_ctx and kabel_ctx:
             matched = _filter_cable_gaskets(parts, size)
             if not matched:
                 matched = _filter_tube_gaskets(parts, size, wstawka_usz, exact_fi=explicit_fi)
-                if (
-                    matched
-                    and not explicit_fi
-                    and _is_ugd_um(matched[0])
-                    and matched[0].fi_mm is not None
-                ):
-                    if abs(matched[0].fi_mm - (size - 0.5)) < 0.06:
-                        size_note = (
-                            f" Dla rurki {_fmt_mm(size)} mm "
-                            f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm)."
-                        )
+        else:
+            cable_hits = _filter_cable_gaskets(parts, size)
+            tube_hits = _filter_tube_gaskets(parts, size, wstawka_usz, exact_fi=explicit_fi)
+            if cable_hits and tube_hits:
+                return _ask_gasket_context(display)
+            matched = cable_hits or tube_hits
             if not matched:
-                # uszczelki „inne” (np. gumowa tuleja fi 50) — po fi/mm w nazwie źródłowej
                 matched = _filter_by_kind_and_size(parts, "uszczelka", size)[:3]
+            if (
+                matched
+                and not explicit_fi
+                and tube_hits
+                and not cable_hits
+                and _is_ugd_um(matched[0])
+                and matched[0].fi_mm is not None
+            ):
+                if abs(matched[0].fi_mm - (size - 0.5)) < 0.06:
+                    size_note = (
+                        f" Dla rurki {_fmt_mm(size)} mm "
+                        f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm)."
+                    )
         reason = "uszczelka"
         if not matched:
             return _miss_or_elsewhere(f"uszczelka {_fmt_mm(size)} mm")

@@ -236,6 +236,55 @@ def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
     return mentions
 
 
+# Follow-upy częściowe — wtedy można dziedziczyć model z wcześniejszych wiadomości USER.
+_PARTS_SESSION_REASONS = frozenset({
+    "uszczelka",
+    "uszczelka_list",
+    "need_size",
+    "need_machine",
+    "tuleja",
+    "pas",
+    "oponka",
+    "oponka_list",
+    "manometr",
+    "keyword",
+    "candidates",
+    "candidate_pick",
+    "exact_name",
+    "found_elsewhere",
+    "reject_clarify",
+    "miss",
+})
+
+
+def resolve_machine_for_parts_lookup(
+    message: str,
+    *,
+    chip_machine: str | None = None,
+    history: list[tuple[str, str]] | None = None,
+    prior_reason: str | None = None,
+) -> str | None:
+    """
+    Model maszyny do katalogu części — tylko z wiarygodnych źródeł:
+    (1) bieżąca wiadomość użytkownika, (2) chip UI, (3) wcześniejsze wiadomości USER
+    w trwającym flow częściowym. Nigdy z odpowiedzi asystenta ani z syntetycznego
+    „Mam maszynę …” wzbogaconego pytania (tam LLM często domyśla Extended).
+    """
+    m = resolve_machine_from_query(message or "", chip_machine=None)
+    if m:
+        return m
+    if chip_machine:
+        return _chip_to_tag(chip_machine)
+    if prior_reason in _PARTS_SESSION_REASONS and history:
+        for role, text in reversed(history[-4:]):
+            if role != "user":
+                continue
+            m = resolve_machine_from_query(text or "", chip_machine=None)
+            if m:
+                return m
+    return None
+
+
 def resolve_machine_from_query(query: str, chip_machine: str | None = None) -> str | None:
     """Wybiera właściwy model: korekta użytkownika > ostatnie wspomnienie > chip UI."""
     q = (query or "").strip()

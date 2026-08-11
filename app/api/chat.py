@@ -47,6 +47,13 @@ def _is_unclear_response(answer: str) -> bool:
     unclear_markers = [
         "podaj proszę model maszyny",
         "podaj proszę model",
+        "wybierz **model maszyny**",
+        "żeby dobrać część",
+        "żeby wypisać listę uszczelek",
+        "właściwy kod sku z katalogu",
+        "napisz tylko średnicę",
+        "dobiorę sam z katalogu",
+        "kabel** czy na **mikrorurkę",
         "aby precyzyjnie dobrać część",
         "przepraszam, ale w mojej bazie nie mam przypisanej",
         "nie mam przypisanej tej części",

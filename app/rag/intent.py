@@ -11,6 +11,11 @@ import re
 from dataclasses import asdict, dataclass, replace
 from typing import Any, Literal
 
+from app.rag.machines import (
+    machine_display_name,
+    resolve_machine_for_parts_lookup,
+    resolve_machine_from_query,
+)
 from app.rag.query_rewrite import apply_colloquial_aliases
 
 PartKind = Literal[
@@ -127,6 +132,7 @@ Reguły:
 - Gdy brak modelu a potrzeba części → needs_clarify=machine.
 - Gdy uszczelka/tuleja bez rozmiaru i nie list_all → needs_clarify=size.
 - Nie zgaduj size_mm ani machine jeśli nie ma w tekście/historii.
+- NIGDY nie ustawiaj machine na „Extended” ani inny model domyślnie — tylko gdy user/chip to podał.
 """
 
 
@@ -237,9 +243,26 @@ def _slots_from_rules(
     hist_size: float | None = None
     hist_exact = False
     hist_machine: str | None = None
-    if history:
-        # ostatnie wiadomości user — kind/size/machine
+    _scan_user_history = same_but or (
+        prior_reason in {
+        "need_size",
+        "need_gasket_context",
+        "uszczelka",
+            "uszczelka_list",
+            "need_machine",
+            "tuleja",
+            "pas",
+            "oponka",
+            "manometr",
+            "keyword",
+            "miss",
+        }
+    )
+    if history and _scan_user_history:
+        # Tylko wiadomości USER — odpowiedź asystenta z „BDJ EXTENDED” nie jest modelem klienta
         for role, text in reversed(history[-4:]):
+            if role != "user":
+                continue
             blob = apply_colloquial_aliases(text or "")
             if hist_kind == "unknown":
                 k = _detect_kind(blob)
@@ -274,6 +297,18 @@ def _slots_from_rules(
         elif _MIKRORURKA_RE.search(q) and not _KABEL_RE.search(q):
             kind = "uszczelka_mikrorurka"
 
+    if prior_reason == "need_gasket_context":
+        if _KABEL_RE.search(q) and not _MIKRORURKA_RE.search(q):
+            kind = "uszczelka_kabel"
+        elif _MIKRORURKA_RE.search(q) or (
+            _USZCZELKA_RE.search(q) and not _KABEL_RE.search(q)
+        ):
+            kind = "uszczelka_mikrorurka"
+        if size is None and hist_size is not None:
+            size, exact_fi = hist_size, hist_exact
+        if kind == "unknown" and hist_kind.startswith("uszczelka"):
+            kind = hist_kind
+
     # goły rozmiar / krótki follow-up po need_size
     bare_size_only = bool(_BARE_SIZE_RE.match(q.strip())) or (
         size is not None and kind in ("unknown", "other") and len(q) < 24
@@ -289,7 +324,7 @@ def _slots_from_rules(
         kind = hist_kind if hist_kind != "unknown" else "uszczelka_mikrorurka"
 
     if kind in ("unknown", "other") and list_all and (
-        prior_reason in {"need_size", "uszczelka", "uszczelka_list"}
+        prior_reason in {"need_size", "need_gasket_context", "uszczelka", "uszczelka_list"}
         or hist_kind.startswith("uszczelka")
         or _USZCZELKA_RE.search(hist)
         or _MIKRORURKA_RE.search(hist)
@@ -302,21 +337,16 @@ def _slots_from_rules(
     ):
         kind = hist_kind
 
-    machine = chip_machine
-    if not machine and hist_machine:
+    machine: str | None = chip_machine
+    tag_now = resolve_machine_from_query(q, chip_machine=None)
+    if tag_now:
+        machine = machine_display_name(tag_now)
+    elif hist_machine and (
+        same_but
+        or bare_size_only
+        or prior_reason in {"need_size", "need_gasket_context", "uszczelka", "uszczelka_list"}
+    ):
         machine = hist_machine
-    # model w bieżącej wiadomości wygrywa — resolve zrobi to w lookup;
-    # tu zostawiamy surową wskazówkę jeśli chip pusty
-    m_now = re.search(
-        r"\b(budget\s+plus\s+easy\s+set|budget\s+easy\s+set|budget\s+plus|"
-        r"budget|mini\s*c\s*plus|mini|nexta?|extended|max\s+dual\s+head|"
-        r"max|hydro\s+chain(?:\s+multi\s+tube|\s+cable)?|"
-        r"multi\s*tube|dragonair)\b",
-        q,
-        re.I,
-    )
-    if m_now:
-        machine = m_now.group(1)
 
     needs: ClarifyNeed = "none"
     if kind != "unknown" or list_all or size is not None:
@@ -446,6 +476,44 @@ def _llm_extract(
     return _coerce_slots(data)
 
 
+def _sanitize_slots_machine(
+    slots: PartSlots,
+    message: str,
+    *,
+    chip_machine: str | None,
+    history: list[tuple[str, str]] | None,
+    prior_reason: str | None,
+) -> PartSlots:
+    """Usuwa z halucynacji LLM model, którego user/chip nie podał."""
+    tag = resolve_machine_for_parts_lookup(
+        message,
+        chip_machine=chip_machine,
+        history=history,
+        prior_reason=prior_reason,
+    )
+    machine = machine_display_name(tag) if tag else None
+    wants_part = (
+        slots.part_kind != "unknown"
+        or slots.list_all
+        or slots.size_mm is not None
+    )
+    needs = slots.needs_clarify
+    if wants_part and not tag:
+        needs = "machine"
+    elif tag and needs == "machine":
+        needs = "none"
+    if needs == "none" and slots.part_kind in (
+        "uszczelka_mikrorurka",
+        "uszczelka_kabel",
+        "tuleja",
+    ):
+        if slots.size_mm is None and not slots.list_all:
+            needs = "size"
+    elif needs == "kind" and slots.part_kind != "unknown":
+        needs = "none"
+    return replace(slots, machine=machine, needs_clarify=needs)
+
+
 def _merge_slots(primary: PartSlots, fallback: PartSlots) -> PartSlots:
     """Uzupełnij dziury z LLM slotami z reguł (i odwrotnie dla machine/size)."""
     kind = primary.part_kind if primary.part_kind != "unknown" else fallback.part_kind
@@ -505,7 +573,13 @@ def extract_part_slots(
         prior_reason=prior_reason,
     )
     if not use_llm or llm is None:
-        return rules
+        return _sanitize_slots_machine(
+            rules,
+            message,
+            chip_machine=chip_machine,
+            history=history,
+            prior_reason=prior_reason,
+        )
 
     llm_slots = _llm_extract(
         message,
@@ -514,18 +588,31 @@ def extract_part_slots(
         llm=llm,
     )
     if llm_slots is None:
-        return rules
-    merged = _merge_slots(llm_slots, rules)
+        merged = rules
+    else:
+        merged = _merge_slots(llm_slots, rules)
     if _OPONKA_RE.search(apply_colloquial_aliases(message or "")):
         merged = replace(merged, part_kind="oponka", needs_clarify="none")
-    return merged
+    return _sanitize_slots_machine(
+        merged,
+        message,
+        chip_machine=chip_machine,
+        history=history,
+        prior_reason=prior_reason,
+    )
 
 
-def slots_to_lookup_question(slots: PartSlots, original: str) -> str:
+def slots_to_lookup_question(
+    slots: PartSlots,
+    original: str,
+    *,
+    chip_machine: str | None = None,
+) -> str:
     """Składa jednoznaczne pytanie dla try_deterministic_lookup z slotów."""
     bits: list[str] = []
-    if slots.machine:
-        bits.append(f"Mam maszynę {slots.machine}.")
+    tag = resolve_machine_from_query(original, chip_machine=chip_machine)
+    if tag:
+        bits.append(f"Mam maszynę {machine_display_name(tag)}.")
     if slots.list_all:
         bits.append("wyświetl listę")
     phrase = _KIND_TO_PHRASE.get(slots.part_kind)
@@ -553,6 +640,11 @@ def slots_as_dict(slots: PartSlots) -> dict[str, Any]:
 
 
 def with_chip_machine(slots: PartSlots, chip: str | None) -> PartSlots:
-    if not chip or slots.machine:
+    if not chip:
         return slots
-    return replace(slots, machine=chip)
+    if slots.machine:
+        return slots
+    tag = resolve_machine_for_parts_lookup("", chip_machine=chip)
+    if not tag:
+        return slots
+    return replace(slots, machine=machine_display_name(tag))

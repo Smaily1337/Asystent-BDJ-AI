@@ -77,6 +77,12 @@ def create_app() -> FastAPI:
             headers={"Cache-Control": "public, max-age=60"},
         )
 
+    @application.get("/api/machines")
+    def list_machines():
+        from app.rag.machine_web import machines_for_api
+
+        return machines_for_api()
+
     @application.get("/health")
     def health():
         return {

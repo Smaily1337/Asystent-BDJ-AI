@@ -929,23 +929,129 @@ def test_hydro_multi_tube_gasket_list_and_size():
     assert any("WST-PRO-RUR" in p.sku.upper() or "USZ" in p.sku.upper() for p in listed.parts)
     assert "[GET_QUOTE:" in listed.answer
 
-    sized = try_deterministic_lookup("uszczelka multi tube fi 10")
+    sized = try_deterministic_lookup("uszczelka mikrorurki multi tube fi 10")
     assert sized is not None
     assert sized.reason == "uszczelka"
     assert any("7XFI10" in p.sku.upper() or (p.fi_mm and abs(p.fi_mm - 10) < 0.1) for p in sized.parts)
 
 
-def test_ui_machine_chips_cover_hydro_and_dragonair():
-    """Chip picker musi mieć Multi Tube + DragonAir (wcześniej brakowało w UI)."""
+def test_uszczelka_without_machine_never_defaults_to_extended():
+    """Bez modelu maszyny — tylko dopytanie, zero SKU z Extended."""
+    from app.rag.intent import extract_part_slots
+    from app.rag.part_lookup import lookup_from_slots
+
+    q = "potrzebuję uszczelkę mikrorurki 7 mm"
+    slots = extract_part_slots(q, use_llm=False)
+    assert slots.needs_clarify == "machine"
+    assert slots.machine is None
+
+    result = lookup_from_slots(slots, q, llm=None)
+    assert result is not None
+    assert result.reason == "need_machine"
+    assert not result.parts
+    assert "UM-D35" not in result.answer
+
+
+def test_assistant_extended_in_history_does_not_poison_next_turn():
+    """Odpowiedź bota z „BDJ EXTENDED” nie ustawia modelu przy kolejnym pytaniu."""
+    from app.rag.intent import extract_part_slots
+    from app.rag.part_lookup import lookup_from_slots
+
+    history = [
+        ("user", "uszczelka mikrorurki"),
+        (
+            "assistant",
+            "Na podstawie katalogu części dla maszyny **BDJ EXTENDED** | UM-D35X5-6,5 |",
+        ),
+    ]
+    q = "potrzebuję tuleję 7 mm"
+    slots = extract_part_slots(
+        q,
+        history=history,
+        prior_reason="uszczelka",
+        use_llm=False,
+    )
+    assert slots.machine is None
+    assert slots.needs_clarify == "machine"
+
+    result = lookup_from_slots(
+        slots, q, prior_reason="uszczelka", history=history, llm=None
+    )
+    assert result is not None
+    assert result.reason == "need_machine"
+    assert not result.parts
+
+
+def test_slots_enriched_question_cannot_inject_hallucinated_machine():
+    """Syntetyczne „Mam maszynę Extended” ze slotów LLM nie wybiera katalogu."""
+    from dataclasses import replace
+
+    from app.rag.intent import PartSlots, slots_to_lookup_question
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    slots = PartSlots(
+        machine="Extended",
+        part_kind="uszczelka_mikrorurka",
+        size_mm=7.0,
+        needs_clarify="none",
+        confidence=0.9,
+    )
+    slots = replace(slots, machine="Extended")
+    enriched = slots_to_lookup_question(
+        slots, "uszczelka mikrorurki 7 mm", chip_machine=None
+    )
+    assert "extended" not in enriched.lower()
+
+    result = try_deterministic_lookup(
+        enriched,
+        machine_source="uszczelka mikrorurki 7 mm",
+    )
+    assert result is not None
+    assert result.reason == "need_machine"
+    assert not result.parts
+
+
+def test_sanitize_without_machine_strips_llm_sku():
+    from app.rag.sku_validate import sanitize_answer_skus
+
+    fake = "Proponuję SKU UM-D35X5-6,5 do twojej maszyny."
+    out = sanitize_answer_skus(fake, "uszczelka 7 mm", chip_machine=None)
+    assert "UM-D35" not in out
+    assert "MACHINE_CARDS" in out or "model maszyny" in out.lower()
+
+
+def test_machine_showcase_next():
+    from app.rag.part_lookup import try_machine_showcase
+
+    r = try_machine_showcase("co to jest BDJ Next?")
+    assert r is not None
+    assert r.reason == "machine_showcase"
+    assert "MACHINE_CARD" in r.answer
+
+
+def test_machine_web_catalog_has_urls():
+    from app.rag.machine_web import CATALOG_URL, MACHINE_WEB
+
+    assert CATALOG_URL.startswith("https://bluedragonjet.com")
+    assert "bdj next" in MACHINE_WEB
+    assert MACHINE_WEB["bdj next"].image.startswith("https://")
+    assert "wdmuchiwarka-bdj-next" in MACHINE_WEB["bdj next"].url
+
+
+def test_ui_hero_lists_hydro_and_dragonair():
+    """Hero banner musi pokazywać Multi Tube + DragonAir w rotacji nazw."""
     from pathlib import Path
 
     html = (Path(__file__).resolve().parents[1] / "static" / "index.html").read_text(
         encoding="utf-8"
     )
-    assert "BDJ HYDRO CHAIN MULTI TUBE" in html
-    assert "BDJ HYDRO CHAIN CABLE" in html
-    assert "BDJ DRAGONAIR" in html
+    assert "HERO_MACHINE_LABELS" in html
     assert "Hydro Multi Tube" in html
+    assert "DragonAir" in html
+    assert "gradient-text-shimmer" in html
+    assert "machine-select" in html
+    assert "machine-cards-grid" in html
+    assert "model-chips" not in html
 
 
 if __name__ == "__main__":
