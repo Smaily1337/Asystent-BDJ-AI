@@ -1088,6 +1088,8 @@ def test_ui_hero_lists_hydro_and_dragonair():
     assert "gradient-text-shimmer" in html
     assert "machine-select" in html
     assert "machine-cards-grid" in html
+    assert "machine-card--pick" in html
+    assert "pickMachineFromCard" in html
     assert "model-chips" not in html
 
 

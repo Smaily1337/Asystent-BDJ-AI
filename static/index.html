@@ -511,10 +511,50 @@
             color: inherit;
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
+        button.machine-card {
+            cursor: pointer;
+            text-align: left;
+            font: inherit;
+            width: 100%;
+            padding: 0;
+            appearance: none;
+            -webkit-appearance: none;
+        }
         .machine-card:hover {
             transform: translateY(-2px);
             border-color: rgba(96, 165, 250, 0.55);
             box-shadow: 0 10px 24px rgba(37, 99, 235, 0.12);
+        }
+        .machine-card.is-selected {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.28);
+            transform: translateY(-1px);
+        }
+        .machine-card-ext-link {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 2;
+            width: 28px;
+            height: 28px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            color: #2563eb;
+            font-size: 0.82rem;
+            font-weight: 800;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1);
+        }
+        .machine-card-ext-link:hover {
+            background: #eff6ff;
+            border-color: rgba(96, 165, 250, 0.65);
+        }
+        .machine-card--pick {
+            position: relative;
         }
         .machine-card img {
             width: 100%;
@@ -544,6 +584,12 @@
         }
         .machine-card-link {
             font-size: 0.68rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-top: 6px;
+        }
+        .machine-card-hint {
+            font-size: 0.65rem;
             font-weight: 700;
             color: #2563eb;
             margin-top: 6px;
@@ -1377,6 +1423,31 @@ const BDJChatApp = (() => {
         state.pendingMachine = displayName || null;
         saveState();
         syncMachineSelect();
+        syncMachineCardSelection();
+    };
+
+    const pickMachineFromCard = (info, cardEl) => {
+        if (!info) return;
+        setPendingMachine(info.display);
+        if (cardEl) {
+            DOM.history.querySelectorAll('.machine-card.is-selected').forEach((el) => {
+                el.classList.remove('is-selected');
+            });
+            cardEl.classList.add('is-selected');
+        }
+        const label = (info.display || '').replace(/^BDJ\s+/i, 'BDJ ').trim();
+        DOM.input.value = label ? `Mam ${label}` : '';
+        DOM.btnSend.disabled = DOM.input.value.trim().length === 0;
+        resizeInput();
+        DOM.input.focus();
+    };
+
+    const syncMachineCardSelection = () => {
+        const selected = state.pendingMachine;
+        DOM.history.querySelectorAll('.machine-card--pick').forEach((card) => {
+            const info = machineByTag()[card.dataset.machineTag || ''];
+            card.classList.toggle('is-selected', !!(info && selected && info.display === selected));
+        });
     };
 
     const saveState = () => {
@@ -1460,6 +1531,7 @@ const BDJChatApp = (() => {
         });
         scrollToBottom();
         updateCheckboxesState();
+        syncMachineCardSelection();
     };
 
     let heroRotateTimer = null;
@@ -1596,6 +1668,7 @@ const BDJChatApp = (() => {
         bubble.classList.remove('streaming');
         bubble.innerHTML = htmlContent;
         updateCheckboxesState();
+        syncMachineCardSelection();
     };
 
     const buildPartsCardList = (table, titleText = 'Proponowane części') => {
@@ -1869,14 +1942,18 @@ const BDJChatApp = (() => {
         const img = info.image
             ? `<img src="${info.image}" alt="${info.display}" loading="lazy" referrerpolicy="no-referrer" />`
             : '';
-        return `<a class="machine-card" href="${info.url}" target="_blank" rel="noopener noreferrer" data-machine-tag="${info.tag}">
+        const extLink = info.url
+            ? `<a class="machine-card-ext-link" href="${info.url}" target="_blank" rel="noopener noreferrer" aria-label="Strona produktu ${info.display}" title="Strona produktu">↗</a>`
+            : '';
+        return `<button type="button" class="machine-card machine-card--pick" data-machine-tag="${info.tag}" data-machine-display="${info.display}">
+            ${extLink}
             ${img}
             <div class="machine-card-body">
                 <div class="machine-card-title">${info.display}</div>
                 <div class="machine-card-tagline">${info.tagline || ''}</div>
-                <div class="machine-card-link">Zobacz na stronie →</div>
+                <div class="machine-card-hint">Kliknij zdjęcie, aby wybrać</div>
             </div>
-        </a>`;
+        </button>`;
     };
 
     const buildMachineCardsGrid = (tags) => {
@@ -2380,11 +2457,17 @@ const BDJChatApp = (() => {
         }
 
         DOM.history.addEventListener('click', (e) => {
-            const mCard = e.target.closest('.machine-card');
+            if (e.target.closest('.machine-card-ext-link')) {
+                e.stopPropagation();
+                return;
+            }
+            const mCard = e.target.closest('.machine-card--pick');
             if (mCard && mCard.dataset.machineTag) {
-                const byTag = machineByTag();
-                const info = byTag[mCard.dataset.machineTag];
-                if (info) setPendingMachine(info.display);
+                e.preventDefault();
+                e.stopPropagation();
+                const info = machineByTag()[mCard.dataset.machineTag];
+                pickMachineFromCard(info, mCard);
+                return;
             }
             const card = e.target.closest('.part-card');
             if (card && e.target.type !== 'checkbox') {

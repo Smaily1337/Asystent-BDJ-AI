@@ -219,9 +219,9 @@ def _ask_machine() -> LookupResult:
     cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
-            "Żeby dobrać część, wybierz **model maszyny** u góry czatu "
-            "(albo dopisz np. Extended / Next / Budget Plus). "
-            "Potem napisz czego potrzebujesz i wymiar — **kod SKU podam ja**, "
+            "Żeby dobrać część, **kliknij zdjęcie swojej maszyny** poniżej "
+            "(albo wybierz model u góry czatu). "
+            "Potem dopisz czego potrzebujesz i wymiar — **kod SKU podam ja**, "
             "a Ty klikasz «Zapytaj o wycenę»."
             + (f"\n\n{cards}" if cards else "")
         ),
@@ -234,8 +234,8 @@ def _ask_machine_for_list() -> LookupResult:
     cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
-            "Żeby wypisać listę uszczelek na rurkę/mikrorurkę, wybierz "
-            "**model maszyny** u góry czatu (albo dopisz np. Extended / Max Dual Head / Next). "
+            "Żeby wypisać listę uszczelek na rurkę/mikrorurkę, **kliknij zdjęcie maszyny** "
+            "poniżej (albo wybierz model u góry). "
             "Potem napisz ponownie «lista uszczelek na mikrorurkę» — pokażę pełny katalog "
             "dla tego modelu, bez dopytywania o rozmiar rurki."
             + (f"\n\n{cards}" if cards else "")

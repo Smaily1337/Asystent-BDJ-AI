@@ -82,8 +82,8 @@ def sanitize_answer_skus(
         cards = format_machine_cards_tag(["all"])
         if is_parts_intent(question or ""):
             return (
-                "Żeby podać **właściwy kod SKU z katalogu**, dopisz **model maszyny** "
-                "(np. Extended, Next, Budget Plus) albo wybierz go u góry czatu.\n\n"
+                "Żeby podać **właściwy kod SKU z katalogu**, **kliknij zdjęcie maszyny** poniżej "
+                "albo wybierz model u góry czatu.\n\n"
                 f"{cards}"
             )
         if cards:
