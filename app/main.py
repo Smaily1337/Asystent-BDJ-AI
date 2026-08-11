@@ -51,7 +51,10 @@ def create_app() -> FastAPI:
 
     @application.get("/")
     def read_index():
-        return FileResponse(str(index_path))
+        return FileResponse(
+            str(index_path),
+            headers={"Cache-Control": "no-cache, must-revalidate"},
+        )
 
     @application.head("/")
     def read_index_head():
@@ -74,7 +77,7 @@ def create_app() -> FastAPI:
         return FileResponse(
             str(embed_path),
             media_type="application/javascript; charset=utf-8",
-            headers={"Cache-Control": "public, max-age=60"},
+            headers={"Cache-Control": "public, max-age=300"},
         )
 
     @application.get("/api/machines")

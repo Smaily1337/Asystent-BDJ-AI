@@ -7,6 +7,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
+  var EMBED_VERSION = "0.0.7";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -99,7 +100,7 @@
       return;
     }
     loaded = true;
-    frame.src = BASE + "/?embed=1&open=1";
+    frame.src = BASE + "/?embed=1&open=1&v=" + encodeURIComponent(EMBED_VERSION);
   }
 
   function mount() {
