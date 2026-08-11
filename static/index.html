@@ -6,7 +6,7 @@
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
     <script>
     (function () {
-        var NEED = '0.0.8';
+        var NEED = '0.0.9';
         if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
         var p = new URLSearchParams(location.search);
         if (p.get('v') === NEED) return;
@@ -156,16 +156,22 @@
         #chat-widget.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
 
         @media (max-width: 680px) {
+            html, body {
+                height: 100%;
+                height: 100dvh;
+                overscroll-behavior: none;
+            }
             #chat-widget {
                 inset: 0 !important;
                 width: 100% !important;
                 max-width: 100% !important;
-                height: 100% !important;
-                max-height: 100dvh !important;
+                height: var(--vv-height, 100dvh) !important;
+                max-height: var(--vv-height, 100dvh) !important;
                 border-radius: 0 !important;
                 border: none !important;
                 bottom: 0 !important;
                 right: 0 !important;
+                padding-top: env(safe-area-inset-top, 0px);
                 padding-bottom: env(safe-area-inset-bottom, 0px);
             }
             #fab-btn {
@@ -176,6 +182,20 @@
             #fab-btn.open { display: none; }
             .fab-tooltip { display: none !important; }
 
+            /* iOS: font ≥16px = brak auto-zooma przy focusie */
+            #chat-input,
+            #machine-select,
+            .modal-box input,
+            .modal-box textarea,
+            .modal-box select {
+                font-size: 16px !important;
+            }
+
+            html.embed-mode,
+            html.embed-mode body {
+                height: var(--vv-height, 100%) !important;
+                max-height: var(--vv-height, 100%) !important;
+            }
             html.embed-mode #chat-widget {
                 inset: 0 !important;
                 top: 0 !important;
@@ -183,9 +203,9 @@
                 bottom: 0 !important;
                 left: 0 !important;
                 width: 100% !important;
-                height: 100% !important;
+                height: var(--vv-height, 100%) !important;
                 max-width: 100% !important;
-                max-height: 100% !important;
+                max-height: var(--vv-height, 100%) !important;
                 border-radius: 0 !important;
                 border: none !important;
                 box-shadow: none !important;
@@ -1066,10 +1086,12 @@
         }
         #chat-input {
             flex: 1 1 auto; min-width: 0; width: 100%;
-            border: none; background: transparent; outline: none; font-size: 0.95rem;
+            border: none; background: transparent; outline: none;
+            font-size: 16px; /* ≥16px — iOS nie zoomuje przy focusie */
             resize: none; overflow: hidden; line-height: 1.45;
-            min-height: 22px; max-height: 120px; color: var(--text-dark);
+            min-height: 24px; max-height: 120px; color: var(--text-dark);
             padding: 6px 0; margin: 0;
+            -webkit-text-size-adjust: 100%;
         }
         #btn-send { 
             width: 36px; height: 36px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); 
@@ -1246,7 +1268,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">0.0.8</span>
+                <span class="app-version">0.0.9</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1332,7 +1354,7 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.8';
+    const UI_VERSION = '0.0.9';
 
     let state = {
         messages: [],
@@ -2415,12 +2437,37 @@ const BDJChatApp = (() => {
         DOM.fab.classList.toggle('open', !!open);
         if (open) {
             DOM.tooltip.classList.remove('show');
-            if (DOM.input) DOM.input.focus();
+            syncVisualViewport();
+            // Na telefonie nie fokusuj od razu — otwarcie klawiatury ucina viewport
+            const isNarrow = window.matchMedia('(max-width: 680px)').matches;
+            if (!isNarrow && DOM.input) DOM.input.focus();
         }
         notifyEmbedParent();
     };
 
+    const syncVisualViewport = () => {
+        const vv = window.visualViewport;
+        if (!vv) {
+            document.documentElement.style.setProperty('--vv-height', '100dvh');
+            return;
+        }
+        document.documentElement.style.setProperty('--vv-height', Math.round(vv.height) + 'px');
+    };
+
+    const bindVisualViewport = () => {
+        syncVisualViewport();
+        if (!window.visualViewport) return;
+        const onVv = () => {
+            syncVisualViewport();
+            if (DOM.history) scrollToBottom();
+        };
+        window.visualViewport.addEventListener('resize', onVv);
+        window.visualViewport.addEventListener('scroll', onVv);
+        window.addEventListener('orientationchange', () => setTimeout(syncVisualViewport, 120));
+    };
+
     const bindEvents = () => {
+        bindVisualViewport();
         // W embed na WP: bez chmurki; chat otwiera rodzic albo ?open=1
         if (isEmbed) {
             window.addEventListener('message', (e) => {

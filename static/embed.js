@@ -1,13 +1,14 @@
 /**
  * Dragon AI — osadzenie WP (inline / embed.js)
  * Przycisk montowany na document.body — poza stacking context stopki.
+ * Na telefonie chat = pełny ekran (bez zooma / uciętego UI).
  */
 (function () {
   if (window.__bdjAiEmbedLoaded) return;
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.8";
+  var EMBED_VERSION = "0.0.9";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -26,13 +27,13 @@
     "border:1px solid rgba(255,255,255,.18)!important;border-radius:50%!important;padding:0!important;margin:0!important;",
     "background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(30,41,59,.88))!important;color:#fff!important;cursor:pointer!important;",
     "z-index:2147483647!important;box-shadow:0 12px 32px rgba(15,23,42,.28)!important;",
-    "display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:auto!important;}",
+    "display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:auto!important;touch-action:manipulation!important;}",
     "#bdj-ai-fab.is-chat-open{display:none!important;}",
     "#bdj-ai-fab svg{width:26px;height:26px;pointer-events:none;}",
     "#bdj-ai-tip{position:fixed!important;bottom:100px!important;right:28px!important;max-width:min(300px,calc(100vw - 100px));",
     "z-index:2147483647!important;background:rgba(255,255,255,.95)!important;border:1px solid rgba(15,23,42,.08)!important;",
     "border-radius:18px!important;padding:12px 14px!important;box-shadow:0 16px 36px rgba(15,23,42,.18)!important;",
-    "cursor:pointer!important;font-family:system-ui,sans-serif!important;pointer-events:auto!important;display:none;}",
+    "cursor:pointer!important;font-family:system-ui,sans-serif!important;pointer-events:auto!important;display:none;touch-action:manipulation!important;}",
     "#bdj-ai-tip strong{display:block;font-size:14px;color:#0f172a;}",
     "#bdj-ai-tip span{display:block;font-size:13px;color:#64748b;line-height:1.35;margin-top:2px;}",
     "#bdj-ai-tip-close{background:none;border:none;font-size:18px;color:#94a3b8;cursor:pointer;padding:0 2px;pointer-events:auto!important;}",
@@ -41,6 +42,14 @@
     "z-index:2147483646!important;background:transparent!important;pointer-events:none!important;border:none!important;}",
     "#bdj-ai-embed.is-open{display:block!important;pointer-events:auto!important;}",
     "#bdj-ai-widget{width:100%!important;height:100%!important;border:0!important;background:transparent!important;}",
+    "body.bdj-ai-chat-open{overflow:hidden!important;}",
+    "@media (max-width:680px){",
+    "#bdj-ai-fab{bottom:max(18px,env(safe-area-inset-bottom,18px))!important;right:max(18px,env(safe-area-inset-right,18px))!important;}",
+    "#bdj-ai-tip{bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;right:max(16px,env(safe-area-inset-right,16px))!important;}",
+    "#bdj-ai-embed.is-open{inset:0!important;top:0!important;right:0!important;bottom:0!important;left:0!important;",
+    "width:100%!important;height:100%!important;height:100dvh!important;max-width:none!important;max-height:none!important;",
+    "background:#fff!important;}",
+    "}",
   ].join("");
 
   var fab = document.createElement("button");
@@ -59,6 +68,7 @@
   frame.id = "bdj-ai-widget";
   frame.title = "Dragon AI";
   frame.allow = "clipboard-write";
+  frame.setAttribute("allowfullscreen", "true");
   wrap.appendChild(frame);
 
   var ready = false;
@@ -73,6 +83,7 @@
     wrap.classList.add("is-open");
     wrap.style.display = "block";
     wrap.style.pointerEvents = "auto";
+    document.body.classList.add("bdj-ai-chat-open");
   }
 
   function hideChat() {
@@ -80,6 +91,7 @@
     wrap.classList.remove("is-open");
     wrap.style.display = "none";
     wrap.style.pointerEvents = "none";
+    document.body.classList.remove("bdj-ai-chat-open");
     wantOpen = false;
   }
 
