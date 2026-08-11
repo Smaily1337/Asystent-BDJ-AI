@@ -1359,12 +1359,42 @@ const BDJChatApp = (() => {
     };
 
     const init = async () => {
+        warmupBackend();
         await loadMachineCatalog();
         loadState();
         syncMachineSelect();
         renderHistory();
         bindEvents();
         resizeInput();
+    };
+
+    const warmupBackend = () => {
+        fetch('/health', { cache: 'no-store' }).catch(() => {});
+    };
+
+    const postChat = async (payload, attempt = 0) => {
+        const res = await fetch('/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+            if (attempt < 2 && [502, 503, 504, 429].includes(res.status)) {
+                await wait(1800 * (attempt + 1));
+                return postChat(payload, attempt + 1);
+            }
+            throw new Error(`HTTP ${res.status}`);
+        }
+        let data;
+        try {
+            data = await res.json();
+        } catch (e) {
+            throw new Error('invalid_json');
+        }
+        if (!data || typeof data.answer !== 'string') {
+            throw new Error('missing_answer');
+        }
+        return data;
     };
 
     const loadMachineCatalog = async () => {
@@ -1514,7 +1544,7 @@ const BDJChatApp = (() => {
             DOM.history.appendChild(createHeroBanner());
         }
         state.messages.forEach(msg => {
-            const content = (msg.role === 'bot' && msg.raw)
+            const content = (msg.role === 'bot' && msg.raw && !msg.isError)
                 ? processBotResponse(msg.raw)
                 : msg.content;
             DOM.history.appendChild(createMessageElement(msg.role, content));
@@ -2140,18 +2170,21 @@ const BDJChatApp = (() => {
         const typingId = showTypingIndicator();
 
         try {
-            const res = await fetch('/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    question: text,
-                    session_id: state.sessionId,
-                    machine: machineForApi
-                })
+            const data = await postChat({
+                question: text,
+                session_id: state.sessionId,
+                machine: machineForApi,
             });
-            const data = await res.json();
-            const formattedHTML = processBotResponse(data.answer);
-            
+            let formattedHTML;
+            try {
+                formattedHTML = processBotResponse(data.answer);
+            } catch (parseErr) {
+                console.error('processBotResponse', parseErr);
+                formattedHTML = `<div class="bot-md"><p>${(data.answer || '')
+                    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                    .replace(/\n/g, '<br>')}</p></div>`;
+            }
+
             removeTypingIndicator(typingId);
             const botRow = appendMessage('bot', '');
             state.messages.push({ role: 'bot', content: formattedHTML, raw: data.answer });
@@ -2159,9 +2192,10 @@ const BDJChatApp = (() => {
             await animateBotMessage(botRow, formattedHTML);
 
         } catch (error) {
+            console.error('sendMessage', error);
             removeTypingIndicator(typingId);
-            const errHtml = `<span style="color:#ef4444; font-weight:600;">Błąd połączenia z serwerem konfiguratora.</span>`;
-            state.messages.push({ role: 'bot', content: errHtml, raw: 'Błąd' });
+            const errHtml = `<span style="color:#ef4444; font-weight:600;">Nie udało się połączyć z serwerem. Poczekaj chwilę (Render budzi backend) i spróbuj ponownie.</span>`;
+            state.messages.push({ role: 'bot', content: errHtml, isError: true });
             renderHistory();
         } finally {
             DOM.widget.classList.remove('thinking-glow');
