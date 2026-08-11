@@ -239,10 +239,10 @@ def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
 # User nie zna / pyta o model — nie dziedzicz chipa ani historii sesji.
 _MACHINE_UNKNOWN_RE = re.compile(
     r"(?:"
-    r"nie\s+w[iy]em\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?(?:\s+mam)?\s*(?:model|maszyn)",
-    r"|nie\s+znam\s+(?:modelu|maszyny|jak[aą]\s+(?:to\s+)?maszyn)",
-    r"|nie\s+mam\s+poj[eę]cia\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?\s*(?:model|maszyn)",
-    r"|(?:jaki|jaka|jak[aą])\s+(?:to\s+)?(?:model|maszyn)\s+(?:mam|posiadam|u\s+mnie|to\s+jest)",
+    r"nie\s+w[iy]em\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?(?:\s+mam)?\s*(?:model|maszyn)"
+    r"|nie\s+znam\s+(?:modelu|maszyny|jak[aą]\s+(?:to\s+)?maszyn)"
+    r"|nie\s+mam\s+poj[eę]cia\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?\s*(?:model|maszyn)"
+    r"|(?:jaki|jaka|jak[aą])\s+(?:to\s+)?(?:model|maszyn)\s+(?:mam|posiadam|u\s+mnie|to\s+jest)"
     r")",
     re.I,
 )
