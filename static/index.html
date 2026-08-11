@@ -6,7 +6,7 @@
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
     <script>
     (function () {
-        var NEED = '0.0.9';
+        var NEED = '0.0.10';
         if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
         var p = new URLSearchParams(location.search);
         if (p.get('v') === NEED) return;
@@ -90,6 +90,7 @@
             opacity: 1;
             transform: none;
             pointer-events: all;
+            overscroll-behavior: contain;
         }
         html.embed-mode #chat-widget.open { opacity: 1; transform: none; pointer-events: all; }
         html.embed-mode .modal-overlay { z-index: 2147483647; }
@@ -291,6 +292,7 @@
             min-width: 0;
             overflow-y: auto;
             overflow-x: hidden;
+            overscroll-behavior: contain;
             padding: 24px;
             display: flex;
             flex-direction: column;
@@ -1268,7 +1270,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">0.0.9</span>
+                <span class="app-version">0.0.10</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1354,7 +1356,7 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.9';
+    const UI_VERSION = '0.0.10';
 
     let state = {
         messages: [],

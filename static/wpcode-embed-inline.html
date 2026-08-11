@@ -1,4 +1,4 @@
-<!-- WPCode: wklej CAŁY blok (inline — CSP WP blokuje zewn. script z Rendera) -->
+<!-- WPCode: wklej CAŁY blok -->
 <script>
 /**
  * Dragon AI — osadzenie WP (inline / embed.js)
@@ -10,7 +10,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.9";
+  var EMBED_VERSION = "0.0.10";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -39,18 +39,22 @@
     "#bdj-ai-tip strong{display:block;font-size:14px;color:#0f172a;}",
     "#bdj-ai-tip span{display:block;font-size:13px;color:#64748b;line-height:1.35;margin-top:2px;}",
     "#bdj-ai-tip-close{background:none;border:none;font-size:18px;color:#94a3b8;cursor:pointer;padding:0 2px;pointer-events:auto!important;}",
-    "#bdj-ai-embed{display:none;position:fixed!important;bottom:0!important;right:0!important;",
-    "width:min(450px,100vw)!important;height:min(780px,100dvh)!important;",
-    "z-index:2147483646!important;background:transparent!important;pointer-events:none!important;border:none!important;}",
+    "#bdj-ai-embed{display:none;position:fixed!important;",
+    "bottom:max(24px,env(safe-area-inset-bottom,24px))!important;",
+    "right:max(24px,env(safe-area-inset-right,24px))!important;",
+    "width:min(420px,calc(100vw - 48px))!important;height:min(720px,calc(100dvh - 48px))!important;",
+    "z-index:2147483646!important;background:#fff!important;pointer-events:none!important;border:none!important;",
+    "border-radius:24px!important;overflow:hidden!important;",
+    "box-shadow:0 20px 48px rgba(15,23,42,.18),0 8px 20px rgba(15,23,42,.08)!important;}",
     "#bdj-ai-embed.is-open{display:block!important;pointer-events:auto!important;}",
     "#bdj-ai-widget{width:100%!important;height:100%!important;border:0!important;background:transparent!important;}",
-    "body.bdj-ai-chat-open{overflow:hidden!important;}",
     "@media (max-width:680px){",
+    "body.bdj-ai-chat-open{overflow:hidden!important;}",
     "#bdj-ai-fab{bottom:max(18px,env(safe-area-inset-bottom,18px))!important;right:max(18px,env(safe-area-inset-right,18px))!important;}",
     "#bdj-ai-tip{bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;right:max(16px,env(safe-area-inset-right,16px))!important;}",
     "#bdj-ai-embed.is-open{inset:0!important;top:0!important;right:0!important;bottom:0!important;left:0!important;",
     "width:100%!important;height:100%!important;height:100dvh!important;max-width:none!important;max-height:none!important;",
-    "background:#fff!important;}",
+    "border-radius:0!important;box-shadow:none!important;background:#fff!important;}",
     "}",
   ].join("");
 
@@ -166,4 +170,5 @@
   if (document.body) mount();
   else document.addEventListener("DOMContentLoaded", mount);
 })();
+
 </script>
