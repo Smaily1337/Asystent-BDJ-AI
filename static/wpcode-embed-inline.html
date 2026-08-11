@@ -1,20 +1,12 @@
-/**
- * Dragon AI — osadzenie WP (inline / embed.js)
- * Przycisk montowany na document.body — poza stacking context stopki.
- */
+<!-- WPCode: wklej CAŁY blok (inline — CSP WP blokuje zewn. script z Rendera) -->
+<script>
 (function () {
   if (window.__bdjAiEmbedLoaded) return;
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
   var EMBED_VERSION = "0.0.8";
-  try {
-    if (document.currentScript && document.currentScript.src) {
-      BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
-    }
-  } catch (e) {}
 
-  // Usuń stare atrapy z WPCode (w stopce)
   ["bdj-ai-fab", "bdj-ai-tip", "bdj-ai-embed", "bdj-ai-widget"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.remove();
@@ -26,13 +18,13 @@
     "border:1px solid rgba(255,255,255,.18)!important;border-radius:50%!important;padding:0!important;margin:0!important;",
     "background:linear-gradient(145deg,rgba(15,23,42,.92),rgba(30,41,59,.88))!important;color:#fff!important;cursor:pointer!important;",
     "z-index:2147483647!important;box-shadow:0 12px 32px rgba(15,23,42,.28)!important;",
-    "display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:auto!important;}",
+    "display:flex!important;align-items:center!important;justify-content:center!important;pointer-events:auto!important;touch-action:manipulation!important;}",
     "#bdj-ai-fab.is-chat-open{display:none!important;}",
     "#bdj-ai-fab svg{width:26px;height:26px;pointer-events:none;}",
     "#bdj-ai-tip{position:fixed!important;bottom:100px!important;right:28px!important;max-width:min(300px,calc(100vw - 100px));",
     "z-index:2147483647!important;background:rgba(255,255,255,.95)!important;border:1px solid rgba(15,23,42,.08)!important;",
     "border-radius:18px!important;padding:12px 14px!important;box-shadow:0 16px 36px rgba(15,23,42,.18)!important;",
-    "cursor:pointer!important;font-family:system-ui,sans-serif!important;pointer-events:auto!important;display:none;}",
+    "cursor:pointer!important;font-family:system-ui,sans-serif!important;pointer-events:auto!important;display:none;touch-action:manipulation!important;}",
     "#bdj-ai-tip strong{display:block;font-size:14px;color:#0f172a;}",
     "#bdj-ai-tip span{display:block;font-size:13px;color:#64748b;line-height:1.35;margin-top:2px;}",
     "#bdj-ai-tip-close{background:none;border:none;font-size:18px;color:#94a3b8;cursor:pointer;padding:0 2px;pointer-events:auto!important;}",
@@ -143,8 +135,8 @@
           try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (err) {}
         }
       }
-      if (e.data.type === "bdj-ai-resize") {
-        if (e.data.open === false) hideChat();
+      if (e.data.type === "bdj-ai-resize" && e.data.open === false) {
+        hideChat();
       }
     });
   }
@@ -152,3 +144,4 @@
   if (document.body) mount();
   else document.addEventListener("DOMContentLoaded", mount);
 })();
+</script>
