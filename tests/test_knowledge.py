@@ -1057,6 +1057,24 @@ def test_unknown_machine_message_ignores_chip():
     assert "model maszyny" in out.lower() or "MACHINE_CARDS" in out
 
 
+def test_product_card_next():
+    from app.rag.part_lookup import try_product_card
+
+    r = try_product_card("karta produktu BDJ Next")
+    assert r is not None
+    assert r.reason == "product_card"
+    assert "PRODUCT_CARD" in r.answer
+    assert "NEXT" in r.answer
+
+
+def test_product_card_without_machine():
+    from app.rag.part_lookup import try_product_card
+
+    r = try_product_card("chcę kartę produktu")
+    assert r is not None
+    assert "MACHINE_CARDS" in r.answer
+
+
 def test_machine_showcase_next():
     from app.rag.part_lookup import try_machine_showcase
 
@@ -1087,7 +1105,8 @@ def test_ui_machine_cards_have_product_pdf_link():
         encoding="utf-8"
     )
     assert "machine-card-pdf-link" in html
-    assert "Zobacz kartę produktu" in html
+    assert "Karta produktu" in html
+    assert "btn-product-card" in html
     assert "product_card_url" in html
 
 

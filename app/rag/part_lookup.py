@@ -26,7 +26,12 @@ from app.rag.machines import (
     resolve_machine_for_parts_lookup,
     resolve_machine_from_query,
 )
-from app.rag.machine_web import format_machine_card_tag, format_machine_cards_tag
+from app.rag.machine_web import (
+    format_machine_card_tag,
+    format_machine_cards_tag,
+    format_product_card_tag,
+    machine_web_info,
+)
 from app.rag.query_rewrite import apply_colloquial_aliases
 
 _EXPLICIT_MM_RE = re.compile(r"\b([0-9]+(?:[.,][0-9]+)?)\s*mm\b", re.I)
@@ -102,6 +107,20 @@ _MACHINE_SHOWCASE_RE = re.compile(
     re.I,
 )
 
+_PRODUCT_CARD_RE = re.compile(
+    r"(?:"
+    r"kart[aęe]\s+produkt\w*|"
+    r"produktow\w*\s+kart\w*|"
+    r"chc[eę]\s+kart\w*|"
+    r"poka[zż]\s+kart\w*|"
+    r"wy[sś]lij\s+kart\w*|"
+    r"\bpdf\b|"
+    r"bro[sś]ur\w*|"
+    r"ulotk\w*"
+    r")",
+    re.I,
+)
+
 # Pytanie o dobór części → NIGDY nie puszczamy do LLM (halucynuje SKU)
 _PARTS_INTENT_RE = re.compile(
     r"\b("
@@ -169,11 +188,68 @@ def _fmt_mm(val: float) -> str:
 
 
 def is_machine_showcase_intent(question: str) -> bool:
-    """Pytanie o maszynę (nie o konkretną część) — karta produktu ze strony."""
+    """Pytanie o maszynę (nie o konkretną część) — prezentacja modelu."""
     q = question or ""
     if is_parts_intent(q):
         return False
+    if is_product_card_intent(q):
+        return False
     return bool(_MACHINE_SHOWCASE_RE.search(q))
+
+
+def is_product_card_intent(question: str) -> bool:
+    """Klient prosi o kartę produktu (PDF)."""
+    q = question or ""
+    if is_parts_intent(q):
+        return False
+    return bool(_PRODUCT_CARD_RE.search(q))
+
+
+def try_product_card(
+    question: str,
+    chip_machine: str | None = None,
+) -> LookupResult | None:
+    """Karta produktu PDF — duży przycisk w UI."""
+    if not is_product_card_intent(question):
+        return None
+
+    tag = resolve_machine_for_parts_lookup(question or "", chip_machine=chip_machine)
+    if tag:
+        info = machine_web_info(tag)
+        if not info:
+            return None
+        pdf_tag = format_product_card_tag(tag)
+        if pdf_tag:
+            intro = (
+                f"Oto **karta produktu {info.display}** — PDF z parametrami "
+                f"i zdjęciami maszyny:"
+            )
+            return LookupResult(
+                answer=f"{intro}\n\n{pdf_tag}",
+                parts=(),
+                reason="product_card",
+            )
+        intro = (
+            f"Dla **{info.display}** nie mamy jeszcze karty PDF. "
+            f"Szczegóły techniczne znajdziesz na stronie produktu:"
+        )
+        card = format_machine_card_tag(tag)
+        return LookupResult(
+            answer=f"{intro}\n\n{card}" if card else intro,
+            parts=(),
+            reason="product_card",
+        )
+
+    cards = format_machine_cards_tag(["all"])
+    return LookupResult(
+        answer=(
+            "Której maszyny dotyczy **karta produktu**? "
+            "**Kliknij model** poniżej — pokażę przycisk do PDF."
+            + (f"\n\n{cards}" if cards else "")
+        ),
+        parts=(),
+        reason="product_card",
+    )
 
 
 def try_machine_showcase(

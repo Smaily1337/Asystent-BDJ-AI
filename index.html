@@ -611,18 +611,71 @@
         .machine-card-pdf-link {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            margin-top: 6px;
-            font-size: 0.66rem;
-            font-weight: 700;
+            justify-content: center;
+            gap: 6px;
+            width: 100%;
+            margin-top: 8px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 800;
             color: #1d4ed8;
             text-decoration: none;
             position: relative;
             z-index: 3;
+            background: #eff6ff;
+            border: 1px solid #bfdbfe;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+            transition: all 0.2s ease;
+            line-height: 1.3;
+            text-align: center;
+        }
+        .machine-card-pdf-link::before {
+            content: "📄";
+            font-size: 0.9rem;
+            line-height: 1;
         }
         .machine-card-pdf-link:hover {
-            text-decoration: underline;
+            text-decoration: none;
             color: #1e40af;
+            background: #dbeafe;
+            border-color: #60a5fa;
+            transform: translateY(-1px);
+        }
+        .btn-product-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            max-width: 100%;
+            margin-top: 16px;
+            padding: 15px 20px;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            line-height: 1.35;
+            text-decoration: none;
+            text-align: center;
+            color: #1d4ed8;
+            background: linear-gradient(145deg, #eff6ff 0%, #ffffff 100%);
+            border: 1px solid #93c5fd;
+            box-shadow: 0 8px 22px rgba(37, 99, 235, 0.12);
+            transition: all 0.22s ease;
+            cursor: pointer;
+        }
+        .btn-product-card::before {
+            content: "📄";
+            font-size: 1.05rem;
+            line-height: 1;
+        }
+        .btn-product-card:hover {
+            color: #1e3a8a;
+            background: #dbeafe;
+            border-color: #3b82f6;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 28px rgba(37, 99, 235, 0.16);
+            text-decoration: none;
         }
         .machine-cards-catalog-link {
             display: inline-block;
@@ -2006,7 +2059,7 @@ const BDJChatApp = (() => {
             ? `<a class="machine-card-ext-link" href="${info.url}" target="_blank" rel="noopener noreferrer" aria-label="Strona produktu ${info.display}" title="Strona produktu">↗</a>`
             : '';
         const pdfLink = info.product_card_url
-            ? `<a class="machine-card-pdf-link" href="${info.product_card_url}" target="_blank" rel="noopener noreferrer" title="Karta produktu PDF">Zobacz kartę produktu →</a>`
+            ? `<a class="machine-card-pdf-link" href="${info.product_card_url}" target="_blank" rel="noopener noreferrer" title="Karta produktu PDF">Karta produktu</a>`
             : '';
         return `<button type="button" class="machine-card machine-card--pick" data-machine-tag="${info.tag}" data-machine-display="${info.display}">
             ${extLink}
@@ -2037,6 +2090,7 @@ const BDJChatApp = (() => {
         let requestMachine = null;
         const machineCardTags = [];
         let machineCardsAll = null;
+        let productCardTag = null;
 
         md = md.replace(/\[GET_QUOTE:\s*(.*?)\]/gi, (_, machine) => {
             quoteMachine = (machine || '').trim();
@@ -2055,6 +2109,10 @@ const BDJChatApp = (() => {
             machineCardsAll = (list || '').split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
             return '';
         });
+        md = md.replace(/\[PRODUCT_CARD:\s*(.*?)\]/gi, (_, tag) => {
+            productCardTag = (tag || '').trim().toLowerCase();
+            return '';
+        });
 
         // Usuń ewentualny duplikat komunikatu z odpowiedzi modelu — UI pokaże własną kartę.
         md = md.replace(
@@ -2062,11 +2120,11 @@ const BDJChatApp = (() => {
             ''
         ).trim();
 
-        return { md, quoteMachine, requestMachine, machineCardTags, machineCardsAll };
+        return { md, quoteMachine, requestMachine, machineCardTags, machineCardsAll, productCardTag };
     };
 
     const processBotResponse = (markdownText) => {
-        const { md, quoteMachine, requestMachine, machineCardTags, machineCardsAll } = extractResponseTags(markdownText);
+        const { md, quoteMachine, requestMachine, machineCardTags, machineCardsAll, productCardTag } = extractResponseTags(markdownText);
         const normalized = normalizeMarkdownTables(md);
         const rawHTML = (window.marked && typeof marked.parse === 'function')
             ? marked.parse(normalized)
@@ -2124,6 +2182,20 @@ const BDJChatApp = (() => {
             const grid = document.createElement('div');
             grid.innerHTML = buildMachineCardsGrid(cardTags);
             while (grid.firstChild) wrapper.appendChild(grid.firstChild);
+        }
+
+        if (productCardTag) {
+            const info = machineByTag()[productCardTag];
+            if (info && info.product_card_url) {
+                const link = document.createElement('a');
+                link.className = 'btn-product-card';
+                link.href = info.product_card_url;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.title = `Karta produktu ${info.display}`;
+                link.textContent = 'Karta produktu';
+                wrapper.appendChild(link);
+            }
         }
 
         if (quoteMachine) {

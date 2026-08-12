@@ -22,6 +22,7 @@ from app.rag.part_lookup import (
     lookup_from_slots,
     try_deterministic_lookup,
     try_machine_showcase,
+    try_product_card,
 )
 from app.rag.query_rewrite import rewrite_query
 from app.rag.sku_validate import sanitize_answer_skus
@@ -139,6 +140,20 @@ class SessionChatManager:
         chip_for_lookup = machine or (
             machine_display_name(resolved) if resolved else None
         )
+
+        product_card = try_product_card(question, chip_machine=chip_for_lookup)
+        if product_card is not None and not (
+            is_parts_intent(q)
+            or is_parts_intent(question)
+            or is_gasket_list_followup(question, prior_reason)
+        ):
+            self._last_part_reason[sid] = product_card.reason
+            answer = sanitize_answer_skus(
+                product_card.answer, q, chip_machine=chip_for_lookup
+            )
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", answer)
+            return answer
 
         showcase = try_machine_showcase(question, chip_machine=chip_for_lookup)
         if showcase is not None and not (

@@ -172,6 +172,15 @@ def machines_for_api() -> dict:
     }
 
 
+def format_product_card_tag(tag: str | None) -> str:
+    if not tag:
+        return ""
+    info = machine_web_info(tag)
+    if not info or not info.product_card_url:
+        return ""
+    return f"[PRODUCT_CARD: {info.tag}]"
+
+
 def format_machine_card_tag(tag: str | None) -> str:
     if not tag:
         return ""
