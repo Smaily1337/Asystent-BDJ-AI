@@ -1067,12 +1067,28 @@ def test_machine_showcase_next():
 
 
 def test_machine_web_catalog_has_urls():
-    from app.rag.machine_web import CATALOG_URL, MACHINE_WEB
+    from app.rag.machine_web import CATALOG_URL, MACHINE_WEB, machines_for_api
 
     assert CATALOG_URL.startswith("https://bluedragonjet.com")
     assert "bdj next" in MACHINE_WEB
     assert MACHINE_WEB["bdj next"].image.startswith("https://")
     assert "wdmuchiwarka-bdj-next" in MACHINE_WEB["bdj next"].url
+    assert MACHINE_WEB["bdj next"].product_card_url.endswith("NEXT.pdf")
+    api = machines_for_api()
+    next_m = next(m for m in api["machines"] if m["tag"] == "bdj next")
+    assert next_m["product_card_url"].endswith("NEXT.pdf")
+    assert "machine-card-pdf-link" not in str(api)  # sanity — field name only in API
+
+
+def test_ui_machine_cards_have_product_pdf_link():
+    from pathlib import Path
+
+    html = (Path(__file__).resolve().parents[1] / "static" / "index.html").read_text(
+        encoding="utf-8"
+    )
+    assert "machine-card-pdf-link" in html
+    assert "Zobacz kartę produktu" in html
+    assert "product_card_url" in html
 
 
 def test_ui_hero_lists_hydro_and_dragonair():

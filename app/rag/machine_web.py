@@ -6,6 +6,9 @@ from dataclasses import dataclass
 
 CATALOG_URL = "https://bluedragonjet.com/c/wdmuchiwarki-pl/"
 
+PDF_BASE = "https://bluedragonjet.com/wp-content/uploads/2026/08/"
+
+
 # Kanoniczny tag (jak w machines.py) → dane produktu na stronie.
 @dataclass(frozen=True)
 class MachineWebInfo:
@@ -15,6 +18,7 @@ class MachineWebInfo:
     url: str
     image: str
     tagline: str
+    product_card_url: str = ""
 
 
 MACHINE_WEB: dict[str, MachineWebInfo] = {
@@ -25,6 +29,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/bdj-minie/",
         image="https://bluedragonjet.com/wp-content/uploads/2026/05/IMG_3796-1024x768.png",
         tagline="Kompaktowa wdmuchiwarka — kable 2,5–10 mm, zasięg do 1000 m",
+        product_card_url=PDF_BASE + "MINIe.pdf",
     ),
     "bdj next": MachineWebInfo(
         tag="bdj next",
@@ -33,6 +38,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/wdmuchiwarka-bdj-next/",
         image="https://bluedragonjet.com/wp-content/uploads/2025/03/001-scaled.jpg",
         tagline="Wszechstronna wdmuchiwarka — kable 2,5–12 mm, zasięg do 3500 m",
+        product_card_url=PDF_BASE + "NEXT.pdf",
     ),
     "bdj budget": MachineWebInfo(
         tag="bdj budget",
@@ -49,6 +55,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/bdj-budget-easy-set/",
         image="https://bluedragonjet.com/wp-content/uploads/2022/12/Budget-EasySet-3-scaled.jpg",
         tagline="Budget ze zintegrowanym napędem — kable 0,7–6 mm",
+        product_card_url=PDF_BASE + "BUDGET-EASY-SET-2.pdf",
     ),
     "bdj budget plus": MachineWebInfo(
         tag="bdj budget plus",
@@ -65,6 +72,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/bdj-budget-plus-easy-set/",
         image="https://bluedragonjet.com/wp-content/uploads/2022/12/Budget-Plus-EasySet-1-scaled.jpg",
         tagline="Budget Plus ze zintegrowanym napędem i dzieloną głowicą",
+        product_card_url=PDF_BASE + "BUDGET-PLUS-EASY-SET.pdf",
     ),
     "bdj extended": MachineWebInfo(
         tag="bdj extended",
@@ -81,6 +89,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/wdmuchiwarka-bdj-max/",
         image="https://bluedragonjet.com/wp-content/uploads/2022/12/MAX-1-scaled.jpg",
         tagline="Duże średnice — kable 6–15 mm, rury HDPE 32–50 mm",
+        product_card_url=PDF_BASE + "MAX-.pdf",
     ),
     "bdj max dual head": MachineWebInfo(
         tag="bdj max dual head",
@@ -89,6 +98,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/bdj-max-dual-head/",
         image="https://bluedragonjet.com/wp-content/uploads/2023/02/BDJ-Max-Dual-Head-3.jpg",
         tagline="Wymienna głowica — dobór części według zamontowanej głowicy",
+        product_card_url=PDF_BASE + "MAX-DUAL-HEAD.pdf",
     ),
     "bdj hydro chain cable": MachineWebInfo(
         tag="bdj hydro chain cable",
@@ -97,6 +107,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/wdmuchiwarka-bdj-hydro-chain/",
         image="https://bluedragonjet.com/wp-content/uploads/2022/12/Hydrochain-1-scaled.jpg",
         tagline="Łańcuchowa do kabli — kable 6–20 mm, silniki hydrauliczne",
+        product_card_url=PDF_BASE + "HYDRO-CHAIN-CABLE.pdf",
     ),
     "bdj hydro chain multi tube": MachineWebInfo(
         tag="bdj hydro chain multi tube",
@@ -105,6 +116,7 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/bdj-hydro-chain-multi-tube/",
         image="https://bluedragonjet.com/wp-content/uploads/2022/12/BDJ-Hydro-Chain-Multi-Tube-1-scaled.jpg",
         tagline="Pakiety mikrorurek — rury HDPE 32–50 mm, zasięg do 1500 m",
+        product_card_url=PDF_BASE + "HYDRO-CHAIN-MULTI-TUBE.pdf",
     ),
     "bdj dragonair": MachineWebInfo(
         tag="bdj dragonair",
@@ -113,11 +125,23 @@ MACHINE_WEB: dict[str, MachineWebInfo] = {
         url="https://bluedragonjet.com/p/mobilny-kompresor-dragonair/",
         image="https://bluedragonjet.com/wp-content/uploads/2026/04/IMG_7918899856072071461-1024x768.png",
         tagline="Mobilny kompresor spalinowy do zasilania wdmuchiwarek BDJ",
+        product_card_url=PDF_BASE + "Dragon-Air.pdf",
+    ),
+    "bdj brain v3": MachineWebInfo(
+        tag="bdj brain v3",
+        display="BDJ BRAIN V3",
+        label="Brain V3",
+        url=CATALOG_URL,
+        image="",
+        tagline="Sterownik pomiarowy BDJ — osobny produkt (nie wdmuchiwarka)",
+        product_card_url=PDF_BASE + "BRAIN-V3.pdf",
     ),
 }
 
-# Kolejność kart „wszystkie modele” w UI.
-MACHINE_CARD_ORDER: tuple[str, ...] = tuple(MACHINE_WEB.keys())
+# Kolejność kart „wszystkie modele” w UI (Brain V3 na końcu — bez katalogu części).
+MACHINE_CARD_ORDER: tuple[str, ...] = tuple(
+    k for k in MACHINE_WEB if k != "bdj brain v3"
+) + ("bdj brain v3",)
 
 
 def machine_web_info(tag: str | None) -> MachineWebInfo | None:
@@ -141,6 +165,7 @@ def machines_for_api() -> dict:
                 "url": info.url,
                 "image": info.image,
                 "tagline": info.tagline,
+                "product_card_url": info.product_card_url,
             }
             for info in (MACHINE_WEB[t] for t in MACHINE_CARD_ORDER)
         ],

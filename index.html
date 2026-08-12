@@ -608,6 +608,22 @@
             color: #2563eb;
             margin-top: 6px;
         }
+        .machine-card-pdf-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 6px;
+            font-size: 0.66rem;
+            font-weight: 700;
+            color: #1d4ed8;
+            text-decoration: none;
+            position: relative;
+            z-index: 3;
+        }
+        .machine-card-pdf-link:hover {
+            text-decoration: underline;
+            color: #1e40af;
+        }
         .machine-cards-catalog-link {
             display: inline-block;
             margin-top: 8px;
@@ -1989,6 +2005,9 @@ const BDJChatApp = (() => {
         const extLink = info.url
             ? `<a class="machine-card-ext-link" href="${info.url}" target="_blank" rel="noopener noreferrer" aria-label="Strona produktu ${info.display}" title="Strona produktu">↗</a>`
             : '';
+        const pdfLink = info.product_card_url
+            ? `<a class="machine-card-pdf-link" href="${info.product_card_url}" target="_blank" rel="noopener noreferrer" title="Karta produktu PDF">Zobacz kartę produktu →</a>`
+            : '';
         return `<button type="button" class="machine-card machine-card--pick" data-machine-tag="${info.tag}" data-machine-display="${info.display}">
             ${extLink}
             ${img}
@@ -1996,6 +2015,7 @@ const BDJChatApp = (() => {
                 <div class="machine-card-title">${info.display}</div>
                 <div class="machine-card-tagline">${info.tagline || ''}</div>
                 <div class="machine-card-hint">Kliknij zdjęcie, aby wybrać</div>
+                ${pdfLink}
             </div>
         </button>`;
     };
@@ -2530,7 +2550,7 @@ const BDJChatApp = (() => {
         }
 
         DOM.history.addEventListener('click', (e) => {
-            if (e.target.closest('.machine-card-ext-link')) {
+            if (e.target.closest('.machine-card-ext-link') || e.target.closest('.machine-card-pdf-link')) {
                 e.stopPropagation();
                 return;
             }
