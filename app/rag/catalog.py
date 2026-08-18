@@ -8,6 +8,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from app.config import ROOT_DIR
+from app.i18n import loc
 from app.rag.bom_inherit import merge_inherited_parts
 from app.rag.machines import FOLDER_TO_TAG, TAG_TO_DISPLAY, _chip_to_tag
 
@@ -181,12 +182,13 @@ def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str
     lines = [
         intro.strip(),
         "",
-        "| Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |",
+        loc(
+            "| Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |",
+            "| SKU | Part name | BOM qty | Machine model |",
+        ),
         "| :--- | :--- | :---: | :--- |",
     ]
     for p in parts:
         display_name = format_part_name_display(p.name)
         lines.append(f"| {p.sku} | {display_name} | {p.qty} | {p.machine or machine_display} |")
-    lines.append("")
-    lines.append(f"[GET_QUOTE: {machine_display}]")
     return "\n".join(lines)

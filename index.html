@@ -6,7 +6,7 @@
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
     <script>
     (function () {
-        var NEED = '0.0.10';
+        var NEED = '0.0.11';
         if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
         var p = new URLSearchParams(location.search);
         if (p.get('v') === NEED) return;
@@ -90,6 +90,7 @@
             opacity: 1;
             transform: none;
             pointer-events: all;
+            overscroll-behavior: contain;
         }
         html.embed-mode #chat-widget.open { opacity: 1; transform: none; pointer-events: all; }
         html.embed-mode .modal-overlay { z-index: 2147483647; }
@@ -211,7 +212,6 @@
                 box-shadow: none !important;
             }
         }
-
 
         @media (max-width: 560px) {
             .btn-reset .reset-label { display: none; }
@@ -484,7 +484,7 @@
             box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
             appearance: none;
             -webkit-appearance: none;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
         .machine-context-bar.is-empty #machine-select {
             border-color: #93c5fd;
@@ -492,9 +492,17 @@
             background: #ffffff;
             box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
         }
-        .machine-context-bar:not(.is-empty) #machine-select {
-            border-color: #3b82f6;
-            color: #0f172a;
+        .machine-context-bar:not(.is-empty) #machine-select,
+        .machine-context-bar.is-selected #machine-select {
+            border-color: #2563eb;
+            color: #1e3a8a;
+            background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+            box-shadow:
+                0 0 0 3px rgba(59, 130, 246, 0.2),
+                0 4px 16px rgba(37, 99, 235, 0.18);
+        }
+        .machine-context-bar.is-selected .machine-select-wrap::after {
+            border-color: #1d4ed8;
         }
         #machine-select:focus {
             border-color: #2563eb;
@@ -1331,7 +1339,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">0.0.10</span>
+                <span class="app-version">0.0.11</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1417,7 +1425,174 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.10';
+    const UI_VERSION = '0.0.11';
+
+    const detectUiLang = () => {
+        const p = new URLSearchParams(location.search);
+        const q = (p.get('lang') || '').toLowerCase();
+        if (q.startsWith('en')) return 'en';
+        if (q.startsWith('pl')) return 'pl';
+        return 'pl';
+    };
+    const uiLang = detectUiLang();
+    const I18N = {
+        pl: {
+            subtitle: 'Twój wirtualny asystent',
+            reset: 'Wyczyść czat',
+            resetTitle: 'Wyczyść historię rozmowy',
+            machine: 'Maszyna',
+            machineSelect: 'Wybierz model maszyny',
+            machinePlaceholder: '— wybierz model maszyny —',
+            inputPh: 'Opisz potrzebną część lub podaj model i wymiar...',
+            offerSelected: 'Wybrane części',
+            offerBtn: 'Wygeneruj zapytanie',
+            disclaimer: '<strong>Rozwiązanie eksperymentalne</strong> — asystent może popełniać błędy; zawsze sprawdź SKU i wymiary przed zamówieniem.',
+            modalQuote: 'Zapytanie Ofertowe',
+            modalHandoff: 'Kontakt z obsługą klienta',
+            companyPh: 'Nazwa firmy *',
+            emailPh: 'Adres e-mail (np. jan@firma.pl) *',
+            phonePh: 'Numer telefonu (min. 9 cyfr) *',
+            messageLabel: 'Wiadomość (opcjonalnie)',
+            messagePh: 'Dopisz szczegóły zapytania, wymiary, ilość sztuk lub inne uwagi...',
+            cancel: 'Anuluj',
+            submit: 'Wyślij zapytanie',
+            otherPhone: '🌐 Inny (+)',
+            welcomeHtml: 'Cześć! Jestem <strong>DRAGON AI</strong> – Twój wirtualny asystent. W czym mogę Ci pomóc? 😊',
+            welcomeRaw: 'Cześć! Jestem DRAGON AI – Twój wirtualny asystent. W czym mogę Ci pomóc? 😊',
+            heroHello: 'Witaj w',
+            heroSub: 'Opisz model maszyny i część — dobiorę pozycję z katalogu BDJ.',
+            heroHint: 'Np. «Mam Extended, potrzebuję uszczelkę mikrorurki 7 mm»',
+            iHave: 'Mam',
+            clickPhoto: 'Kliknij zdjęcie, aby wybrać',
+            productCard: 'Karta produktu',
+            productPage: 'Strona produktu',
+            allBlowers: 'Wszystkie wdmuchiwarki BDJ →',
+            skuBadge: 'SKU z oficjalnego katalogu BDJ',
+            proposedParts: 'Proponowane części',
+            closestParts: 'Najbliższe dostępne części',
+            quoteBtn: 'Zapytaj o wycenę',
+            handoffTitle: 'Potrzebujesz pomocy przy doborze części?',
+            handoffText: 'Skontaktuj się z obsługą ręcznie — nasz zespół pomoże Ci dobrać właściwą część.',
+            handoffBtn: 'Kontakt z obsługą klienta',
+            contactIntro: 'Kontakt z zespołem BDJ',
+            selectedItems: 'Wybrane pozycje do zapytania',
+            recentQuestions: 'Twoje ostatnie pytania:',
+            aboutMachine: 'Dotyczy zapytania dla maszyny:',
+            errCompany: 'Proszę podać nazwę firmy.',
+            errEmail: 'Wprowadź poprawny i pełny adres e-mail (np. jan@firma.pl).',
+            errPhone: 'Wprowadź poprawny numer telefonu (minimum 9 cyfr).',
+            errConnect: 'Nie udało się połączyć z serwerem. Poczekaj chwilę (Render budzi backend) i spróbuj ponownie.',
+            yourMessage: 'Twoja wiadomość:',
+            thanks: 'Dziękujemy za kontakt — wkrótce nasz zespół skontaktuje się z Tobą.',
+            savedNoEmail: 'Zapisaliśmy Twoje zgłoszenie, ale automatyczna wysyłka e-mail nie powiodła się (konfiguracja serwera). Skontaktuj się bezpośrednio: info@gamm-bud.pl / info@bluedragonjet.com.',
+            sendFail: 'Nie udało się wysłać zgłoszenia. Spróbuj ponownie lub napisz na info@gamm-bud.pl / info@bluedragonjet.com.',
+            confirmReset: 'Czy na pewno chcesz wyczyścić historię rozmowy i rozpocząć nową konwersację?',
+            tipText: 'Cześć! Chętnie pomogę Ci w doborze części 😊',
+            closeTip: 'Zamknij',
+            openChat: 'Otwórz Konfigurator Części',
+        },
+        en: {
+            subtitle: 'Your virtual assistant',
+            reset: 'Clear chat',
+            resetTitle: 'Clear conversation history',
+            machine: 'Machine',
+            machineSelect: 'Select machine model',
+            machinePlaceholder: '— select machine model —',
+            inputPh: 'Describe the part you need, or give the model and size...',
+            offerSelected: 'Selected parts',
+            offerBtn: 'Generate quote',
+            disclaimer: '<strong>Experimental tool</strong> — the assistant can make mistakes; always check SKU and sizes before ordering.',
+            modalQuote: 'Quote request',
+            modalHandoff: 'Contact customer support',
+            companyPh: 'Company name *',
+            emailPh: 'Email address (e.g. john@company.com) *',
+            phonePh: 'Phone number (min. 9 digits) *',
+            messageLabel: 'Message (optional)',
+            messagePh: 'Add quote details, sizes, quantities or other notes...',
+            cancel: 'Cancel',
+            submit: 'Send request',
+            otherPhone: '🌐 Other (+)',
+            welcomeHtml: 'Hi! I’m <strong>DRAGON AI</strong> – your virtual assistant. How can I help? 😊',
+            welcomeRaw: 'Hi! I’m DRAGON AI – your virtual assistant. How can I help? 😊',
+            heroHello: 'Welcome to',
+            heroSub: 'Describe the machine model and the part — I’ll pick it from the BDJ catalog.',
+            heroHint: 'E.g. «I have Extended, I need a 7 mm microduct gasket»',
+            iHave: 'I have',
+            clickPhoto: 'Click the photo to select',
+            productCard: 'Product card',
+            productPage: 'Product page',
+            allBlowers: 'All BDJ blowing machines →',
+            skuBadge: 'SKU from official BDJ catalog',
+            proposedParts: 'Suggested parts',
+            closestParts: 'Closest available parts',
+            quoteBtn: 'Ask for a quote',
+            handoffTitle: 'Need help picking a part?',
+            handoffText: 'Contact support — our team will help you choose the right part.',
+            handoffBtn: 'Contact customer support',
+            contactIntro: 'Contact the BDJ team',
+            selectedItems: 'Selected items for quote',
+            recentQuestions: 'Your recent questions:',
+            aboutMachine: 'This request is for machine:',
+            errCompany: 'Please enter the company name.',
+            errEmail: 'Enter a valid full email address (e.g. john@company.com).',
+            errPhone: 'Enter a valid phone number (at least 9 digits).',
+            errConnect: 'Could not connect to the server. Wait a moment (Render is waking the backend) and try again.',
+            yourMessage: 'Your message:',
+            thanks: 'Thanks for getting in touch — our team will contact you shortly.',
+            savedNoEmail: 'We saved your request, but automatic email sending failed (server config). Please contact us directly: info@gamm-bud.pl / info@bluedragonjet.com.',
+            sendFail: 'Could not send the request. Try again or write to info@gamm-bud.pl / info@bluedragonjet.com.',
+            confirmReset: 'Clear the conversation and start a new chat?',
+            tipText: 'Hi! I can help you pick spare parts 😊',
+            closeTip: 'Close',
+            openChat: 'Open spare-parts assistant',
+        },
+    };
+    const t = (key) => (I18N[uiLang] && I18N[uiLang][key]) || I18N.pl[key] || key;
+
+    const applyUiLang = () => {
+        document.documentElement.lang = uiLang;
+        const sub = document.querySelector('.brand-titles .subtitle');
+        if (sub) sub.textContent = t('subtitle');
+        const reset = document.querySelector('.reset-label');
+        if (reset) reset.textContent = t('reset');
+        const resetBtn = document.getElementById('btn-reset');
+        if (resetBtn) resetBtn.title = t('resetTitle');
+        const mLabel = document.querySelector('.machine-context-label');
+        if (mLabel) mLabel.textContent = t('machine');
+        const mSel = document.getElementById('machine-select');
+        if (mSel) mSel.setAttribute('aria-label', t('machineSelect'));
+        const input = document.getElementById('chat-input');
+        if (input) input.placeholder = t('inputPh');
+        const offerSpan = document.querySelector('#offer-action-bar span');
+        if (offerSpan) offerSpan.innerHTML = `${t('offerSelected')} (<b id="offer-count">0</b>):`;
+        DOM.offerCount = document.getElementById('offer-count');
+        const offerBtn = document.getElementById('btn-open-modal');
+        if (offerBtn) offerBtn.textContent = t('offerBtn');
+        const disc = document.querySelector('.disclaimer-text');
+        if (disc) disc.innerHTML = t('disclaimer');
+        const company = document.getElementById('inp-company');
+        if (company) company.placeholder = t('companyPh');
+        const email = document.getElementById('inp-email');
+        if (email) email.placeholder = t('emailPh');
+        const phone = document.getElementById('inp-phone');
+        if (phone) phone.placeholder = t('phonePh');
+        const msgLabel = document.querySelector('label[for="inp-message"]');
+        if (msgLabel) msgLabel.textContent = t('messageLabel');
+        const msg = document.getElementById('inp-message');
+        if (msg) msg.placeholder = t('messagePh');
+        const cancel = document.getElementById('btn-cancel');
+        if (cancel) cancel.textContent = t('cancel');
+        const submit = document.getElementById('btn-submit-offer');
+        if (submit) submit.textContent = t('submit');
+        const other = document.querySelector('#inp-country-code option[value=""]');
+        if (other) other.textContent = t('otherPhone');
+        const tipSpan = document.querySelector('#fab-tooltip .tooltip-content span');
+        if (tipSpan) tipSpan.textContent = t('tipText');
+        const tipClose = document.getElementById('tooltip-close');
+        if (tipClose) tipClose.setAttribute('aria-label', t('closeTip'));
+        const fab = document.getElementById('fab-btn');
+        if (fab) fab.setAttribute('aria-label', t('openChat'));
+    };
 
     let state = {
         messages: [],
@@ -1452,6 +1627,7 @@ const BDJChatApp = (() => {
     };
 
     const init = async () => {
+        applyUiLang();
         warmupBackend();
         await loadMachineCatalog();
         loadState();
@@ -1505,7 +1681,7 @@ const BDJChatApp = (() => {
     const populateMachineSelect = () => {
         if (!DOM.machineSelect) return;
         const current = DOM.machineSelect.value;
-        DOM.machineSelect.innerHTML = '<option value="">— wybierz model maszyny —</option>';
+        DOM.machineSelect.innerHTML = `<option value="">${t('machinePlaceholder')}</option>`;
         (machineCatalog.machines || []).forEach((m) => {
             const opt = document.createElement('option');
             opt.value = m.display;
@@ -1518,7 +1694,9 @@ const BDJChatApp = (() => {
 
     const updateMachineBarState = () => {
         if (DOM.machineContextBar) {
-            DOM.machineContextBar.classList.toggle('is-empty', !state.pendingMachine);
+            const has = !!state.pendingMachine;
+            DOM.machineContextBar.classList.toggle('is-empty', !has);
+            DOM.machineContextBar.classList.toggle('is-selected', has);
         }
     };
 
@@ -1549,7 +1727,7 @@ const BDJChatApp = (() => {
             cardEl.classList.add('is-selected');
         }
         const label = (info.display || '').replace(/^BDJ\s+/i, 'BDJ ').trim();
-        DOM.input.value = label ? `Mam ${label}` : '';
+        DOM.input.value = label ? `${t('iHave')} ${label}` : '';
         DOM.btnSend.disabled = DOM.input.value.trim().length === 0;
         resizeInput();
         DOM.input.focus();
@@ -1567,11 +1745,11 @@ const BDJChatApp = (() => {
         localStorage.setItem('bdj_chat_state', JSON.stringify(state));
     };
 
-    const welcomeMessage = {
+    const welcomeMessage = () => ({
         role: 'bot',
-        content: 'Cześć! Jestem <strong>DRAGON AI</strong> – Twój wirtualny asystent. W czym mogę Ci pomóc? 😊',
-        raw: 'Cześć! Jestem DRAGON AI – Twój wirtualny asystent. W czym mogę Ci pomóc? 😊'
-    };
+        content: t('welcomeHtml'),
+        raw: t('welcomeRaw')
+    });
 
     const loadState = () => {
         const storedUiVer = localStorage.getItem('bdj_ui_version');
@@ -1587,7 +1765,7 @@ const BDJChatApp = (() => {
             state.sessionId = 'sess_' + Math.random().toString(36).substring(2, 10);
         }
         if (!state.messages || state.messages.length === 0) {
-            state.messages = [welcomeMessage];
+            state.messages = [welcomeMessage()];
         }
         // Stary clear zostawiał pendingMachine w localStorage przy pustym czacie —
         // wtedy każde wklejenie dostało „Mam maszynę NEXT” mimo braku wyboru.
@@ -1603,13 +1781,13 @@ const BDJChatApp = (() => {
     };
 
     const resetSession = async () => {
-        if (!confirm('Czy na pewno chcesz wyczyścić historię rozmowy i rozpocząć nową konwersację?')) {
+        if (!confirm(t('confirmReset'))) {
             return;
         }
         const oldSessionId = state.sessionId;
         localStorage.removeItem('bdj_chat_state');
         state = {
-            messages: [welcomeMessage],
+            messages: [welcomeMessage()],
             pendingMachine: null,
             pendingRequestType: 'oferta',
             sessionId: 'sess_' + Math.random().toString(36).substring(2, 10)
@@ -1673,14 +1851,14 @@ const BDJChatApp = (() => {
         div.className = 'hero-banner';
         div.innerHTML = `
             <div class="hero-title-row">
-                <span class="hero-gradient-static">Witaj w</span>
+                <span class="hero-gradient-static">${t('heroHello')}</span>
                 <span class="gradient-text-shimmer hero-gradient-text">DRAGON AI</span>
             </div>
             <div class="hero-machine-line" aria-live="polite">
                 <span class="hero-machine-prefix hero-gradient-text">BDJ </span><span class="hero-machine-name hero-gradient-text">${HERO_MACHINE_LABELS[0]}</span>
             </div>
-            <div class="hero-subtitle">Opisz model maszyny i część — dobiorę pozycję z katalogu BDJ.</div>
-            <div class="hero-hint">Np. «Mam Extended, potrzebuję uszczelkę mikrorurki 7 mm»</div>
+            <div class="hero-subtitle">${t('heroSub')}</div>
+            <div class="hero-hint">${t('heroHint')}</div>
         `;
         const rotator = div.querySelector('.hero-machine-name');
         if (rotator) {
@@ -1784,7 +1962,7 @@ const BDJChatApp = (() => {
         syncMachineCardSelection();
     };
 
-    const buildPartsCardList = (table, titleText = 'Proponowane części') => {
+    const buildPartsCardList = (table, titleText = t('proposedParts')) => {
         const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
         const wrapper = document.createElement('div');
         wrapper.className = 'parts-list-wrapper';
@@ -1932,7 +2110,7 @@ const BDJChatApp = (() => {
         });
         if (movedContact) {
             const intro = document.createElement('strong');
-            intro.textContent = 'Kontakt z zespołem BDJ';
+            intro.textContent = t('contactIntro');
             contactBlock.insertBefore(intro, contactBlock.firstChild);
             root.appendChild(contactBlock);
         }
@@ -2044,9 +2222,9 @@ const BDJChatApp = (() => {
     const buildHandoffCard = (machine) => {
         const m = (machine || 'Zapytanie').trim();
         return `<div class="handoff-card">
-            <div class="handoff-card-title">Potrzebujesz pomocy przy doborze części?</div>
-            <div class="handoff-card-text">Skontaktuj się z obsługą ręcznie — nasz zespół pomoże Ci dobrać właściwą część.</div>
-            <button type="button" class="btn-quote btn-handoff" data-machine="${m}" data-kind="zapytanie">Kontakt z obsługą klienta</button>
+            <div class="handoff-card-title">${t('handoffTitle')}</div>
+            <div class="handoff-card-text">${t('handoffText')}</div>
+            <button type="button" class="btn-quote btn-handoff" data-machine="${m}" data-kind="zapytanie">${t('handoffBtn')}</button>
         </div>`;
     };
 
@@ -2056,18 +2234,19 @@ const BDJChatApp = (() => {
             ? `<img src="${info.image}" alt="${info.display}" loading="lazy" referrerpolicy="no-referrer" />`
             : '';
         const extLink = info.url
-            ? `<a class="machine-card-ext-link" href="${info.url}" target="_blank" rel="noopener noreferrer" aria-label="Strona produktu ${info.display}" title="Strona produktu">↗</a>`
+            ? `<a class="machine-card-ext-link" href="${info.url}" target="_blank" rel="noopener noreferrer" aria-label="${t('productPage')} ${info.display}" title="${t('productPage')}">↗</a>`
             : '';
         const pdfLink = info.product_card_url
-            ? `<a class="machine-card-pdf-link" href="${info.product_card_url}" target="_blank" rel="noopener noreferrer" title="Karta produktu PDF">Karta produktu</a>`
+            ? `<a class="machine-card-pdf-link" href="${info.product_card_url}" target="_blank" rel="noopener noreferrer" title="${t('productCard')} PDF">${t('productCard')}</a>`
             : '';
+        const tagline = (uiLang === 'en' && info.tagline_en) ? info.tagline_en : (info.tagline || '');
         return `<button type="button" class="machine-card machine-card--pick" data-machine-tag="${info.tag}" data-machine-display="${info.display}">
             ${extLink}
             ${img}
             <div class="machine-card-body">
                 <div class="machine-card-title">${info.display}</div>
-                <div class="machine-card-tagline">${info.tagline || ''}</div>
-                <div class="machine-card-hint">Kliknij zdjęcie, aby wybrać</div>
+                <div class="machine-card-tagline">${tagline}</div>
+                <div class="machine-card-hint">${t('clickPhoto')}</div>
                 ${pdfLink}
             </div>
         </button>`;
@@ -2079,7 +2258,7 @@ const BDJChatApp = (() => {
         if (!items.length) return '';
         const cards = items.map(buildMachineCard).join('');
         const catalog = machineCatalog.catalog_url
-            ? `<a class="machine-cards-catalog-link" href="${machineCatalog.catalog_url}" target="_blank" rel="noopener noreferrer">Wszystkie wdmuchiwarki BDJ →</a>`
+            ? `<a class="machine-cards-catalog-link" href="${machineCatalog.catalog_url}" target="_blank" rel="noopener noreferrer">${t('allBlowers')}</a>`
             : '';
         return `<div class="machine-cards-grid">${cards}</div>${catalog}`;
     };
@@ -2156,12 +2335,12 @@ const BDJChatApp = (() => {
             }
 
             const title = apologyEl
-                ? 'Najbliższe dostępne części'
-                : 'Proponowane części';
+                ? t('closestParts')
+                : t('proposedParts');
             const cardBlock = buildPartsCardList(table, title);
             const badge = document.createElement('div');
             badge.className = 'catalog-trust-badge';
-            badge.textContent = 'SKU z oficjalnego katalogu BDJ';
+            badge.textContent = t('skuBadge');
             cardBlock.insertBefore(badge, cardBlock.firstChild?.nextSibling || null);
             table.replaceWith(cardBlock);
         });
@@ -2192,19 +2371,19 @@ const BDJChatApp = (() => {
                 link.href = info.product_card_url;
                 link.target = '_blank';
                 link.rel = 'noopener noreferrer';
-                link.title = `Karta produktu ${info.display}`;
-                link.textContent = 'Karta produktu';
+                link.title = `${t('productCard')} ${info.display}`;
+                link.textContent = t('productCard');
                 wrapper.appendChild(link);
             }
         }
 
-        if (quoteMachine) {
+        if (quoteMachine && !wrapper.querySelector('.parts-list-wrapper')) {
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'btn-quote';
             btn.dataset.machine = quoteMachine;
             btn.dataset.kind = 'oferta';
-            btn.textContent = `Zapytaj o wycenę: ${quoteMachine}`;
+            btn.textContent = `${t('quoteBtn')}: ${quoteMachine}`;
             wrapper.appendChild(btn);
         }
 
@@ -2290,6 +2469,7 @@ const BDJChatApp = (() => {
                 question: text,
                 session_id: state.sessionId,
                 machine: machineForApi,
+                lang: uiLang,
             });
             let formattedHTML;
             try {
@@ -2310,7 +2490,7 @@ const BDJChatApp = (() => {
         } catch (error) {
             console.error('sendMessage', error);
             removeTypingIndicator(typingId);
-            const errHtml = `<span style="color:#ef4444; font-weight:600;">Nie udało się połączyć z serwerem. Poczekaj chwilę (Render budzi backend) i spróbuj ponownie.</span>`;
+            const errHtml = `<span style="color:#ef4444; font-weight:600;">${t('errConnect')}</span>`;
             state.messages.push({ role: 'bot', content: errHtml, isError: true });
             renderHistory();
         } finally {
@@ -2343,7 +2523,7 @@ const BDJChatApp = (() => {
 
         if (!company) {
             inpCompany.style.borderColor = "#ef4444";
-            errorBox.textContent = "Proszę podać nazwę firmy.";
+            errorBox.textContent = t('errCompany');
             errorBox.style.display = 'block';
             inpCompany.focus();
             return;
@@ -2353,7 +2533,7 @@ const BDJChatApp = (() => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!email || !emailRegex.test(email)) {
             inpEmail.style.borderColor = "#ef4444";
-            errorBox.textContent = "Wprowadź poprawny i pełny adres e-mail (np. jan@firma.pl).";
+            errorBox.textContent = t('errEmail');
             errorBox.style.display = 'block';
             inpEmail.focus();
             return;
@@ -2363,7 +2543,7 @@ const BDJChatApp = (() => {
         const digitsOnly = rawPhone.replace(/\D/g, '');
         if (!rawPhone || digitsOnly.length < 9) {
             inpPhone.style.borderColor = "#ef4444";
-            errorBox.textContent = "Wprowadź poprawny numer telefonu (minimum 9 cyfr).";
+            errorBox.textContent = t('errPhone');
             errorBox.style.display = 'block';
             inpPhone.focus();
             return;
@@ -2386,7 +2566,7 @@ const BDJChatApp = (() => {
         }
 
         const messageNote = clientMessage
-            ? `<br><strong>Twoja wiadomość:</strong> ${clientMessage.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
+            ? `<br><strong>${t('yourMessage')}</strong> ${clientMessage.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
             : '';
 
         try {
@@ -2419,14 +2599,14 @@ const BDJChatApp = (() => {
             } catch (_) { /* ignore parse errors */ }
 
             const successMsg = emailSent
-                ? `Dziękujemy za kontakt — wkrótce nasz zespół skontaktuje się z Tobą.${itemsSummary}${messageNote}`
-                : `Zapisaliśmy Twoje zgłoszenie, ale automatyczna wysyłka e-mail nie powiodła się (konfiguracja serwera). Skontaktuj się bezpośrednio: info@gamm-bud.pl / info@bluedragonjet.com.${itemsSummary}${messageNote}`;
+                ? `${t('thanks')}${itemsSummary}${messageNote}`
+                : `${t('savedNoEmail')}${itemsSummary}${messageNote}`;
             state.messages.push({ role: 'bot', content: successMsg, raw: successMsg });
             renderHistory();
             saveState();
         } catch(e) {
             console.error("Błąd wysyłki zgłoszenia", e);
-            const failMsg = `Nie udało się wysłać zgłoszenia. Spróbuj ponownie lub napisz na info@gamm-bud.pl / info@bluedragonjet.com.${itemsSummary}${messageNote}`;
+            const failMsg = `${t('sendFail')}${itemsSummary}${messageNote}`;
             state.messages.push({ role: 'bot', content: failMsg, raw: failMsg });
             renderHistory();
             saveState();
@@ -2465,12 +2645,12 @@ const BDJChatApp = (() => {
 
         if (modalTitle) {
             modalTitle.textContent = isHandoff
-                ? 'Kontakt z obsługą klienta'
-                : 'Zapytanie Ofertowe';
+                ? t('modalHandoff')
+                : t('modalQuote');
         }
 
         if (checkedBoxes.length > 0) {
-            let html = `<strong>Wybrane pozycje do zapytania (${checkedBoxes.length}):</strong><ul>`;
+            let html = `<strong>${t('selectedItems')} (${checkedBoxes.length}):</strong><ul>`;
             checkedBoxes.forEach(cb => {
                 try {
                     const data = JSON.parse(cb.dataset.itemData);
@@ -2487,16 +2667,16 @@ const BDJChatApp = (() => {
                 .slice(-3)
                 .map((m) => (m.raw || m.content || '').replace(/<[^>]+>/g, '').trim())
                 .filter(Boolean);
-            let html = '<strong>Twoje ostatnie pytania:</strong><ul>';
+            let html = `<strong>${t('recentQuestions')}</strong><ul>`;
             recentQuestions.forEach((q) => { html += `<li>${q}</li>`; });
             html += '</ul>';
             if (state.pendingMachine) {
-                html += `<p style="margin-top:10px;"><strong>Maszyna:</strong> ${state.pendingMachine}</p>`;
+                html += `<p style="margin-top:10px;"><strong>${t('machine')}:</strong> ${state.pendingMachine}</p>`;
             }
             preview.innerHTML = html;
             preview.style.display = 'block';
         } else if (state.pendingMachine) {
-            preview.innerHTML = `<strong>Dotyczy zapytania dla maszyny:</strong> ${state.pendingMachine}`;
+            preview.innerHTML = `<strong>${t('aboutMachine')}</strong> ${state.pendingMachine}`;
             preview.style.display = 'block';
         } else {
             preview.style.display = 'none';

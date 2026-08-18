@@ -12,6 +12,7 @@ import unicodedata
 from dataclasses import dataclass
 from typing import Any
 
+from app.i18n import loc
 from app.rag.catalog import (
     PartRow,
     format_part_name_display,
@@ -40,10 +41,10 @@ _SKU_RE = re.compile(r"\b([A-Z]{1,5}-[A-Z0-9]{2,}(?:-[A-Z0-9.,]+)+)\b", re.I)
 _DIM_TOKEN_RE = re.compile(r"\bd\d+x\d+\b", re.I)
 
 # uszczelka / uszczelki / uszczelek (D.lm) / uszczelkę …
-_USZCZELKA_RE = re.compile(r"\b(uszczel\w*|gumk\w*|o-?ring|oring)\b", re.I)
-_TULEJA_RE = re.compile(r"\b(tulejk\w*|tulej\w*|wstawk\w*)\b", re.I)
+_USZCZELKA_RE = re.compile(r"\b(uszczel\w*|gumk\w*|o-?ring|oring|gasket|seals?)\b", re.I)
+_TULEJA_RE = re.compile(r"\b(tulejk\w*|tulej\w*|wstawk\w*|sleeve|insert)\b", re.I)
 _PAS_RE = re.compile(
-    r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*)\b",
+    r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*|drive\s*belt|belts?)\b",
     re.I,
 )
 _OPONKA_RE = re.compile(
@@ -52,6 +53,7 @@ _OPONKA_RE = re.compile(
     r"|gumk\w*\s+(?:jezdn|na\s+(?:rolk|ko))"
     r"|ko[łl]o\s+nap\w*"
     r"|gumk\w*\s+na\s+ko[łl]o\s+nap\w*"
+    r"|drive\s*wheel|tyre|tire"
     r")\b",
     re.I,
 )
@@ -62,12 +64,14 @@ _MIKRORURKA_RE = re.compile(
     r"|mikro\s*rur\w*"
     r"|rurk\w*"
     r"|rurce"
+    r"|microduct"
+    r"|micro[-\s]?tube"
     r")\b",
     re.I,
 )
-_KABEL_RE = re.compile(r"\b(kabel|kabla|kablu|kable|światłowod\w*|swiatlowod\w*)\b", re.I)
+_KABEL_RE = re.compile(r"\b(kabel|kabla|kablu|kable|światłowod\w*|swiatlowod\w*|cable|fiber|fibre)\b", re.I)
 _WSTAWKA_USZ_RE = re.compile(r"uszczelk\w*.{0,24}wstawk\w*|wstawk\w*.{0,24}uszczelk\w*", re.I)
-_MANOMETR_RE = re.compile(r"\b(manometr\w*|zegar|wska[zź]nik\s+ci[sś]nieni)\b", re.I)
+_MANOMETR_RE = re.compile(r"\b(manometr\w*|zegar|wska[zź]nik\s+ci[sś]nieni|pressure\s*gauge|gauge)\b", re.I)
 # lista / wszystkie / pokaż / wyświetl / wybiorę sam …
 _LIST_INTENT_RE = re.compile(
     r"\b("
@@ -77,7 +81,8 @@ _LIST_INTENT_RE = re.compile(
     r"jakie\s+macie|jakie\s+s[aą]|"
     r"dost[eę]pne|"
     r"wybior[eę]\s+sam|wybior[eę]\s+sobie|"
-    r"wybiorę\s+sam|wybiorę\s+sobie"
+    r"wybiorę\s+sam|wybiorę\s+sobie|"
+    r"list\s+of|show\s+all|all\s+gaskets"
     r")\b",
     re.I,
 )
@@ -102,7 +107,9 @@ _MACHINE_SHOWCASE_RE = re.compile(
     r"\b("
     r"co to|czym jest|opisz|poka[zż]|informacj\w+ o|charakterystyk|"
     r"parametr|specyfik|zasi[eę]g|jakie kable|jakie rur|"
-    r"do czego|jak dzia[lł]a|model maszyn"
+    r"do czego|jak dzia[lł]a|model maszyn|"
+    r"what is|what's|tell me about|specifications?|"
+    r"how does|which cables|which ducts|product info"
     r")\b",
     re.I,
 )
@@ -116,7 +123,10 @@ _PRODUCT_CARD_RE = re.compile(
     r"wy[sś]lij\s+kart\w*|"
     r"\bpdf\b|"
     r"bro[sś]ur\w*|"
-    r"ulotk\w*"
+    r"ulotk\w*|"
+    r"product\s+card|"
+    r"datasheet|data\s*sheet|"
+    r"spec\s*sheet|brochure"
     r")",
     re.I,
 )
@@ -135,6 +145,7 @@ _PARTS_INTENT_RE = re.compile(
     r"manometr\w*|zegar|"
     r"łożysk\w*|lozysk\w*|"
     r"częś[cć]\w*|czesci|sku|katalog\w*|bom|"
+    r"gasket|seals?|sleeve|spare\s*parts?|drive\s*belt|"
     r"bullet\w*|spadochron\w*|t[lł]oczek|"
     r"króciec|krolec|szybkoz[lł][aą]cz|"
     r"za[sś]lepk\w*|organizer|prelube|p[lł]yn\s+po[sś]lizg"
@@ -220,18 +231,22 @@ def try_product_card(
             return None
         pdf_tag = format_product_card_tag(tag)
         if pdf_tag:
-            intro = (
+            intro = loc(
                 f"Oto **karta produktu {info.display}** — PDF z parametrami "
-                f"i zdjęciami maszyny:"
+                f"i zdjęciami maszyny:",
+                f"Here is the **{info.display} product card** — a PDF with specs "
+                f"and photos of the machine:",
             )
             return LookupResult(
                 answer=f"{intro}\n\n{pdf_tag}",
                 parts=(),
                 reason="product_card",
             )
-        intro = (
+        intro = loc(
             f"Dla **{info.display}** nie mamy jeszcze karty PDF. "
-            f"Szczegóły techniczne znajdziesz na stronie produktu:"
+            f"Szczegóły techniczne znajdziesz na stronie produktu:",
+            f"We don’t have a PDF product card for **{info.display}** yet. "
+            f"Technical details are on the product page:",
         )
         card = format_machine_card_tag(tag)
         return LookupResult(
@@ -243,8 +258,12 @@ def try_product_card(
     cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
-            "Której maszyny dotyczy **karta produktu**? "
-            "**Kliknij model** poniżej — pokażę przycisk do PDF."
+            loc(
+                "Której maszyny dotyczy **karta produktu**? "
+                "**Kliknij model** poniżej — pokażę przycisk do PDF.",
+                "Which machine should the **product card** be for? "
+                "**Click a model** below — I’ll show the PDF button.",
+            )
             + (f"\n\n{cards}" if cards else "")
         ),
         parts=(),
@@ -272,11 +291,16 @@ def try_machine_showcase(
     if not is_machine_showcase_intent(q) and not short_query:
         return None
 
-    intro = (
-        f"**{info.display}** — {info.tagline}\n\n"
+    tagline = loc(info.tagline, info.tagline_en or info.tagline)
+    intro = loc(
+        f"**{info.display}** — {tagline}\n\n"
         f"Szczegóły techniczne i zdjęcia maszyny znajdziesz na stronie produktu. "
         f"Do doboru **części zamiennej** napisz np.: "
-        f"«Mam {info.label}, potrzebuję uszczelkę mikrorurki 7 mm»."
+        f"«Mam {info.label}, potrzebuję uszczelkę mikrorurki 7 mm».",
+        f"**{info.display}** — {tagline}\n\n"
+        f"You’ll find specs and photos on the product page. "
+        f"To pick a **spare part**, write e.g.: "
+        f"«I have {info.label}, I need a 7 mm microduct gasket».",
     )
     card = format_machine_card_tag(tag)
     return LookupResult(
@@ -295,10 +319,16 @@ def _ask_machine() -> LookupResult:
     cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
-            "Żeby dobrać część, **kliknij zdjęcie swojej maszyny** poniżej "
-            "(albo wybierz model u góry czatu). "
-            "Potem dopisz czego potrzebujesz i wymiar — **kod SKU podam ja**, "
-            "a Ty klikasz «Zapytaj o wycenę»."
+            loc(
+                "Żeby dobrać część, **kliknij zdjęcie swojej maszyny** poniżej "
+                "(albo wybierz model u góry czatu). "
+                "Potem dopisz czego potrzebujesz i wymiar — **kod SKU podam ja**, "
+                "a Ty klikasz «Zapytaj o wycenę».",
+                "To quote a spare part, **click the photo of your machine** below "
+                "(or pick the model at the top of the chat). "
+                "Then tell me what you need and the size — **I’ll provide the SKU**, "
+                "and you tap «Ask for a quote».",
+            )
             + (f"\n\n{cards}" if cards else "")
         ),
         parts=(),
@@ -310,10 +340,16 @@ def _ask_machine_for_list() -> LookupResult:
     cards = format_machine_cards_tag(["all"])
     return LookupResult(
         answer=(
-            "Żeby wypisać listę uszczelek na rurkę/mikrorurkę, **kliknij zdjęcie maszyny** "
-            "poniżej (albo wybierz model u góry). "
-            "Potem napisz ponownie «lista uszczelek na mikrorurkę» — pokażę pełny katalog "
-            "dla tego modelu, bez dopytywania o rozmiar rurki."
+            loc(
+                "Żeby wypisać listę uszczelek na rurkę/mikrorurkę, **kliknij zdjęcie maszyny** "
+                "poniżej (albo wybierz model u góry). "
+                "Potem napisz ponownie «lista uszczelek na mikrorurkę» — pokażę pełny katalog "
+                "dla tego modelu, bez dopytywania o rozmiar rurki.",
+                "To list tube/microduct gaskets, **click the machine photo** below "
+                "(or pick the model at the top). "
+                "Then write again «list of microduct gaskets» — I’ll show the full catalog "
+                "for that model, without asking for the tube size.",
+            )
             + (f"\n\n{cards}" if cards else "")
         ),
         parts=(),
@@ -323,10 +359,13 @@ def _ask_machine_for_list() -> LookupResult:
 
 def _ask_gasket_context(display: str) -> LookupResult:
     return LookupResult(
-        answer=(
+        answer=loc(
             f"Dla modelu **{display}** doprecyzuj proszę: uszczelka na **kabel** "
             f"czy na **mikrorurkę/rurkę**? (np. «na kabel 7 mm» albo «mikrorurka 7 mm»). "
-            f"**Kod SKU dobiorę sam z katalogu** — potem kliknij «Zapytaj o wycenę»."
+            f"**Kod SKU dobiorę sam z katalogu** — potem kliknij «Zapytaj o wycenę».",
+            f"For **{display}**, please specify: gasket for **cable** or for "
+            f"**microduct/tube**? (e.g. «cable 7 mm» or «microduct 7 mm»). "
+            f"**I’ll pick the SKU from the catalog** — then tap «Ask for a quote».",
         ),
         parts=(),
         reason="need_gasket_context",
@@ -335,11 +374,15 @@ def _ask_gasket_context(display: str) -> LookupResult:
 
 def _ask_diameter(display: str, part_label: str) -> LookupResult:
     return LookupResult(
-        answer=(
+        answer=loc(
             f"Dla modelu **{display}** napisz tylko średnicę w mm "
             f"(np. «7 mm» albo «10 mm») — chodzi o {part_label}. "
             f"**Kod SKU dobiorę sam z katalogu** — potem możesz od razu "
-            f"kliknąć «Zapytaj o wycenę». Nie musisz znać numeru części."
+            f"kliknąć «Zapytaj o wycenę». Nie musisz znać numeru części.",
+            f"For **{display}**, just write the diameter in mm "
+            f"(e.g. «7 mm» or «10 mm») — this is about the {part_label}. "
+            f"**I’ll pick the SKU from the catalog** — then you can tap "
+            f"«Ask for a quote». You don’t need the part number.",
         ),
         parts=(),
         reason="need_size",
@@ -419,14 +462,21 @@ def _list_tube_gaskets(parts: list[PartRow]) -> list[PartRow]:
 
 def _ask_clarify_after_reject() -> LookupResult:
     return LookupResult(
-        answer=(
+        answer=loc(
             "OK — pomijam poprzednią propozycję (to nie to). "
             "Napisz proszę **czego dokładnie potrzebujesz**, np.:\n"
             "• «uszczelka mikrorurki 7 mm do Extended»\n"
             "• «uszczelka na kabel 10 mm do Next»\n"
             "• «pasek do Next»\n\n"
             "Ja **podam kod SKU z katalogu**, a Ty klikasz **«Zapytaj o wycenę»**. "
-            "Nie proszę Cię o numer SKU."
+            "Nie proszę Cię o numer SKU.",
+            "OK — I’ll skip the previous suggestion (that’s not it). "
+            "Please write **exactly what you need**, e.g.:\n"
+            "• «7 mm microduct gasket for Extended»\n"
+            "• «10 mm cable gasket for Next»\n"
+            "• «drive belt for Next»\n\n"
+            "I’ll **quote the catalog SKU**, and you tap **«Ask for a quote»**. "
+            "You don’t need the SKU number.",
         ),
         parts=(),
         reason="reject_clarify",
@@ -469,10 +519,12 @@ def _wants_tuleja_positive(question: str) -> bool:
 
 def _miss(display: str, detail: str) -> LookupResult:
     return LookupResult(
-        answer=(
+        answer=loc(
             f"Przepraszam, ale w katalogu modelu **{display}** "
             f"nie znalazłem pozycji: {detail}. "
-            f"Podaj dokładniejszą nazwę części / wymiar albo skorzystaj z kontaktu z obsługą."
+            f"Podaj dokładniejszą nazwę części / wymiar albo skorzystaj z kontaktu z obsługą.",
+            f"Sorry, I couldn’t find this item in the **{display}** catalog: {detail}. "
+            f"Please give a more precise part name / size, or contact support.",
         ),
         parts=(),
         reason="miss",
@@ -715,11 +767,18 @@ def _found_elsewhere(display: str, hits: list[PartRow]) -> LookupResult:
     listing = "\n".join(blocks)
     return LookupResult(
         answer=(
-            f"Ta dokładna pozycja **nie występuje** w katalogu modelu **{display}**.\n\n"
-            f"Natomiast jest w katalogu innych maszyn:\n{listing}\n\n"
-            f"Czy chodziło Ci o jedną z tych maszyn? Jeśli tak — przełącz model na liście "
-            f"i napisz ponownie (wtedy możesz od razu kliknąć **«Zapytaj o wycenę»**), "
-            f"albo skorzystaj z kontaktu z obsługą."
+            loc(
+                f"Ta dokładna pozycja **nie występuje** w katalogu modelu **{display}**.\n\n"
+                f"Natomiast jest w katalogu innych maszyn:\n{listing}\n\n"
+                f"Czy chodziło Ci o jedną z tych maszyn? Jeśli tak — przełącz model na liście "
+                f"i napisz ponownie (wtedy możesz od razu kliknąć **«Zapytaj o wycenę»**), "
+                f"albo skorzystaj z kontaktu z obsługą.",
+                f"This exact item is **not in** the **{display}** catalog.\n\n"
+                f"It is listed for other machines:\n{listing}\n\n"
+                f"Did you mean one of those models? If so — switch the machine in the list "
+                f"and write again (then you can tap **«Ask for a quote»**), "
+                f"or contact support.",
+            )
         ),
         parts=(),
         reason="found_elsewhere",
@@ -746,10 +805,13 @@ def _try_exact_or_elsewhere(
     # preferuj wiersze z wybranej maszyny
     on_selected_local = [p for p in local_parts if p.sku.upper() in {h.sku.upper() for h in hits}]
     if on_selected_local:
-        intro = (
+        intro = loc(
             f"Na podstawie katalogu części dla maszyny **{display}**, "
             f"oto dopasowana pozycja (po dokładnej nazwie/SKU): "
-            f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+            f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU.",
+            f"From the spare-parts catalog for **{display}**, "
+            f"here is the matching item (exact name/SKU): "
+            f"Select the part and tap **«Ask for a quote»** — you don’t need the SKU code.",
         )
         # jedna pozycja na SKU
         uniq: list[PartRow] = []
@@ -953,10 +1015,13 @@ def _candidates_short_list(
         uniq.append(p)
         if len(uniq) >= limit:
             break
-    text = intro or (
+    text = intro or loc(
         f"W katalogu maszyny **{display}** znalazłem kilka pasujących pozycji "
         f"— wybierz właściwą (albo doprecyzuj wymiar / nazwę). "
-        f"Zaznacz część i kliknij **«Zapytaj o wycenę»**."
+        f"Zaznacz część i kliknij **«Zapytaj o wycenę»**.",
+        f"In the **{display}** catalog I found several matching items "
+        f"— pick the right one (or specify size / name). "
+        f"Select the part and tap **«Ask for a quote»**.",
     )
     return LookupResult(
         answer=format_parts_markdown(uniq, text, display),
@@ -1041,10 +1106,13 @@ def maybe_refine_with_candidates(
             len(scored) == 1 or scored[0][0] > scored[1][0]
         ):
             chosen = scored[0][1]
-            intro = (
+            intro = loc(
                 f"Na podstawie katalogu części dla maszyny **{display}**, "
                 f"oto najlepiej pasująca pozycja: "
-                f"Zaznacz część i kliknij **«Zapytaj o wycenę»**."
+                f"Zaznacz część i kliknij **«Zapytaj o wycenę»**.",
+                f"From the spare-parts catalog for **{display}**, "
+                f"here is the best match: "
+                f"Select the part and tap **«Ask for a quote»**.",
             )
             return LookupResult(
                 answer=format_parts_markdown([chosen], intro, display),
@@ -1056,10 +1124,13 @@ def maybe_refine_with_candidates(
     picked = _llm_pick_candidate_index(question, parts, llm)
     if picked is not None:
         chosen = parts[picked]
-        intro = (
+        intro = loc(
             f"Na podstawie katalogu części dla maszyny **{display}**, "
             f"oto najlepiej pasująca pozycja spośród kandydatów: "
-            f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+            f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU.",
+            f"From the spare-parts catalog for **{display}**, "
+            f"here is the best match among candidates: "
+            f"Select the part and tap **«Ask for a quote»** — you don’t need the SKU code.",
         )
         return LookupResult(
             answer=format_parts_markdown([chosen], intro, display),
@@ -1208,7 +1279,7 @@ def try_deterministic_lookup(
 
     parts = parts_for_machine(machine)
     if not parts:
-        return _miss(machine_display_name(machine), "brak katalogu części")
+        return _miss(machine_display_name(machine), loc("brak katalogu części", "no parts catalog"))
 
     display = machine_display_name(machine)
     size = _extract_size_mm(q)
@@ -1217,11 +1288,14 @@ def try_deterministic_lookup(
     if list_intent and size is None:
         matched = _list_tube_gaskets(parts)
         if not matched:
-            return _miss(display, "uszczelki na rurkę/mikrorurkę")
-        intro = (
+            return _miss(display, loc("uszczelki na rurkę/mikrorurkę", "tube/microduct gaskets"))
+        intro = loc(
             f"Oto **lista uszczelek na rurkę/mikrorurkę** w katalogu maszyny **{display}** "
             f"({len(matched)} pozycji). "
-            f"Zaznacz wybraną pozycję i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+            f"Zaznacz wybraną pozycję i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU.",
+            f"Here is the **tube/microduct gasket list** in the **{display}** catalog "
+            f"({len(matched)} items). "
+            f"Select an item and tap **«Ask for a quote»** — you don’t need the SKU code.",
         )
         return LookupResult(
             answer=format_parts_markdown(matched, intro, display),
@@ -1271,7 +1345,7 @@ def try_deterministic_lookup(
 
     if wants_uszczelka:
         if size is None:
-            return _ask_diameter(display, "uszczelkę")
+            return _ask_diameter(display, loc("uszczelkę", "gasket"))
         if tube_ctx and not kabel_ctx:
             matched = _filter_tube_gaskets(parts, size, wstawka_usz, exact_fi=explicit_fi)
             if (
@@ -1281,9 +1355,11 @@ def try_deterministic_lookup(
                 and matched[0].fi_mm is not None
             ):
                 if abs(matched[0].fi_mm - (size - 0.5)) < 0.06:
-                    size_note = (
+                    size_note = loc(
                         f" Dla rurki/mikrorurki {_fmt_mm(size)} mm "
-                        f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm)."
+                        f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm).",
+                        f" For a {_fmt_mm(size)} mm tube/microduct "
+                        f"I quote a fi {_fmt_mm(matched[0].fi_mm)} mm gasket (−0.5 mm rule).",
                     )
         elif kabel_ctx and not tube_ctx:
             matched = _filter_cable_gaskets(parts, size)
@@ -1308,17 +1384,19 @@ def try_deterministic_lookup(
                 and matched[0].fi_mm is not None
             ):
                 if abs(matched[0].fi_mm - (size - 0.5)) < 0.06:
-                    size_note = (
+                    size_note = loc(
                         f" Dla rurki {_fmt_mm(size)} mm "
-                        f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm)."
+                        f"dobieram uszczelkę fi {_fmt_mm(matched[0].fi_mm)} mm (reguła −0,5 mm).",
+                        f" For a {_fmt_mm(size)} mm tube "
+                        f"I quote a fi {_fmt_mm(matched[0].fi_mm)} mm gasket (−0.5 mm rule).",
                     )
         reason = "uszczelka"
         if not matched:
-            return _miss_or_elsewhere(f"uszczelka {_fmt_mm(size)} mm")
+            return _miss_or_elsewhere(loc(f"uszczelka {_fmt_mm(size)} mm", f"{_fmt_mm(size)} mm gasket"))
 
     elif wants_tuleja:
         if size is None:
-            return _ask_diameter(display, "tulejkę")
+            return _ask_diameter(display, loc("tulejkę", "sleeve"))
         matched = _filter_by_kind_and_size(parts, "tuleja", size)[:2]
         if not matched:
             # BOM często nazywa „uszczelka … tuleja fi N” → kind=uszczelka
@@ -1331,22 +1409,25 @@ def try_deterministic_lookup(
             ][:2]
         reason = "tuleja"
         if not matched:
-            return _miss_or_elsewhere(f"tulejka {_fmt_mm(size)} mm")
+            return _miss_or_elsewhere(loc(f"tulejka {_fmt_mm(size)} mm", f"{_fmt_mm(size)} mm sleeve"))
 
     elif wants_pas:
         matched = _filter_pas(parts)
         reason = "pas"
         if not matched:
-            return _miss_or_elsewhere("pas napędowy (PNE-PAS)")
+            return _miss_or_elsewhere(loc("pas napędowy (PNE-PAS)", "drive belt (PNE-PAS)"))
 
     elif wants_oponka:
         if size is None:
             matched = [p for p in parts if p.kind == "oponka"][:12]
             if matched:
-                intro = (
+                intro = loc(
                     f"Oto **oponki / gumki na koło napędowe** w katalogu maszyny **{display}** "
                     f"({len(matched)} pozycji). "
-                    f"Zaznacz wybraną pozycję i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+                    f"Zaznacz wybraną pozycję i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU.",
+                    f"Here are the **drive-wheel tyres / rubber rings** in the **{display}** catalog "
+                    f"({len(matched)} items). "
+                    f"Select an item and tap **«Ask for a quote»** — you don’t need the SKU code.",
                 )
                 return LookupResult(
                     answer=format_parts_markdown(matched, intro, display),
@@ -1357,7 +1438,7 @@ def try_deterministic_lookup(
             matched = _filter_by_kind_and_size(parts, "oponka", size)[:4]
         reason = "oponka"
         if not matched:
-            return _miss_or_elsewhere("oponka")
+            return _miss_or_elsewhere(loc("oponka", "drive-wheel tyre"))
 
     elif wants_manometr:
         matched = [
@@ -1366,7 +1447,7 @@ def try_deterministic_lookup(
         ][:4]
         reason = "manometr"
         if not matched:
-            return _miss_or_elsewhere("manometr")
+            return _miss_or_elsewhere(loc("manometr", "pressure gauge"))
 
     else:
         # ogólne pytanie o część (śruba, rolka, …) — tylko keyword po katalogu
@@ -1386,12 +1467,15 @@ def try_deterministic_lookup(
             and not re.search(r"tulejk?\w*\s+mocuj", p.name, re.I)
         ]
         if not matched:
-            return _miss_or_elsewhere("uszczelka")
+            return _miss_or_elsewhere(loc("uszczelka", "gasket"))
 
-    intro = (
+    intro = loc(
         f"Na podstawie katalogu części dla maszyny **{display}**, "
         f"oto dopasowana pozycja:{size_note} "
-        f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU."
+        f"Zaznacz część i kliknij **«Zapytaj o wycenę»** — nie musisz znać kodu SKU.",
+        f"From the spare-parts catalog for **{display}**, "
+        f"here is the matching item:{size_note} "
+        f"Select the part and tap **«Ask for a quote»** — you don’t need the SKU code.",
     )
     return LookupResult(
         answer=format_parts_markdown(matched, intro, display),

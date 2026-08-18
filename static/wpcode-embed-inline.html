@@ -1,4 +1,13 @@
-<!-- WPCode: wklej CAŁY blok -->
+<!--
+  WPCode — Dragon AI (auto PL/EN) — JEDEN snippet na całą stronę
+  ─────────────────────────────────────────────────────────────
+  Nazwa:       Dragon AI
+  Typ:         HTML Snippet
+  Lokalizacja: Site Wide Footer
+  Warunki:     brak (wykrywa język z lang= i ścieżki /en/)
+
+  Alternatywa: dwa snippety → static/wpcode-embed-pl.html + wpcode-embed-en.html
+-->
 <script>
 /**
  * Dragon AI — osadzenie WP (inline / embed.js)
@@ -10,7 +19,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.10";
+  var EMBED_VERSION = "0.0.11";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -64,9 +73,29 @@
   fab.setAttribute("aria-label", "Dragon AI");
   fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"></circle><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"></circle><circle cx="15.5" cy="10.5" r="1" fill="currentColor" stroke="none"></circle></svg>';
 
+  function detectPageLang() {
+    try {
+      var htmlLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
+      if (htmlLang.indexOf("en") === 0) return "en";
+      var path = (location.pathname || "").toLowerCase();
+      if (/^\/en(-[a-z]{2})?(\/|$)/.test(path) || /\/en(\/|$)/.test(path)) return "en";
+      var body = (document.body && document.body.className) || "";
+      if (/\b(lang-en|pll-en|wpml-en)\b/i.test(body)) return "en";
+      if (/wp-wpml_current_language=en/.test(document.cookie || "")) return "en";
+      var host = (location.hostname || "").toLowerCase();
+      if (host.indexOf("en.") === 0 || host.indexOf(".en.") !== -1) return "en";
+    } catch (e) {}
+    return "pl";
+  }
+  var PAGE_LANG = detectPageLang();
+
   var tip = document.createElement("div");
   tip.id = "bdj-ai-tip";
-  tip.innerHTML = '<div style="display:flex;gap:10px;align-items:flex-start;"><div style="flex:1;min-width:0;"><strong>DRAGON AI</strong><span>Cześć! Chętnie pomogę Ci w doborze części 😊</span></div><button id="bdj-ai-tip-close" type="button" aria-label="Zamknij">&times;</button></div>';
+  var tipText = PAGE_LANG === "en"
+    ? "Hi! I can help you pick spare parts 😊"
+    : "Cześć! Chętnie pomogę Ci w doborze części 😊";
+  var tipClose = PAGE_LANG === "en" ? "Close" : "Zamknij";
+  tip.innerHTML = '<div style="display:flex;gap:10px;align-items:flex-start;"><div style="flex:1;min-width:0;"><strong>DRAGON AI</strong><span>' + tipText + '</span></div><button id="bdj-ai-tip-close" type="button" aria-label="' + tipClose + '">&times;</button></div>';
 
   var wrap = document.createElement("div");
   wrap.id = "bdj-ai-embed";
@@ -119,7 +148,7 @@
       return;
     }
     loaded = true;
-    frame.src = BASE + "/?embed=1&open=1&v=" + encodeURIComponent(EMBED_VERSION);
+    frame.src = BASE + "/?embed=1&open=1&lang=" + encodeURIComponent(PAGE_LANG) + "&v=" + encodeURIComponent(EMBED_VERSION);
   }
 
   function mount() {

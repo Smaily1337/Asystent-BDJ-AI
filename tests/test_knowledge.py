@@ -347,7 +347,7 @@ def test_list_uszczelek_mikrorurka_dual_head_no_size():
     assert "średnic" not in ans_l
     assert not re.search(r"\bnapisz tylko.*mm\b", ans_l)
     assert "wymiar" not in ans_l or "lista" in ans_l
-    assert "[GET_QUOTE:" in result.answer
+    assert "[GET_QUOTE:" not in result.answer
 
 
 def test_list_uszczelek_mikrorurka_extended_no_size():
@@ -447,6 +447,7 @@ def test_format_parts_markdown_has_gfm_table():
     header_idx = next(i for i, l in enumerate(lines) if l.startswith("| Kod SKU |"))
     assert header_idx >= 1
     assert lines[header_idx - 1].strip() == ""
+    assert "[GET_QUOTE:" not in md
 
 
 def test_format_part_name_display_fi_mm():
@@ -927,7 +928,7 @@ def test_hydro_multi_tube_gasket_list_and_size():
     assert listed.reason == "uszczelka_list"
     assert len(listed.parts) >= 3
     assert any("WST-PRO-RUR" in p.sku.upper() or "USZ" in p.sku.upper() for p in listed.parts)
-    assert "[GET_QUOTE:" in listed.answer
+    assert "[GET_QUOTE:" not in listed.answer
 
     sized = try_deterministic_lookup("uszczelka mikrorurki multi tube fi 10")
     assert sized is not None
@@ -1108,6 +1109,8 @@ def test_ui_machine_cards_have_product_pdf_link():
     assert "Karta produktu" in html
     assert "btn-product-card" in html
     assert "product_card_url" in html
+    assert "parts-list-wrapper" in html
+    assert "quoteMachine && !wrapper.querySelector('.parts-list-wrapper')" in html
 
 
 def test_ui_hero_lists_hydro_and_dragonair():
@@ -1126,6 +1129,48 @@ def test_ui_hero_lists_hydro_and_dragonair():
     assert "machine-card--pick" in html
     assert "pickMachineFromCard" in html
     assert "model-chips" not in html
+    assert "detectUiLang" in html
+    assert "Your virtual assistant" in html
+    assert "lang: uiLang" in html
+
+
+def test_embed_detects_english_and_passes_lang():
+    from pathlib import Path
+
+    js = (Path(__file__).resolve().parents[1] / "static" / "embed.js").read_text(
+        encoding="utf-8"
+    )
+    assert 'EMBED_VERSION = "0.0.11"' in js
+    assert "detectPageLang" in js
+    assert "lang=" in js
+    assert "htmlLang.indexOf(\"en\")" in js
+
+
+def test_english_ask_machine_and_product_card():
+    from app.i18n import set_lang
+    from app.rag.part_lookup import ask_machine_message, try_product_card, is_parts_intent
+
+    set_lang("en")
+    try:
+        msg = ask_machine_message()
+        assert "click the photo of your machine" in msg.lower()
+        assert "MACHINE_CARDS" in msg
+        r = try_product_card("I need the product card for BDJ Next")
+        assert r is not None
+        assert "PRODUCT_CARD" in r.answer
+        assert "product card" in r.answer.lower()
+        assert is_parts_intent("I need a 7mm cable gasket for BDJ NEXT")
+    finally:
+        set_lang("pl")
+
+
+def test_polish_ask_machine_unchanged_by_default():
+    from app.i18n import set_lang
+    from app.rag.part_lookup import ask_machine_message
+
+    set_lang("pl")
+    msg = ask_machine_message()
+    assert "kliknij zdjęcie swojej maszyny" in msg.lower()
 
 
 if __name__ == "__main__":

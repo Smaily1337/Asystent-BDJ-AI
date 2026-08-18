@@ -11,6 +11,7 @@ class ChatRequest(BaseModel):
     question: str
     session_id: Optional[str] = "sess_default"
     machine: Optional[str] = None
+    lang: Optional[str] = "pl"
 
 
 class ResetRequest(BaseModel):

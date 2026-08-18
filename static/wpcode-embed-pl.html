@@ -1,21 +1,23 @@
-/**
- * Dragon AI — osadzenie WP (inline / embed.js)
- * Przycisk montowany na document.body — poza stacking context stopki.
- * Na telefonie chat = pełny ekran (bez zooma / uciętego UI).
- */
+<!--
+  WPCode — Dragon AI (POLSKI)
+  ───────────────────────────
+  Nazwa snippetu:  Dragon AI — PL
+  Typ:              HTML Snippet
+  Lokalizacja:      Site Wide Footer (cała witryna)
+  Warunek (Pro):    Page URL  →  does not contain  →  /en/
+
+  Strona PL: https://bluedragonjet.com  (lang="pl-PL")
+  Wyłącz stary snippet „Dragon AI” jeśli masz jeden wspólny.
+-->
+<script>
 (function () {
   if (window.__bdjAiEmbedLoaded) return;
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
   var EMBED_VERSION = "0.0.11";
-  try {
-    if (document.currentScript && document.currentScript.src) {
-      BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
-    }
-  } catch (e) {}
+  var PAGE_LANG = "pl";
 
-  // Usuń stare atrapy z WPCode (w stopce)
   ["bdj-ai-fab", "bdj-ai-tip", "bdj-ai-embed", "bdj-ai-widget"].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) el.remove();
@@ -62,29 +64,9 @@
   fab.setAttribute("aria-label", "Dragon AI");
   fab.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="8.5" cy="10.5" r="1" fill="currentColor" stroke="none"></circle><circle cx="12" cy="10.5" r="1" fill="currentColor" stroke="none"></circle><circle cx="15.5" cy="10.5" r="1" fill="currentColor" stroke="none"></circle></svg>';
 
-  function detectPageLang() {
-    try {
-      var htmlLang = (document.documentElement.getAttribute("lang") || "").toLowerCase();
-      if (htmlLang.indexOf("en") === 0) return "en";
-      var path = (location.pathname || "").toLowerCase();
-      if (/^\/en(-[a-z]{2})?(\/|$)/.test(path) || /\/en(\/|$)/.test(path)) return "en";
-      var body = (document.body && document.body.className) || "";
-      if (/\b(lang-en|pll-en|wpml-en)\b/i.test(body)) return "en";
-      if (/wp-wpml_current_language=en/.test(document.cookie || "")) return "en";
-      var host = (location.hostname || "").toLowerCase();
-      if (host.indexOf("en.") === 0 || host.indexOf(".en.") !== -1) return "en";
-    } catch (e) {}
-    return "pl";
-  }
-  var PAGE_LANG = detectPageLang();
-
   var tip = document.createElement("div");
   tip.id = "bdj-ai-tip";
-  var tipText = PAGE_LANG === "en"
-    ? "Hi! I can help you pick spare parts 😊"
-    : "Cześć! Chętnie pomogę Ci w doborze części 😊";
-  var tipClose = PAGE_LANG === "en" ? "Close" : "Zamknij";
-  tip.innerHTML = '<div style="display:flex;gap:10px;align-items:flex-start;"><div style="flex:1;min-width:0;"><strong>DRAGON AI</strong><span>' + tipText + '</span></div><button id="bdj-ai-tip-close" type="button" aria-label="' + tipClose + '">&times;</button></div>';
+  tip.innerHTML = '<div style="display:flex;gap:10px;align-items:flex-start;"><div style="flex:1;min-width:0;"><strong>DRAGON AI</strong><span>Cześć! Chętnie pomogę Ci w doborze części 😊</span></div><button id="bdj-ai-tip-close" type="button" aria-label="Zamknij">&times;</button></div>';
 
   var wrap = document.createElement("div");
   wrap.id = "bdj-ai-embed";
@@ -95,12 +77,10 @@
   frame.setAttribute("allowfullscreen", "true");
   wrap.appendChild(frame);
 
-  var ready = false;
   var wantOpen = false;
   var loaded = false;
 
   function hideTip() { tip.style.display = "none"; }
-
   function showChat() {
     hideTip();
     fab.classList.add("is-chat-open");
@@ -109,7 +89,6 @@
     wrap.style.pointerEvents = "auto";
     document.body.classList.add("bdj-ai-chat-open");
   }
-
   function hideChat() {
     fab.classList.remove("is-chat-open");
     wrap.classList.remove("is-open");
@@ -118,73 +97,47 @@
     document.body.classList.remove("bdj-ai-chat-open");
     wantOpen = false;
   }
-
   function sendOpen() {
     if (!frame.contentWindow) return;
     try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (e) {}
   }
-
   function openChat() {
     wantOpen = true;
     showChat();
     ensureFrame();
     sendOpen();
   }
-
   function ensureFrame() {
-    if (loaded) {
-      sendOpen();
-      return;
-    }
+    if (loaded) { sendOpen(); return; }
     loaded = true;
-    frame.src = BASE + "/?embed=1&open=1&lang=" + encodeURIComponent(PAGE_LANG) + "&v=" + encodeURIComponent(EMBED_VERSION);
+    frame.src = BASE + "/?embed=1&open=1&lang=" + PAGE_LANG + "&v=" + encodeURIComponent(EMBED_VERSION);
   }
-
   function mount() {
     document.head.appendChild(style);
     document.body.appendChild(fab);
     document.body.appendChild(tip);
     document.body.appendChild(wrap);
-
     setTimeout(ensureFrame, 500);
     frame.addEventListener("load", function () {
-      if (wantOpen) {
-        setTimeout(function () { ready = true; sendOpen(); }, 80);
-      }
+      if (wantOpen) setTimeout(sendOpen, 80);
     });
     setTimeout(function () {
       if (!wrap.classList.contains("is-open")) tip.style.display = "block";
     }, 3000);
-
-    fab.addEventListener("click", function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      openChat();
-    });
+    fab.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openChat(); });
     tip.addEventListener("click", function (e) {
       e.preventDefault();
       e.stopPropagation();
-      if (e.target && e.target.id === "bdj-ai-tip-close") {
-        hideTip();
-        return;
-      }
+      if (e.target && e.target.id === "bdj-ai-tip-close") { hideTip(); return; }
       openChat();
     });
-
     window.addEventListener("message", function (e) {
       if (!e.data || typeof e.data !== "object") return;
-      if (e.data.type === "bdj-ai-ready") {
-        ready = true;
-        if (wantOpen) {
-          try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (err) {}
-        }
-      }
-      if (e.data.type === "bdj-ai-resize") {
-        if (e.data.open === false) hideChat();
-      }
+      if (e.data.type === "bdj-ai-ready" && wantOpen) sendOpen();
+      if (e.data.type === "bdj-ai-resize" && e.data.open === false) hideChat();
     });
   }
-
   if (document.body) mount();
   else document.addEventListener("DOMContentLoaded", mount);
 })();
+</script>

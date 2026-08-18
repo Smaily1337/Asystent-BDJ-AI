@@ -13,6 +13,7 @@ from llama_index.core.chat_engine import ContextChatEngine
 from llama_index.core.memory import ChatMemoryBuffer
 
 from app.config import settings
+from app.i18n import ENGLISH_QUERY_PREFIX, get_lang
 from app.prompts import SYSTEM_PROMPT
 from app.rag.intent import extract_part_slots, with_chip_machine
 from app.rag.machines import machine_display_name, is_machine_unknown_message, resolve_machine_from_query
@@ -235,6 +236,8 @@ class SessionChatManager:
             return fallback
 
         query = rewrite_query(q, chip_machine=chip_for_lookup)
+        if get_lang() == "en":
+            query = ENGLISH_QUERY_PREFIX + query
         engine = self.get_engine(sid)
         try:
             raw = str(engine.chat(query))

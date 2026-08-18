@@ -6,6 +6,7 @@ import re
 
 from fastapi import APIRouter, Request
 
+from app.i18n import loc, set_lang
 from app.models import ChatRequest, ResetRequest
 from app.services.logging_store import log_customer_question
 from app.rag.machines import resolve_machine_from_query
@@ -59,6 +60,12 @@ def _is_unclear_response(answer: str) -> bool:
         "nie mam przypisanej tej części",
         "nie znalazłem",
         "nie znaleziono elementu",
+        "click the photo of your machine",
+        "to quote a spare part",
+        "which machine is the product card",
+        "write only the diameter",
+        "i couldn't find",
+        "sorry, this part is not assigned",
     ]
     return any(m in a for m in unclear_markers)
 
@@ -99,6 +106,7 @@ def handle_chat(request: ChatRequest, req: Request):
         req.client.host if req.client else "127.0.0.1",
     ).split(",")[0]
     session_id = request.session_id or "sess_default"
+    set_lang(request.lang)
 
     try:
         response = chat_manager.chat(session_id, request.question, machine=request.machine)
@@ -117,9 +125,11 @@ def handle_chat(request: ChatRequest, req: Request):
         return {"answer": response}
     except Exception as e:
         print(f"⚠️ Błąd podczas generowania odpowiedzi chat: {e}")
-        err_resp = (
+        err_resp = loc(
             "Przepraszam, wystąpił problem z przetworzeniem pytania. "
-            "Wyczyść czat i spróbuj ponownie."
+            "Wyczyść czat i spróbuj ponownie.",
+            "Sorry, there was a problem processing your question. "
+            "Clear the chat and try again.",
         )
         log_customer_question(request.question, err_resp, client_ip, session_id)
         return {"answer": err_resp}

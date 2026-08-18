@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 
+from app.i18n import loc
 from app.rag.catalog import parts_for_machine
 from app.rag.machine_web import format_machine_cards_tag
 from app.rag.machines import machine_display_name, resolve_machine_from_query
@@ -81,10 +82,13 @@ def sanitize_answer_skus(
         cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
         cards = format_machine_cards_tag(["all"])
         if is_parts_intent(question or ""):
-            return (
+            return loc(
                 "Żeby podać **właściwy kod SKU z katalogu**, **kliknij zdjęcie maszyny** poniżej "
                 "albo wybierz model u góry czatu.\n\n"
-                f"{cards}"
+                f"{cards}",
+                "To quote the **correct catalog SKU**, **click your machine photo** below "
+                "or pick the model at the top of the chat.\n\n"
+                f"{cards}",
             )
         if cards:
             return f"{cleaned}\n\n{cards}".strip()
@@ -109,16 +113,22 @@ def sanitize_answer_skus(
 
     remaining = [s for s in extract_skus(cleaned) if s.upper() in allowed]
     if remaining:
-        note = (
+        note = loc(
             "\n\n_(Usunięto kody spoza katalogu tej maszyny — "
-            "podaję wyłącznie istniejące SKU.)_"
+            "podaję wyłącznie istniejące SKU.)_",
+            "\n\n_(Removed codes that are not in this machine’s catalog — "
+            "only official SKUs are shown.)_",
         )
         return cleaned + note
 
     display = machine_display_name(machine)
-    return (
+    return loc(
         f"Przepraszam — w odpowiedzi pojawiły się nieistniejące kody części. "
         f"Dla modelu {display} mogę podać wyłącznie pozycje z oficjalnego katalogu. "
         f"Podaj proszę dokładny typ części i wymiar (np. uszczelka mikrorurki 7 mm), "
-        f"a dobiorę właściwy SKU."
+        f"a dobiorę właściwy SKU.",
+        f"Sorry — the reply contained non-existent part codes. "
+        f"For {display} I can only quote items from the official catalog. "
+        f"Please specify the part type and size (e.g. 7 mm microduct gasket) "
+        f"and I will pick the correct SKU.",
     )

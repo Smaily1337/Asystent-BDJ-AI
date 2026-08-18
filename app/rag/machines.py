@@ -243,6 +243,10 @@ _MACHINE_UNKNOWN_RE = re.compile(
     r"|nie\s+znam\s+(?:modelu|maszyny|jak[aą]\s+(?:to\s+)?maszyn)"
     r"|nie\s+mam\s+poj[eę]cia\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?\s*(?:model|maszyn)"
     r"|(?:jaki|jaka|jak[aą])\s+(?:to\s+)?(?:model|maszyn)\s+(?:mam|posiadam|u\s+mnie|to\s+jest)"
+    r"|i\s+don'?t\s+know\s+(?:the\s+)?(?:model|machine)"
+    r"|do\s+not\s+know\s+(?:the\s+)?(?:model|machine)"
+    r"|unknown\s+model"
+    r"|what\s+(?:model|machine)\s+(?:do\s+i\s+have|is\s+this)"
     r")",
     re.I,
 )
