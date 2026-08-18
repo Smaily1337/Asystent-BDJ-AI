@@ -45,11 +45,25 @@ class Settings:
             r.strip()
             for r in os.getenv(
                 "OFFER_RECIPIENTS",
-                "info@gamm-bud.pl",
+                "info@gamm-bud.pl,info@bluedragonjet.com",
             ).split(",")
             if r.strip()
         )
     )
+
+    # Backup: przekaż lead do Contact Form 7 na WordPress (formularz ofertowy na stronie głównej)
+    wp_site_url: str = field(
+        default_factory=lambda: os.getenv("WP_SITE_URL", "https://bluedragonjet.com")
+    )
+    wp_cf7_enabled: bool = field(
+        default_factory=lambda: os.getenv("WP_CF7_ENABLED", "true").lower() in ("1", "true", "yes")
+    )
+    wp_cf7_form_id: int = field(default_factory=lambda: int(os.getenv("WP_CF7_FORM_ID", "358")))
+    wp_cf7_unit_tag: str = field(
+        default_factory=lambda: os.getenv("WP_CF7_UNIT_TAG", "wpcf7-f358-o1")
+    )
+    wp_cf7_version: str = field(default_factory=lambda: os.getenv("WP_CF7_VERSION", "5.6.4"))
+    wp_cf7_locale: str = field(default_factory=lambda: os.getenv("WP_CF7_LOCALE", "pl_PL"))
 
     # Jedna baza wiedzy
     knowledge_dirs: tuple[str, ...] = ("knowledge",)

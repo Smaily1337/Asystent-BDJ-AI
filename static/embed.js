@@ -8,7 +8,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.13";
+  var EMBED_VERSION = "0.0.14";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -140,6 +140,38 @@
     frame.src = BASE + "/?embed=1&open=1&lang=" + encodeURIComponent(PAGE_LANG) + "&v=" + encodeURIComponent(EMBED_VERSION);
   }
 
+  function forwardOfferToWpForm(data) {
+    if (!data || typeof data !== "object") return false;
+    var root = document.getElementById("offer-form");
+    if (!root) return false;
+    var form = root.querySelector("form.wpcf7-form");
+    if (!form) return false;
+    function setField(name, val) {
+      var el = form.querySelector('[name="' + name + '"]');
+      if (el && val != null && val !== "") el.value = val;
+    }
+    var itemLines = (data.items || []).map(function (row) {
+      return Array.isArray(row) ? row.filter(Boolean).join(" | ") : String(row);
+    }).join("\n");
+    var details = [
+      data.company ? "Firma: " + data.company : "",
+      data.machine ? "Maszyna: " + data.machine : "",
+      data.message || "",
+      itemLines ? "Pozycje:\n" + itemLines : ""
+    ].filter(Boolean).join("\n\n");
+    setField("your-email", data.email);
+    setField("your-phone", data.phone);
+    setField("calc01", data.machine || data.company || "");
+    setField("calc02", details);
+    setField("products-list", itemLines || details);
+    var btn = form.querySelector('input[type="submit"], button[type="submit"]');
+    if (btn) {
+      try { btn.click(); return true; } catch (e) {}
+    }
+    root.scrollIntoView({ behavior: "smooth", block: "center" });
+    return true;
+  }
+
   function mount() {
     document.head.appendChild(style);
     document.body.appendChild(fab);
@@ -181,6 +213,9 @@
       }
       if (e.data.type === "bdj-ai-resize") {
         if (e.data.open === false) hideChat();
+      }
+      if (e.data.type === "bdj-ai-offer") {
+        forwardOfferToWpForm(e.data);
       }
     });
   }

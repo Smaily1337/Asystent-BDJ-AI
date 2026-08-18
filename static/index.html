@@ -6,7 +6,7 @@
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
     <script>
     (function () {
-        var NEED = '0.0.13';
+        var NEED = '0.0.14';
         if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
         var p = new URLSearchParams(location.search);
         if (p.get('v') === NEED) return;
@@ -1339,7 +1339,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">0.0.13</span>
+                <span class="app-version">0.0.14</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1425,7 +1425,7 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.13';
+    const UI_VERSION = '0.0.14';
 
     const detectUiLang = () => {
         const p = new URLSearchParams(location.search);
@@ -2569,6 +2569,22 @@ const BDJChatApp = (() => {
             ? `<br><strong>${t('yourMessage')}</strong> ${clientMessage.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
             : '';
 
+        const offerPayload = {
+            company,
+            email,
+            phone: fullPhone,
+            items: items.map((item) => item.filter((x) => x && x !== 'Wybór')),
+            machine: state.pendingMachine || 'Zapytanie',
+            request_type: state.pendingRequestType || 'oferta',
+            message: clientMessage,
+        };
+
+        try {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'bdj-ai-offer', ...offerPayload }, '*');
+            }
+        } catch (_) { /* ignore */ }
+
         try {
             const handoffNotes = (state.pendingRequestType === 'zapytanie' && items.length === 0)
                 ? state.messages
@@ -2593,12 +2609,14 @@ const BDJChatApp = (() => {
                 })
             });
             let emailSent = false;
+            let wpForwarded = false;
             try {
                 const offerData = await offerRes.json();
                 emailSent = !!offerData.email_sent;
+                wpForwarded = !!offerData.wp_forwarded;
             } catch (_) { /* ignore parse errors */ }
 
-            const successMsg = emailSent
+            const successMsg = (emailSent || wpForwarded)
                 ? `${t('thanks')}${itemsSummary}${messageNote}`
                 : `${t('savedNoEmail')}${itemsSummary}${messageNote}`;
             state.messages.push({ role: 'bot', content: successMsg, raw: successMsg });

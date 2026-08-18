@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<title>DRAGON AI — Ad 9:16 EN</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --blue: #2563EB;
+    --blue-light: #60a5fa;
+    --dark: #0f172a;
+    --muted: #64748b;
+    --ease: cubic-bezier(0.25, 1, 0.5, 1);
+    --font: 'Outfit', sans-serif;
+    --dur: 10;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; font-family: var(--font); background: #eef4fb; }
+  .stage { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+  .bg-gradient {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(900px 700px at 50% 20%, rgba(37,99,235,0.22), transparent 60%),
+      linear-gradient(165deg, #dbeafe 0%, #f8fafc 45%, #fff 100%);
+  }
+  .scene-hook {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    padding: 80px; z-index: 10; pointer-events: none;
+  }
+  .hook-text {
+    text-align: center; font-size: 68px; font-weight: 900; line-height: 1.1;
+    letter-spacing: -1.5px; color: var(--dark); text-transform: uppercase;
+    opacity: 0; transform: scale(0.82);
+  }
+  .hook-text span {
+    background: linear-gradient(135deg, var(--blue), #1d4ed8);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .scene-demo {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    z-index: 5; opacity: 0; transform: translateY(120px);
+  }
+  .phone-wrap { transform-origin: center center; }
+  .phone {
+    width: 920px; background: #0b1220; border-radius: 56px; padding: 18px;
+    box-shadow: 0 40px 100px rgba(15,23,42,0.35), 0 0 0 2px rgba(255,255,255,0.08);
+  }
+  .phone-notch { width: 180px; height: 28px; background: #0b1220; border-radius: 0 0 20px 20px; margin: -4px auto 12px; }
+  .phone-screen {
+    background: linear-gradient(160deg, #eef4fb, #f7fafc);
+    border-radius: 40px; overflow: hidden; height: 1480px; position: relative;
+  }
+  .chat-widget {
+    position: absolute; inset: 40px 32px 32px;
+    background: linear-gradient(165deg, rgba(255,255,255,0.85), rgba(255,255,255,0.55));
+    border-radius: 28px; border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: 0 24px 64px rgba(15,23,42,0.14);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .chat-header {
+    padding: 22px 24px; background: rgba(255,255,255,0.45);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+    display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+  }
+  .chat-brand { display: flex; align-items: center; gap: 14px; }
+  .chat-avatar { width: 48px; height: 48px; border-radius: 14px; background: #fff; overflow: hidden; box-shadow: 0 8px 20px rgba(15,23,42,0.08); }
+  .chat-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .chat-title { font-size: 1.25rem; font-weight: 800; color: var(--dark); }
+  .chat-sub { font-size: 0.85rem; font-weight: 600; color: var(--muted); margin-top: 2px; }
+  .chat-badge {
+    display: inline-block; margin-top: 6px; padding: 3px 10px; border-radius: 999px;
+    font-size: 0.65rem; font-weight: 800; color: #1d4ed8; background: rgba(219,234,254,0.8);
+    border: 1px solid rgba(147,197,253,0.7); text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .chat-close {
+    width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; color: var(--muted);
+  }
+  .machine-bar {
+    padding: 12px 24px; background: linear-gradient(180deg, #eff6ff, #dbeafe);
+    border-bottom: 1px solid #93c5fd; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  .machine-bar label { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: #1d4ed8; }
+  .machine-bar label::before { content: "✓ "; color: #2563eb; }
+  .machine-bar select {
+    flex: 1; padding: 10px 14px; border-radius: 12px; border: 1px solid #93c5fd; background: #fff;
+    font-family: var(--font); font-size: 0.9rem; font-weight: 600; color: var(--dark);
+  }
+  .chat-body {
+    flex: 1; padding: 24px; overflow: hidden; display: flex; flex-direction: column; gap: 16px;
+    background: linear-gradient(180deg, rgba(248,250,252,0.3), rgba(239,246,255,0.4));
+  }
+  .bubble-user {
+    align-self: flex-end; max-width: 82%; padding: 16px 20px;
+    background: linear-gradient(145deg, #0b1220, #1e293b); color: #fff;
+    border-radius: 20px 20px 6px 20px; font-size: 1.02rem; font-weight: 500; line-height: 1.45;
+    opacity: 0; transform: translateY(16px); box-shadow: 0 8px 24px rgba(15,23,42,0.2);
+  }
+  .bubble-bot { align-self: flex-start; max-width: 92%; opacity: 0; transform: translateY(20px); }
+  .bot-md {
+    background: rgba(255,255,255,0.92); border: 1px solid rgba(226,232,240,0.9);
+    border-radius: 20px 20px 20px 6px; padding: 18px 20px;
+    box-shadow: 0 8px 22px rgba(15,23,42,0.06); font-size: 0.95rem; line-height: 1.5; color: #334155;
+  }
+  .bot-md strong { color: var(--dark); }
+  .catalog-badge {
+    display: inline-flex; align-items: center; gap: 6px; margin: 12px 0 10px; padding: 5px 12px;
+    border-radius: 999px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+    color: #1d4ed8; background: #eff6ff; border: 1px solid #bfdbfe;
+  }
+  .catalog-badge::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
+  .part-card {
+    padding: 16px 18px; border: 1px solid #e5edf6; border-radius: 16px; background: #fff;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.04); margin-top: 8px;
+    display: flex; gap: 12px; align-items: flex-start;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+  .part-card.selected {
+    border-color: var(--blue); background: #eff6ff;
+    box-shadow: 0 0 0 1px rgba(59,130,246,0.15), 0 8px 20px rgba(37,99,235,0.1);
+  }
+  .part-check {
+    width: 22px; height: 22px; border-radius: 5px; border: 2px solid #cbd5e1;
+    background: #fff; flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s var(--ease);
+  }
+  .part-card.selected .part-check {
+    background: var(--blue); border-color: var(--blue);
+  }
+  .part-check svg { opacity: 0; transform: scale(0.5); transition: all 0.2s var(--ease); }
+  .part-card.selected .part-check svg { opacity: 1; transform: scale(1); }
+  .part-body { flex: 1; min-width: 0; }
+  .part-sku { font-family: ui-monospace, Menlo, monospace; font-size: 0.82rem; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+  .part-name { font-size: 0.92rem; font-weight: 600; color: var(--dark); line-height: 1.4; }
+  .part-meta { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
+  .offer-bar {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 18px; flex-shrink: 0;
+    background: linear-gradient(145deg, rgba(15,23,42,0.92), rgba(30,41,59,0.88));
+    border-top: 1px solid rgba(255,255,255,0.12);
+    color: #fff; transform: translateY(100%); opacity: 0;
+  }
+  .offer-bar.visible { transform: translateY(0); opacity: 1; }
+  .offer-bar span { font-weight: 600; font-size: 0.88rem; }
+  .offer-bar b { color: #93c5fd; }
+  .btn-order {
+    background: rgba(255,255,255,0.92); color: var(--dark);
+    border: 1px solid rgba(255,255,255,0.5); padding: 10px 18px;
+    border-radius: 999px; font-family: var(--font); font-weight: 700; font-size: 0.82rem;
+    white-space: nowrap; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.15s var(--ease);
+  }
+  .btn-order.pressed { transform: scale(0.92); }
+  .btn-order.glow {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15), 0 0 0 4px rgba(147,197,253,0.4);
+  }
+  .chat-footer {
+    padding: 16px 20px 20px; border-top: 1px solid rgba(226,232,240,0.8);
+    background: rgba(255,255,255,0.5); flex-shrink: 0;
+  }
+  .input-row {
+    display: flex; gap: 10px; align-items: flex-end; background: #fff; border: 1px solid #e2e8f0;
+    border-radius: 18px; padding: 10px 12px 10px 18px; box-shadow: 0 4px 16px rgba(15,23,42,0.04);
+  }
+  .input-row.focused { border-color: var(--blue-light); box-shadow: 0 0 0 3px rgba(96,165,250,0.25); }
+  .input-text { flex: 1; font-family: var(--font); font-size: 1rem; font-weight: 500; color: var(--dark); min-height: 24px; line-height: 1.4; }
+  .input-cursor { display: inline-block; width: 2px; height: 1.1em; background: var(--blue); margin-left: 1px; opacity: 0; }
+  .btn-send {
+    width: 44px; height: 44px; border-radius: 14px; flex-shrink: 0;
+    background: linear-gradient(145deg, #0b1220, #1e293b); border: none;
+    display: flex; align-items: center; justify-content: center; color: #fff;
+  }
+  .btn-send.pressed { transform: scale(0.88); }
+  .zoom-layer { transform-origin: 50% 75%; }
+  .tap-cursor {
+    position: absolute; width: 48px; height: 48px; border-radius: 50%;
+    border: 3px solid rgba(37,99,235,0.7); background: rgba(37,99,235,0.15);
+    pointer-events: none; z-index: 20; opacity: 0; transform: scale(0.5);
+    box-shadow: 0 0 0 8px rgba(37,99,235,0.1);
+  }
+  .tap-cursor::after {
+    content: ""; position: absolute; inset: 12px; border-radius: 50%; background: rgba(37,99,235,0.35);
+  }
+  .scene-cta {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 80px 64px;
+    z-index: 15; opacity: 0; pointer-events: none;
+  }
+  .cta-title {
+    text-align: center; font-size: 52px; font-weight: 900; line-height: 1.12;
+    letter-spacing: -1px; color: var(--dark); text-transform: uppercase; margin-bottom: 24px;
+  }
+  .cta-sub { text-align: center; font-size: 30px; font-weight: 700; color: var(--muted); line-height: 1.35; margin-bottom: 48px; }
+  .cta-sub em { font-style: normal; color: var(--blue); font-weight: 800; }
+  .cta-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 22px 56px; border-radius: 999px; font-size: 28px; font-weight: 800;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #fff;
+    background: linear-gradient(135deg, var(--blue), #1d4ed8);
+    box-shadow: 0 16px 40px rgba(37,99,235,0.4); border: 2px solid rgba(255,255,255,0.3);
+  }
+  .cta-btn.glow {
+    box-shadow: 0 16px 40px rgba(37,99,235,0.5), 0 0 0 8px rgba(37,99,235,0.15), 0 0 60px rgba(37,99,235,0.25);
+  }
+  .logo-watermark {
+    position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 12px; opacity: 0;
+  }
+  .logo-watermark img { width: 40px; height: 40px; border-radius: 12px; }
+  .logo-watermark span { font-size: 22px; font-weight: 800; color: var(--dark); }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="bg-gradient"></div>
+
+  <div class="scene-hook">
+    <h1 class="hook-text" id="hookText">STOP WAITING<br>FOR YOUR<br><span>ANSWER!</span></h1>
+  </div>
+
+  <div class="scene-demo" id="sceneDemo">
+    <div class="phone-wrap" id="phoneWrap">
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="zoom-layer" id="zoomLayer">
+            <div class="chat-widget" id="chatWidget">
+              <header class="chat-header">
+                <div class="chat-brand">
+                  <div class="chat-avatar"><img src="../static/avatar.png" alt="" /></div>
+                  <div>
+                    <div class="chat-title">DRAGON AI</div>
+                    <div class="chat-sub">Your virtual assistant</div>
+                    <span class="chat-badge">BDJ Assistant</span>
+                  </div>
+                </div>
+                <div class="chat-close">&times;</div>
+              </header>
+              <div class="machine-bar">
+                <label>Machine</label>
+                <select><option>BDJ NEXT</option></select>
+              </div>
+              <div class="chat-body">
+                <div class="bubble-user" id="userBubble"></div>
+                <div class="bubble-bot" id="botBubble">
+                  <div class="bot-md">
+                    I found a matching part from the BDJ catalog for <strong>BDJ NEXT</strong>:
+                    <div class="catalog-badge">SKU from official BDJ catalog</div>
+                    <div class="part-card" id="partCard">
+                      <div class="part-check" id="partCheck">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>
+                      </div>
+                      <div class="part-body">
+                        <div class="part-sku">PNE-USZ-KAB-7</div>
+                        <div class="part-name">Cable gasket 7 mm — BDJ NEXT</div>
+                        <div class="part-meta">Machine: <strong>BDJ NEXT</strong> · BOM qty: 1</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="offer-bar" id="offerBar">
+                <span>Selected parts (<b id="offerCount">0</b>):</span>
+                <button class="btn-order" id="btnOrder" type="button">Generate quote</button>
+              </div>
+              <footer class="chat-footer">
+                <div class="input-row" id="inputRow">
+                  <div class="input-text"><span id="typedText"></span><span class="input-cursor" id="cursor">|</span></div>
+                  <button class="btn-send" id="btnSend" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20" height="20"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  </button>
+                </div>
+              </footer>
+              <div class="tap-cursor" id="tapCursor"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scene-cta" id="sceneCta">
+    <h2 class="cta-title">JUST ASK FOR A PART<br>AND ORDER.</h2>
+    <p class="cta-sub"><em>DRAGON AI</em> — Your virtual assistant</p>
+    <div class="cta-btn" id="ctaBtn">Try it now</div>
+    <div class="logo-watermark" id="logoWm">
+      <img src="../static/avatar.png" alt="" /><span>bluedragonjet.com</span>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const DURATION = 10;
+  const FULL_TEXT = 'Hi, I need a 7mm cable gasket for BDJ NEXT';
+  const $ = (id) => document.getElementById(id);
+
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+  function lerp(a,b,t){return a+(b-a)*t}
+  function easeOut(t){return 1-Math.pow(1-t,3)}
+  function easeInOut(t){return t<0.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2}
+  function seg(t,a,b){return clamp((t-a)/(b-a),0,1)}
+
+  window.seekTo = function(t) {
+    t = clamp(t, 0, DURATION);
+
+    /* HOOK 0–2s */
+    const hookT = seg(t, 0, 0.55);
+    const hookOut = seg(t, 1.5, 1.9);
+    $('hookText').style.opacity = easeOut(hookT) * (1 - easeInOut(hookOut));
+    $('hookText').style.transform = `scale(${lerp(0.82, 1, easeOut(hookT))})`;
+
+    /* DEMO 1.7–8s */
+    const demoIn = seg(t, 1.7, 2.4);
+    const demoOut = seg(t, 8.0, 8.5);
+    $('sceneDemo').style.opacity = easeOut(demoIn) * (1 - easeInOut(demoOut));
+    $('sceneDemo').style.transform = `translateY(${lerp(120, 0, easeOut(demoIn))}px)`;
+    $('phoneWrap').style.transform = `scale(${lerp(0.92, 1, easeOut(demoIn)) * lerp(1, 0.78, easeInOut(demoOut))})`;
+
+    /* zoom input 2.6–4.0 */
+    const zoomIn = seg(t, 2.6, 3.2);
+    const zoomMid = seg(t, 5.0, 5.5);
+    const zoomOut = seg(t, 7.0, 7.5);
+    let zoom = 1;
+    if (t < 5.0) zoom = 1 + easeOut(zoomIn) * 0.16;
+    else if (t < 7.0) zoom = 1.16 + easeOut(zoomMid) * 0.12;
+    else zoom = 1.28 - easeInOut(zoomOut) * 0.28;
+    $('zoomLayer').style.transform = `scale(${zoom})`;
+    if (t >= 5.0 && t < 7.0) $('zoomLayer').style.transformOrigin = '50% 62%';
+    else if (t >= 7.0) $('zoomLayer').style.transformOrigin = '50% 75%';
+    else $('zoomLayer').style.transformOrigin = '50% 88%';
+
+    /* typewriter 2.4–3.8 */
+    const typeT = seg(t, 2.4, 3.8);
+    $('typedText').textContent = t < 4.0 ? FULL_TEXT.slice(0, Math.floor(typeT * FULL_TEXT.length)) : '';
+    $('cursor').style.opacity = (t >= 2.4 && t < 4.0) ? (Math.floor(t*4)%2?1:0.3) : 0;
+    $('inputRow').classList.toggle('focused', t >= 2.4 && t < 4.0);
+    $('btnSend').classList.toggle('pressed', t >= 3.85 && t < 4.05);
+
+    const userIn = seg(t, 4.0, 4.4);
+    $('userBubble').textContent = FULL_TEXT;
+    $('userBubble').style.opacity = easeOut(userIn);
+    $('userBubble').style.transform = `translateY(${lerp(16,0,easeOut(userIn))}px)`;
+
+    const botIn = seg(t, 4.4, 4.9);
+    $('botBubble').style.opacity = easeOut(botIn);
+    $('botBubble').style.transform = `translateY(${lerp(20,0,easeOut(botIn))}px)`;
+
+    /* SELECT part 5.2–5.8 */
+    const selectT = seg(t, 5.35, 5.55);
+    const isSelected = t >= 5.55;
+    $('partCard').classList.toggle('selected', isSelected);
+    $('offerCount').textContent = isSelected ? '1' : '0';
+    $('offerBar').classList.toggle('visible', isSelected);
+
+    /* tap cursor — checkbox then order button */
+    const tap = $('tapCursor');
+    if (t >= 5.2 && t < 5.6) {
+      const tapP = seg(t, 5.2, 5.55);
+      tap.style.opacity = easeOut(tapP) * (1 - seg(t, 5.45, 5.6));
+      tap.style.transform = `scale(${lerp(0.5, 1, easeOut(tapP))})`;
+      tap.style.left = '118px';
+      tap.style.top = '720px';
+    } else if (t >= 6.0 && t < 6.5) {
+      const tapP = seg(t, 6.0, 6.35);
+      tap.style.opacity = easeOut(tapP) * (1 - seg(t, 6.3, 6.5));
+      tap.style.transform = `scale(${lerp(0.5, 1, easeOut(tapP))})`;
+      tap.style.left = '620px';
+      tap.style.top = '895px';
+    } else {
+      tap.style.opacity = 0;
+    }
+
+    /* ORDER click 6.2–6.5 */
+    $('btnOrder').classList.toggle('pressed', t >= 6.25 && t < 6.45);
+    $('btnOrder').classList.toggle('glow', t >= 6.0 && t < 6.6);
+
+    /* CTA 8–10s */
+    const ctaIn = seg(t, 8.0, 8.6);
+    $('sceneCta').style.opacity = easeOut(ctaIn);
+    const pulse = t >= 8.4 ? 0.5 + 0.5 * Math.sin((t - 8.4) * Math.PI * 2) : 0;
+    $('ctaBtn').classList.toggle('glow', t >= 8.4);
+    $('ctaBtn').style.transform = `scale(${1 + pulse * 0.04})`;
+    $('logoWm').style.opacity = seg(t, 8.8, 9.4);
+  };
+
+  window.AD_DURATION = DURATION;
+
+  if (!new URLSearchParams(location.search).has('render')) {
+    let start = performance.now();
+    (function loop(now) {
+      window.seekTo(((now - start) / 1000) % DURATION);
+      requestAnimationFrame(loop);
+    })(start);
+  } else {
+    window.seekTo(parseFloat(new URLSearchParams(location.search).get('t') || '0'));
+  }
+})();
+</script>
+</body>
+</html>

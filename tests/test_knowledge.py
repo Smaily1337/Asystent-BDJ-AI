@@ -1139,7 +1139,7 @@ def test_embed_detects_english_and_passes_lang():
     js = (Path(__file__).resolve().parents[1] / "static" / "embed.js").read_text(
         encoding="utf-8"
     )
-    assert 'EMBED_VERSION = "0.0.11"' in js
+    assert 'EMBED_VERSION = "0.0.14"' in js
     assert "detectPageLang" in js
     assert "lang=" in js
     assert "htmlLang.indexOf(\"en\")" in js
