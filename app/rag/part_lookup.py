@@ -131,6 +131,13 @@ _PRODUCT_CARD_RE = re.compile(
     re.I,
 )
 
+# Samo «mam BDJ NEXT» / «I have Budget Easy Set» — deklaracja modelu, nie prośba o opis
+_BARE_MACHINE_DECLARE_RE = re.compile(
+    r"^\s*(?:mam|posiadam|i\s+have|i['']ve\s+got|my\s+machine\s+is)\s+"
+    r"(?:maszyn[ęe]\s+)?(?:bdj\s+)?[\w\s+\-/]+$",
+    re.I,
+)
+
 # Pytanie o dobór części → NIGDY nie puszczamy do LLM (halucynuje SKU)
 _PARTS_INTENT_RE = re.compile(
     r"\b("
@@ -288,6 +295,8 @@ def try_machine_showcase(
     q = (question or "").strip()
     mentioned = resolve_machine_from_query(q, chip_machine=None) is not None
     short_query = len(q) < 45 and mentioned
+    if _BARE_MACHINE_DECLARE_RE.match(q) and not is_machine_showcase_intent(q):
+        return None
     if not is_machine_showcase_intent(q) and not short_query:
         return None
 

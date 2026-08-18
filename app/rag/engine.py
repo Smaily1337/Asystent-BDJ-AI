@@ -14,6 +14,7 @@ from llama_index.core.memory import ChatMemoryBuffer
 
 from app.config import settings
 from app.i18n import ENGLISH_QUERY_PREFIX, get_lang
+from app.rag.en_pl_glossary import translate_en_history, translate_en_query_for_lookup
 from app.prompts import SYSTEM_PROMPT
 from app.rag.intent import extract_part_slots, with_chip_machine
 from app.rag.machines import machine_display_name, is_machine_unknown_message, resolve_machine_from_query
@@ -117,7 +118,9 @@ class SessionChatManager:
     def chat(self, session_id: str, question: str, machine: str | None = None) -> str:
         sid = session_id or "sess_default"
 
-        if is_machine_unknown_message(question):
+        lookup_question = translate_en_query_for_lookup(question)
+
+        if is_machine_unknown_message(lookup_question):
             from app.rag.part_lookup import ask_machine_message
 
             self._last_part_reason[sid] = "need_machine"
@@ -126,27 +129,26 @@ class SessionChatManager:
             self._remember(sid, "assistant", answer)
             return answer
 
-        resolved = resolve_machine_from_query(question, chip_machine=machine)
-        q = question
+        resolved = resolve_machine_from_query(lookup_question, chip_machine=machine)
+        q = lookup_question
         if resolved:
             display = machine_display_name(resolved)
-            if display and display.lower() not in question.lower():
-                q = f"Mam maszynę {display}. {question}"
-        elif machine and machine.lower() not in question.lower():
-            q = f"Mam maszynę {machine}. {question}"
+            if display and display.lower() not in lookup_question.lower():
+                q = f"Mam maszynę {display}. {lookup_question}"
+        elif machine and machine.lower() not in lookup_question.lower():
+            q = f"Mam maszynę {machine}. {lookup_question}"
 
         prior_reason = self._last_part_reason.get(sid)
-        history = self._recent_history(sid, n=4)
+        history = translate_en_history(self._recent_history(sid, n=4))
         # Chip z UI LUB model wykryty w tekście — sloty nie mogą zgubić maszyny
         chip_for_lookup = machine or (
             machine_display_name(resolved) if resolved else None
         )
 
-        product_card = try_product_card(question, chip_machine=chip_for_lookup)
+        product_card = try_product_card(lookup_question, chip_machine=chip_for_lookup)
         if product_card is not None and not (
             is_parts_intent(q)
-            or is_parts_intent(question)
-            or is_gasket_list_followup(question, prior_reason)
+            or is_gasket_list_followup(lookup_question, prior_reason)
         ):
             self._last_part_reason[sid] = product_card.reason
             answer = sanitize_answer_skus(
@@ -156,11 +158,10 @@ class SessionChatManager:
             self._remember(sid, "assistant", answer)
             return answer
 
-        showcase = try_machine_showcase(question, chip_machine=chip_for_lookup)
+        showcase = try_machine_showcase(lookup_question, chip_machine=chip_for_lookup)
         if showcase is not None and not (
             is_parts_intent(q)
-            or is_parts_intent(question)
-            or is_gasket_list_followup(question, prior_reason)
+            or is_gasket_list_followup(lookup_question, prior_reason)
         ):
             self._last_part_reason[sid] = showcase.reason
             answer = sanitize_answer_skus(
@@ -172,7 +173,7 @@ class SessionChatManager:
 
         # (1) Lekka ekstrakcja intencji/slotów — LLM lub reguły; bez SKU
         slots = extract_part_slots(
-            question,
+            lookup_question,
             history=history,
             chip_machine=chip_for_lookup,
             prior_reason=prior_reason,
@@ -183,8 +184,7 @@ class SessionChatManager:
 
         wants_parts = (
             is_parts_intent(q)
-            or is_parts_intent(question)
-            or is_gasket_list_followup(question, prior_reason)
+            or is_gasket_list_followup(lookup_question, prior_reason)
             or is_gasket_list_followup(q, prior_reason)
             or slots.is_parts_ish()
             or (prior_reason in _PARTS_REASONS and slots.size_mm is not None)
@@ -204,7 +204,7 @@ class SessionChatManager:
             if deterministic is None:
                 deterministic = lookup_from_slots(
                     slots,
-                    question,
+                    lookup_question,
                     chip_machine=chip_for_lookup,
                     prior_reason=prior_reason,
                     llm=self._llm,
@@ -215,7 +215,7 @@ class SessionChatManager:
                     q,
                     chip_machine=chip_for_lookup,
                     prior_reason=prior_reason,
-                    machine_source=question,
+                    machine_source=lookup_question,
                     history=history,
                 )
             if deterministic is not None:

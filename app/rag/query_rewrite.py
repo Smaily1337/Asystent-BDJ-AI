@@ -8,7 +8,7 @@ from app.rag.machines import machine_display_name, resolve_machine_from_query
 
 # (wzorce w pytaniu) → oficjalna nazwa z instrukcji
 _SYNONYM_RULES: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"\b(o-?ring|oring|gumk\w*|uszczelk\w*)\b", re.I), "uszczelka"),
+    (re.compile(r"\b(o-?ring|oring|gumk\w*|uszczelk\w*|gasket|seals?)\b", re.I), "uszczelka"),
     (re.compile(r"\b(pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|ta[sś]m\w*\s+nap|ta[sś]m\w*)\b", re.I), "pas napędowy"),
     (re.compile(r"\b(nak[lł]adk\w*\s+pas\w*|pas\s+z\s+nak[lł]adk\w*)\b", re.I), "pas napędowy PNE-PAS"),
     (re.compile(r"\b(tulejk\w*\s+kabl\w*|wstawk\w*\s+kabl\w*|prowadzen\w*\s+kabl\w*)\b", re.I), "tuleja kabla"),
@@ -51,7 +51,7 @@ _EXPLICIT_FI_RE = re.compile(r"\bfi\s*[0-9]+(?:[.,][0-9]+)?\b", re.I)
 def _gasket_size_hints(question: str) -> list[str]:
     """Dla uszczelki na rurkę 7 mm dopisz fi 6,5 / UGD / UM — inaczej BM25 bierze tulejkę 7."""
     q = question or ""
-    if not re.search(r"\b(uszczelk\w*|gumk\w*|o-?ring)\b", q, re.I):
+    if not re.search(r"\b(uszczelk\w*|gumk\w*|o-?ring|gasket|seals?)\b", q, re.I):
         return []
     if re.search(r"\b(tulejk\w*|tulej\w*)\b", q, re.I) and not re.search(r"uszczelk\w*", q, re.I):
         return []
@@ -83,8 +83,8 @@ def _gasket_size_hints(question: str) -> list[str]:
     except ValueError:
         return hints
 
-    tubeish = bool(re.search(r"\b(mikrorur\w*|rurk\w*)\b", q, re.I))
-    kabelish = bool(re.search(r"\b(kabel|kabla|kablu)\b", q, re.I))
+    tubeish = bool(re.search(r"\b(mikrorur\w*|rurk\w*|mikrorurka|pipe|duct|tube)\b", q, re.I))
+    kabelish = bool(re.search(r"\b(kabel|kabla|kablu|cable|fiber|fibre)\b", q, re.I))
     if tubeish or not kabelish:
         half = asked - 0.5
         half_s = str(half).replace(".", ",")

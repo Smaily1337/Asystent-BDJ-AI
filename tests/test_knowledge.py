@@ -1173,6 +1173,57 @@ def test_polish_ask_machine_unchanged_by_default():
     assert "kliknij zdjęcie swojej maszyny" in msg.lower()
 
 
+def test_en_pl_glossary_pipe_seal():
+    from app.i18n import set_lang
+    from app.rag.en_pl_glossary import translate_en_query_for_lookup
+
+    set_lang("en")
+    try:
+        out = translate_en_query_for_lookup("I need a 7mm pipe seal")
+        assert "uszczel" in out.lower()
+        assert "mikrorur" in out.lower() or "rurk" in out.lower()
+        assert "7" in out
+    finally:
+        set_lang("pl")
+
+
+def test_en_pipe_seal_lookup_with_machine():
+    from app.i18n import set_lang
+    from app.rag.part_lookup import try_deterministic_lookup
+
+    set_lang("en")
+    try:
+        from app.rag.en_pl_glossary import translate_en_query_for_lookup
+
+        q = translate_en_query_for_lookup(
+            "I need a 7mm pipe seal for BDJ Budget Plus Easy Set"
+        )
+        r = try_deterministic_lookup(
+            q,
+            chip_machine="BDJ BUDGET PLUS EASY SET",
+            machine_source=q,
+        )
+        assert r is not None
+        assert r.reason == "uszczelka"
+        assert r.parts
+        assert any("UGD" in p.sku or "UM-" in p.sku for p in r.parts)
+    finally:
+        set_lang("pl")
+
+
+def test_i_have_machine_not_showcase():
+    from app.i18n import set_lang
+    from app.rag.en_pl_glossary import translate_en_query_for_lookup
+    from app.rag.part_lookup import try_machine_showcase
+
+    set_lang("en")
+    try:
+        q = translate_en_query_for_lookup("I have BDJ Budget Plus Easy Set")
+        assert try_machine_showcase(q) is None
+    finally:
+        set_lang("pl")
+
+
 if __name__ == "__main__":
     tests = [v for k, v in globals().items() if k.startswith("test_") and callable(v)]
     failed = 0
