@@ -767,7 +767,7 @@ def _found_elsewhere(display: str, hits: list[PartRow]) -> LookupResult:
 
     blocks: list[str] = []
     for sku_u, rows in by_sku.items():
-        name = format_part_name_display(rows[0].name)
+        name = format_part_name_display(rows[0].name, sku=rows[0].sku)
         sku = rows[0].sku
         machines = sorted({machine_display_name(r.machine_tag) or r.machine for r in rows})
         machines_str = ", ".join(f"**{m}**" for m in machines)

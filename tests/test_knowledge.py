@@ -470,7 +470,6 @@ def test_format_part_name_display_fi_mm():
     # już znormalizowane — bez podwajania / bez rozbijania przecinka
     assert normalize_fi_mm_in_name("tuleja fi 32 (32 mm)") == "tuleja fi 32 (32 mm)"
     assert normalize_fi_mm_in_name("fi 2,5 (2,5 mm)") == "fi 2,5 (2,5 mm)"
-    assert format_part_name_display is normalize_fi_mm_in_name
     once = normalize_fi_mm_in_name("tuleja fi 13,5")
     assert once == "tuleja fi 13,5 (13,5 mm)"
     assert format_part_name_display(once) == once
@@ -1220,6 +1219,45 @@ def test_i_have_machine_not_showcase():
     try:
         q = translate_en_query_for_lookup("I have BDJ Budget Plus Easy Set")
         assert try_machine_showcase(q) is None
+    finally:
+        set_lang("pl")
+
+
+def test_english_part_name_display():
+    from app.i18n import set_lang
+    from app.rag.catalog import format_part_name_display, format_parts_markdown, PartRow
+
+    set_lang("en")
+    try:
+        belt = format_part_name_display(
+            "Pas z nakładką 5mm czerwony z frezem centralnym do PNEUMATIC",
+            sku="PNE-PAS-DOL",
+        )
+        assert "Drive belt" in belt
+        assert "central groove" in belt
+        assert "Pas z" not in belt
+
+        cable = format_part_name_display(
+            "Uszczelka na kabel D25x5 fi 7 (7 mm)",
+            sku="UK-D25X5-7",
+        )
+        assert cable.startswith("Cable gasket")
+        assert "fi 7" in cable
+
+        row = PartRow(
+            sku="PNE-PAS-GOR",
+            name="Pas z nakładką 5mm czerwony płaski do PNEUMATIC",
+            qty="1",
+            machine="BDJ NEXT",
+            machine_tag="bdj next",
+            section="",
+            fi_mm=None,
+            kind="pas",
+        )
+        md = format_parts_markdown([row], "Match:", "BDJ NEXT")
+        assert "| SKU | Part name |" in md
+        assert "flat red overlay" in md
+        assert "Pas z" not in md
     finally:
         set_lang("pl")
 

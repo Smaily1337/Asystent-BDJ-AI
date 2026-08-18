@@ -11,6 +11,7 @@ from app.config import ROOT_DIR
 from app.i18n import loc
 from app.rag.bom_inherit import merge_inherited_parts
 from app.rag.machines import FOLDER_TO_TAG, TAG_TO_DISPLAY, _chip_to_tag
+from app.rag.part_name_en import translate_part_name_en
 
 _ROW_RE = re.compile(
     r"^\|\s*(?P<sku>[A-Z0-9][A-Z0-9\-/\.,]*)\s*\|\s*(?P<name>[^|]+?)\s*\|\s*(?P<qty>[^|]*?)\s*\|\s*(?P<machine>[^|]*?)\s*\|?\s*$"
@@ -174,8 +175,10 @@ def normalize_fi_mm_in_name(name: str) -> str:
     return _FI_NORMALIZE_RE.sub(_repl, name)
 
 
-# Alias — safety-net for UI / markdown formatting of any leftover raw names.
-format_part_name_display = normalize_fi_mm_in_name
+def format_part_name_display(name: str, sku: str | None = None) -> str:
+    """fi mm + opcjonalne tłumaczenie EN dla UI."""
+    normalized = normalize_fi_mm_in_name(name)
+    return translate_part_name_en(normalized, sku=sku)
 
 
 def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str) -> str:
@@ -189,6 +192,6 @@ def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str
         "| :--- | :--- | :---: | :--- |",
     ]
     for p in parts:
-        display_name = format_part_name_display(p.name)
+        display_name = format_part_name_display(p.name, sku=p.sku)
         lines.append(f"| {p.sku} | {display_name} | {p.qty} | {p.machine or machine_display} |")
     return "\n".join(lines)
