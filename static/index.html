@@ -409,44 +409,45 @@
         .machine-context-bar {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 18px;
-            background: #f8fafc;
+            gap: 8px;
+            padding: 6px 14px;
+            background: rgba(248, 250, 252, 0.9);
             border-bottom: 1px solid #e2e8f0;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
             flex-shrink: 0;
             min-width: 0;
+            transition: all 0.2s ease;
         }
         .machine-context-bar.is-empty {
             background: #f8fafc;
             border-bottom-color: #e0f2fb;
         }
         .machine-context-bar.is-selected {
-            background: linear-gradient(180deg, #f0f8fd 0%, #e0f2fb 100%);
+            background: linear-gradient(180deg, #f0f8fd 0%, #e6f4fb 100%);
             border-bottom: 1px solid #8bd3f4;
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.95),
-                inset 0 0 24px rgba(36, 151, 208, 0.08),
-                0 4px 20px rgba(36, 151, 208, 0.14);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.95);
         }
-        .machine-context-label {
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            color: #16648a;
-            white-space: nowrap;
-        }
-        .machine-context-bar.is-empty .machine-context-label {
-            color: #16648a;
-        }
-        .machine-context-bar.is-selected .machine-context-label {
-            color: #1b7ba9;
-        }
-        .machine-context-bar.is-selected .machine-context-label::before {
-            content: "✓ ";
-            font-weight: 900;
+        .machine-context-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(36, 151, 208, 0.08);
+            border: 1px solid rgba(36, 151, 208, 0.18);
             color: #2497D0;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .machine-context-icon svg {
+            width: 15px;
+            height: 15px;
+        }
+        .machine-context-bar.is-selected .machine-context-icon {
+            background: #2497D0;
+            border-color: #2497D0;
+            color: #ffffff;
+            box-shadow: 0 2px 8px rgba(36, 151, 208, 0.28);
         }
         .machine-select-wrap {
             flex: 1;
@@ -456,10 +457,10 @@
         .machine-select-wrap::after {
             content: "";
             position: absolute;
-            right: 14px;
+            right: 12px;
             top: 50%;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-right: 2px solid #2497D0;
             border-bottom: 2px solid #2497D0;
             transform: translateY(-65%) rotate(45deg);
@@ -471,35 +472,34 @@
         #machine-select {
             width: 100%;
             min-width: 0;
-            min-height: 42px;
-            border: 2px solid #8bd3f4;
-            border-radius: 12px;
-            padding: 10px 36px 10px 14px;
-            font-size: 0.92rem;
+            height: 32px;
+            min-height: 32px;
+            border: 1.5px solid #8bd3f4;
+            border-radius: 999px;
+            padding: 0 28px 0 12px;
+            font-size: 0.82rem;
             font-weight: 700;
             color: #0f172a;
             background: #ffffff;
             outline: none;
             cursor: pointer;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
             appearance: none;
             -webkit-appearance: none;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
         }
         .machine-context-bar.is-empty #machine-select {
-            border-color: #8bd3f4;
+            border-color: #bce4f7;
             color: #64748b;
+            font-weight: 600;
             background: #ffffff;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
         }
         .machine-context-bar:not(.is-empty) #machine-select,
         .machine-context-bar.is-selected #machine-select {
             border-color: #2497D0;
             color: #124e6c;
-            background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
-            box-shadow:
-                0 0 0 3px rgba(36, 151, 208, 0.2),
-                0 4px 16px rgba(36, 151, 208, 0.18);
+            background: #ffffff;
+            box-shadow: 0 0 0 2px rgba(36, 151, 208, 0.14);
         }
         .machine-context-bar.is-selected .machine-select-wrap::after {
             border-color: #1b7ba9;
@@ -507,7 +507,7 @@
         #machine-select:focus {
             border-color: #2497D0;
             color: #0f172a;
-            box-shadow: 0 0 0 3px rgba(36, 151, 208, 0.22);
+            box-shadow: 0 0 0 3px rgba(36, 151, 208, 0.2);
         }
         #machine-select option {
             font-weight: 600;
@@ -1352,7 +1352,9 @@
     </header>
 
     <div class="machine-context-bar is-empty" id="machine-context-bar">
-        <span class="machine-context-label">Maszyna</span>
+        <div class="machine-context-icon" id="machine-context-icon" title="Model wdmuchiwarki BDJ" aria-label="Model maszyny">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"></rect><path d="M7 6V4a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2"></path><circle cx="9" cy="13" r="2"></circle><circle cx="15" cy="13" r="2"></circle><path d="M9 13h6"></path></svg>
+        </div>
         <div class="machine-select-wrap">
             <select id="machine-select" aria-label="Wybierz model maszyny">
                 <option value="">— wybierz model maszyny —</option>
@@ -1557,8 +1559,8 @@ const BDJChatApp = (() => {
         if (reset) reset.textContent = t('reset');
         const resetBtn = document.getElementById('btn-reset');
         if (resetBtn) resetBtn.title = t('resetTitle');
-        const mLabel = document.querySelector('.machine-context-label');
-        if (mLabel) mLabel.textContent = t('machine');
+        const mIcon = document.getElementById('machine-context-icon');
+        if (mIcon) mIcon.title = t('machine');
         const mSel = document.getElementById('machine-select');
         if (mSel) mSel.setAttribute('aria-label', t('machineSelect'));
         const input = document.getElementById('chat-input');
