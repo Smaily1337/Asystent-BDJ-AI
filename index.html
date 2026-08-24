@@ -2337,8 +2337,36 @@ const BDJChatApp = (() => {
             apologyRe.test((p.textContent || '').trim())
         );
 
+        const isPartsTable = (table) => {
+            const ths = Array.from(table.querySelectorAll('th')).map((th) => th.textContent.trim().toLowerCase());
+            const hasSkuHeader = ths.some((h) => /\b(sku|kod\s*sku|kod\s+części|kod\s+czesci|part\s*number)\b/i.test(h));
+
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            if (!rows.length) return false;
+
+            let skuMatchCount = 0;
+            const skuRegex = /^[A-Z]{2,4}-[A-Z0-9][A-Z0-9\-/,\.]{2,}$/i;
+            rows.forEach((tr) => {
+                const firstCell = tr.querySelector('td')?.textContent?.trim() || '';
+                if (
+                    skuRegex.test(firstCell) ||
+                    /^(ugd|um|uk|usz|pne|bud|min|ext|max|mod|rol|tul|zas|kom)-/i.test(firstCell)
+                ) {
+                    skuMatchCount++;
+                }
+            });
+
+            // Tabela jest listą części do wyceny jeśli ma jawny nagłówek SKU lub co najmniej 1 wiersz ma autentyczny kod SKU
+            return hasSkuHeader || (skuMatchCount > 0 && skuMatchCount >= Math.min(rows.length, 2));
+        };
+
         wrapper.querySelectorAll('table').forEach((table) => {
             if (!table.querySelector('tbody tr')) return;
+
+            // Konwertuj na interaktywne karty części TYLKO jeśli tabela faktycznie zawiera kody SKU / części
+            if (!isPartsTable(table)) {
+                return;
+            }
 
             // Model czasem wstawia tabelę „trafienia”, a potem formułkę „nie mam” —
             // karty przed komunikatem o braku to sprzeczność; usuwamy je.
@@ -2358,7 +2386,7 @@ const BDJChatApp = (() => {
             table.replaceWith(cardBlock);
         });
 
-        // Tabele informacyjne (bez konwersji na karty) — owijamy w scroll wrapper
+        // Tabele informacyjne (parametry, diagnostyka, zestawienia) — owijamy w scroll wrapper
         wrapper.querySelectorAll('table').forEach((table) => {
             if (table.closest('.table-wrapper, .parts-list-wrapper')) return;
             const wrap = document.createElement('div');
