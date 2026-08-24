@@ -76,6 +76,12 @@ def _enrich_document(doc: Document) -> Document:
     if "specyfikacje" in path_norm:
         prefix += "[SPECYFIKACJE I PARAMETRY TECHNICZNE MASZYN BDJ.]\n\n"
 
+    if "technika_wdmuchiwania" in path_norm or "wdmuchiwanie" in path_norm:
+        prefix += (
+            "[WIEDZA TECHNICZNA I PORADNIK WDMUCHIWANIA ŚWIATŁOWODÓW BDJ]\n"
+            "[ZASADY PRZYGOTOWANIA TRASY, CRASH-TEST, TEORIA, WZORY, DOBÓR KOMPRESORA, BŁĘDY I ROZWIĄZYWANIE PROBLEMÓW]\n\n"
+        )
+
     # Nie indeksuj README w knowledge/
     if filename == "readme.md":
         return Document(text="", metadata={**doc.metadata, "skip": True})
