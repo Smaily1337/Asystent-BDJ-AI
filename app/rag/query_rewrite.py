@@ -37,6 +37,37 @@ _PRICE_HINTS = re.compile(
     re.I,
 )
 
+_TECHNICAL_TOPIC_RULES: list[tuple[re.Pattern[str], list[str]]] = [
+    (
+        re.compile(r"\b(tras\w*|wykop\w*|podsypk\w*|uk[lł]adan\w*|przygotow\w*|kanalizacj\w*|zafalowan\w*|promie[nń]|łuk\w*|luk\w*)\b", re.I),
+        ["przygotowanie trasy", "budowa kanalizacji", "wykop", "podsypka", "zafalowanie", "promień łuku", "kalibracja", "próba ciśnieniowa", "czyszczenie", "rury HDPE"]
+    ),
+    (
+        re.compile(r"\b(crash\s*test\w*|zgniec\w*|wy[lł]am\w*|prób\w*\s+zgniec\w*|prób\w*\s+wy[lł]am\w*)\b", re.I),
+        ["crash test", "próba zginania", "wyłamywanie kabla", "maksymalna siła pchająca", "bezpieczeństwo kabla"]
+    ),
+    (
+        re.compile(r"\b(kompresor\w*|dob[oó]r\s+kompresor\w*|ci[sś]nieni\w*|wydatek|przep[lł]yw|bar\b|m3/min|osuszacz\w*|ch[lł]odnic\w*)\b", re.I),
+        ["dobór kompresora", "wydatek m3/min", "ciśnienie bar", "chłodnica powietrza", "osuszacz"]
+    ),
+    (
+        re.compile(r"\b(bł[aą]d\w*|problem\w*|zaci[eę]c\w*|zatrzyma\w*|utkn[aą]\w*|zablokowa\w*)\b", re.I),
+        ["najczęstsze błędy", "rozwiązywanie problemów", "zatrzymanie kabla", "ucieczka powietrza", "odpowietrzanie"]
+    ),
+    (
+        re.compile(r"\b(wz[oó]r\w*|fizyk\w*|sił\w*|tarc\w*|euler\w*|strumieniow\w*|t[lł]oczkow\w*|dynamik\w*)\b", re.I),
+        ["teoria wdmuchiwania", "wzory", "siła tarcia", "siła ciągnąca", "metoda strumieniowa", "metoda tłoczkowa", "wzór Eulera"]
+    ),
+    (
+        re.compile(r"\b(odwijak\w*|karuzel\w*|twister\w*|tandem\w*|dw[oó]ch\s+stron|pomocnicz\w*)\b", re.I),
+        ["urządzenia pomocnicze", "odwijaki do kabli", "Twister karuzela", "techniki tandemowe", "wdmuchiwanie z dwóch stron"]
+    ),
+    (
+        re.compile(r"\b(smarowani\w*|lubryka\w*|p[lł]yn\s+po[sś]lizgow\w*|prelube\w*)\b", re.I),
+        ["płyn poślizgowy", "lubrykacja", "gąbka rozmarowująca", "Prelube"]
+    ),
+]
+
 # rurka/mikrorurka X mm → uszczelka fi (X−0.5); pomiń gdy już jest «fi …»
 _TUBE_SIZE_RE = re.compile(
     r"(?:mikrorur\w*|mikro\s*rur\w*|rurk\w*|uszczelk\w*|gumk\w*).{0,40}?"
@@ -148,6 +179,10 @@ def rewrite_query(question: str, chip_machine: str | None = None) -> str:
 
     if _PRICE_HINTS.search(q):
         extras.extend(["cennik", "cena EUR"])
+
+    for pattern, tech_keywords in _TECHNICAL_TOPIC_RULES:
+        if pattern.search(q):
+            extras.extend(tech_keywords)
 
     extras.extend(_gasket_size_hints(q))
 

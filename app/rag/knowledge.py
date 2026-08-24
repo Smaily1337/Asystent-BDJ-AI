@@ -158,19 +158,22 @@ class MachineFilteringRetriever(BaseRetriever):
                     filtered.append(n)
             all_nodes = filtered if filtered else all_nodes
 
-        # Preferuj czesci.md; przy uszczelce odsuń chunki z samymi tulejkami
+        wants_parts = bool(re.search(r"\b(uszczelk\w*|gumk\w*|o-?ring|tulejk\w*|tulej\w*|pasek|paski|pas\s+nap\w*|oponk\w*|rolk\w*|ko[łl]o|śrub\w*|srub\w*|manometr|częśc\w*|czesci\w*)\b", raw, re.I))
+
+        # Preferuj czesci.md tylko przy intencji części; przy uszczelce odsuń chunki z samymi tulejkami
         def _rank_key(n):
             fpath = n.node.metadata.get("file_path", "").lower().replace("\\", "/")
             text = (n.node.get_content() or "").lower()
             score = 0
-            if fpath.endswith("czesci.md") or "/czesci.md" in fpath:
+            if wants_parts and (fpath.endswith("czesci.md") or "/czesci.md" in fpath):
                 score -= 100
             if wants_gasket:
                 if "uszczel" in text or re.search(r"\b(ugd|um-|uk-)", text):
                     score -= 50
                 if "tulej" in text and "uszczel" not in text:
                     score += 80
-            return (score, -float(getattr(n, "score", 0) or 0))
+            bm25_score = float(getattr(n, "score", 0) or 0)
+            return (score, -bm25_score)
 
         all_nodes = sorted(all_nodes, key=_rank_key)
         return all_nodes
