@@ -125,12 +125,14 @@ Pola JSON:
 }
 
 Reguły:
+- KRYTYCZNE: Pytania ogólne, parametry, dobór wdmuchiwarki, zasięgi w metrach (np. „do 1500m”, „jaka maszyna”, „jak przygotować trasę”, „jaki kompresor”) to NIE są pytania o zakup części zamiennych! W takich przypadkach: part_kind="unknown", needs_clarify="none".
+- part_kind="uszczelka_*" ustawiaj TYLKO wtedy, gdy użytkownik jawnie pyta o uszczelkę/gumkę/oring lub dobór uszczelek do posiadanej maszyny. Samo słowo „kabel”, „rurka” lub dystans w metrach to part_kind="unknown".
 - Uzupełniaj sloty z bieżącej wiadomości + krótkiej historii (follow-up).
 - „to samo ale na kabel” → zachowaj machine/size z historii, part_kind=uszczelka_kabel.
 - Gołe „7” / „7 mm” po pytaniu o uszczelkę → size_mm + kind z historii.
 - „gumka/oring” → uszczelka_*; „pasek” → pas; „zegar” → manometr.
 - „oponka”, „oponka płaska”, „koło napędowe” → part_kind=oponka (NIE uszczelka), nawet po wcześniejszej rozmowie o uszczelkach.
-- Gdy brak modelu a potrzeba części → needs_clarify=machine.
+- Gdy brak modelu a jest wyraźna potrzeba zakupu części → needs_clarify=machine.
 - Gdy uszczelka/tuleja bez rozmiaru i nie list_all → needs_clarify=size.
 - Nie zgaduj size_mm ani machine jeśli nie ma w tekście/historii.
 - NIGDY nie ustawiaj machine na „Extended” ani inny model domyślnie — tylko gdy user/chip to podał.
@@ -148,13 +150,7 @@ class PartSlots:
     needs_clarify: ClarifyNeed = "none"
 
     def is_parts_ish(self) -> bool:
-        if self.part_kind not in ("unknown", "other", ""):
-            return True
-        if self.size_mm is not None and self.confidence >= 0.4:
-            return True
-        if self.list_all and self.part_kind not in ("unknown", "other", ""):
-            return True
-        return False
+        return self.part_kind not in ("unknown", "other", "")
 
 
 def _parse_mm(raw: str) -> float | None:
@@ -182,27 +178,22 @@ def _detect_kind(text: str) -> PartKind:
     q = apply_colloquial_aliases(text or "")
     if _OPONKA_RE.search(q):
         return "oponka"
-    has_usz = bool(_USZCZELKA_RE.search(q))
-    tube = bool(_MIKRORURKA_RE.search(q))
-    kabel = bool(_KABEL_RE.search(q))
-    if has_usz or tube or kabel:
-        if kabel and not tube:
-            return "uszczelka_kabel"
-        if tube:
-            return "uszczelka_mikrorurka"
-        if has_usz and kabel:
-            return "uszczelka_kabel"
-        if has_usz:
-            # goła uszczelka — domyślnie ścieżka rurki (katalog i tak dopyta / spróbuje UK)
-            return "uszczelka_mikrorurka"
-        if kabel:
-            return "uszczelka_kabel"
-    if _TULEJA_RE.search(q) and not has_usz:
+    if _TULEJA_RE.search(q):
         return "tuleja"
     if _PAS_RE.search(q):
         return "pas"
     if _MANOMETR_RE.search(q):
         return "manometr"
+
+    has_usz = bool(_USZCZELKA_RE.search(q))
+    tube = bool(_MIKRORURKA_RE.search(q))
+    kabel = bool(_KABEL_RE.search(q))
+
+    if has_usz:
+        if kabel and not tube:
+            return "uszczelka_kabel"
+        return "uszczelka_mikrorurka"
+
     if _PARTS_HINT_RE.search(q):
         return "other"
     return "unknown"

@@ -1176,7 +1176,9 @@ def lookup_from_slots(
         prior_reason=prior_reason,
     )
     if slots.needs_clarify == "machine" and not resolved:
-        return _ask_machine_for_list() if slots.list_all else _ask_machine()
+        if is_parts_intent(original_question or "") or slots.part_kind not in ("unknown", "other", ""):
+            return _ask_machine_for_list() if slots.list_all else _ask_machine()
+        return None
 
     if _OPONKA_RE.search(q_orig):
         # Nowa intencja oponki — nie ciągnij flow uszczelki z sesji
