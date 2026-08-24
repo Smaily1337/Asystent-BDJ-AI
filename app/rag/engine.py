@@ -227,13 +227,6 @@ class SessionChatManager:
                 self._remember(sid, "user", question)
                 self._remember(sid, "assistant", answer)
                 return answer
-            self._last_part_reason[sid] = "need_clarify"
-            from app.rag.part_lookup import ask_machine_message
-
-            fallback = ask_machine_message()
-            self._remember(sid, "user", question)
-            self._remember(sid, "assistant", fallback)
-            return fallback
 
         query = rewrite_query(q, chip_machine=chip_for_lookup)
         if get_lang() == "en":
