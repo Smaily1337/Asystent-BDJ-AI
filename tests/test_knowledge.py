@@ -1027,10 +1027,30 @@ def test_unknown_machine_message_ignores_chip():
     from app.rag.part_lookup import try_deterministic_lookup
 
     assert is_machine_unknown_message("nie wiem jaki mam model maszyny")
+    assert is_machine_unknown_message("nie ma zdjęć")
+    assert is_machine_unknown_message("nie ma zdjec")
+    assert is_machine_unknown_message("brak zdjęć")
+    assert is_machine_unknown_message("gdzie są zdjęcia")
+    assert is_machine_unknown_message("nie widzę żadnych zdjęć")
+    assert is_machine_unknown_message("pokaż zdjęcia maszyn")
+    assert is_machine_unknown_message("chcę wybrać ze zdjęć")
+    assert resolve_machine_from_query(
+        "nie ma zdjęć",
+        chip_machine="BDJ NEXT",
+    ) is None
     assert resolve_machine_from_query(
         "nie wiem jaki mam model maszyny",
         chip_machine="BDJ HYDRO CHAIN MULTI TUBE",
     ) is None
+
+    result = try_deterministic_lookup(
+        "nie ma zdjęć",
+        chip_machine="BDJ HYDRO CHAIN MULTI TUBE",
+        prior_reason="need_size",
+    )
+    assert result is not None
+    assert result.reason == "need_machine"
+    assert "MACHINE_CARDS" in result.answer
 
     result = try_deterministic_lookup(
         "nie wiem jaki mam model maszyny",
@@ -1050,11 +1070,18 @@ def test_unknown_machine_message_ignores_chip():
     mgr = SessionChatManager(retriever=_FakeRetriever(), llm=_FakeLLM())
     out = mgr.chat(
         "test-unknown-model",
+        "nie ma zdjęć",
+        machine="BDJ HYDRO CHAIN MULTI TUBE",
+    )
+    assert "MACHINE_CARDS" in out
+
+    out2 = mgr.chat(
+        "test-unknown-model-2",
         "nie wiem jaki mam model maszyny",
         machine="BDJ HYDRO CHAIN MULTI TUBE",
     )
-    assert "HYDRO CHAIN MULTI TUBE" not in out
-    assert "model maszyny" in out.lower() or "MACHINE_CARDS" in out
+    assert "HYDRO CHAIN MULTI TUBE" not in out2
+    assert "model maszyny" in out2.lower() or "MACHINE_CARDS" in out2
 
 
 def test_product_card_next():

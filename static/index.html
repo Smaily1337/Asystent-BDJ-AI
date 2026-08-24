@@ -1598,6 +1598,11 @@ const BDJChatApp = (() => {
         messages: [],
         pendingMachine: null,
         pendingRequestType: "oferta",
+        // Ostatnia intencja usera z wiadomości (np. "7mm uszczelka na kabel...").
+        // Gdy bot prosi o wybór maszyny ze zdjęć, UI wcześniej podmieniało input na
+        // "I have ...", co kasowało kontekst. Trzymamy tutaj, żeby po wyborze maszyny
+        // przywrócić to pytanie do backendu.
+        lastUserQuestion: null,
         sessionId: 'sess_' + Math.random().toString(36).substring(2, 10)
     };
 
@@ -1727,7 +1732,10 @@ const BDJChatApp = (() => {
             cardEl.classList.add('is-selected');
         }
         const label = (info.display || '').replace(/^BDJ\s+/i, 'BDJ ').trim();
-        DOM.input.value = label ? `${t('iHave')} ${label}` : '';
+        const intended = (state.lastUserQuestion && state.lastUserQuestion.trim())
+            ? state.lastUserQuestion
+            : (label ? `${t('iHave')} ${label}` : '');
+        DOM.input.value = intended;
         DOM.btnSend.disabled = DOM.input.value.trim().length === 0;
         resizeInput();
         DOM.input.focus();
@@ -1764,6 +1772,9 @@ const BDJChatApp = (() => {
         if (!state.sessionId) {
             state.sessionId = 'sess_' + Math.random().toString(36).substring(2, 10);
         }
+        if (!('lastUserQuestion' in state)) {
+            state.lastUserQuestion = null;
+        }
         if (!state.messages || state.messages.length === 0) {
             state.messages = [welcomeMessage()];
         }
@@ -1772,6 +1783,7 @@ const BDJChatApp = (() => {
         const hasUserMsg = (state.messages || []).some((m) => m && m.role === 'user');
         if (!hasUserMsg) {
             state.pendingMachine = null;
+            state.lastUserQuestion = null;
         }
         if (!state.pendingRequestType) {
             state.pendingRequestType = 'oferta';
@@ -1790,6 +1802,7 @@ const BDJChatApp = (() => {
             messages: [welcomeMessage()],
             pendingMachine: null,
             pendingRequestType: 'oferta',
+            lastUserQuestion: null,
             sessionId: 'sess_' + Math.random().toString(36).substring(2, 10)
         };
         DOM.offerBar.style.display = 'none';
@@ -2443,6 +2456,7 @@ const BDJChatApp = (() => {
 
         // NIGDY nie doklejaj „Mam maszynę …” do treści wiadomości.
         // Maszyna z chipa idzie tylko w polu API `machine`; treść = to, co user wpisał/wkleił.
+        state.lastUserQuestion = text;
         const fromText = resolveMachineFromText(text);
         if (fromText) {
             setPendingMachine(fromText);

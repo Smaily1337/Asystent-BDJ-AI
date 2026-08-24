@@ -144,7 +144,7 @@ _PARTS_INTENT_RE = re.compile(
     r"uszczel\w*|gumk\w*|o-?ring|oring|"
     r"tulejk\w*|tulej\w*|wstawk\w*|"
     # «pas napędowy»: \w* zjada ę; bare «pas» / «pasy» — nie «pasowana» (brak \b po pas)
-    r"pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?|ta[sś]m\w*|"
+    r"pasek|paski|pas\s+nap\w*|pas\s+czerw\w*|pas(?:y|ów|ow)?\b|ta[sś]m\w*|"
     r"oponk\w*|ko[łl]o\s+nap\w*|"
     r"śrub\w*|srub\w*|"
     r"rolk\w*|kółk\w*|kolk\w*|"

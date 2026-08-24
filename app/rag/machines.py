@@ -236,17 +236,39 @@ def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
     return mentions
 
 
-# User nie zna / pyta o model — nie dziedzicz chipa ani historii sesji.
+# User nie zna / pyta o model / prosi o zdjęcia maszyn — nie dziedzicz chipa ani historii sesji.
 _MACHINE_UNKNOWN_RE = re.compile(
     r"(?:"
+    # Nie wiem jaki model / nie znam
     r"nie\s+w[iy]em\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?(?:\s+mam)?\s*(?:model|maszyn)"
     r"|nie\s+znam\s+(?:modelu|maszyny|jak[aą]\s+(?:to\s+)?maszyn)"
     r"|nie\s+mam\s+poj[eę]cia\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?\s*(?:model|maszyn)"
     r"|(?:jaki|jaka|jak[aą])\s+(?:to\s+)?(?:model|maszyn)\s+(?:mam|posiadam|u\s+mnie|to\s+jest)"
+    # Zdjęcia maszyn / brak zdjęć / nie widzę zdjęć / gdzie zdjęcia / wybór ze zdjęć
+    r"|nie\s+(?:ma|widz[eę]|mam)\s+(?:tu\s+|tutaj\s+|żadnych\s+|zadnych\s+|żadnego\s+|zadnego\s+)?(?:zdj[eę][cć]|zdj[eę]cia|fot(?:ek|o|ografii))"
+    r"|brak\s+(?:tu\s+|tutaj\s+)?(?:zdj[eę][cć]|zdj[eę]cia|fot(?:ek|o|ografii))"
+    r"|gdzie\s+(?:s[aą]|te|to|znajd[eę])?\s*(?:te\s+)?(?:zdj[eę]cia|zdj[eę]cie|fotki|foto)"
+    r"|jakich\s+(?:zdj[eę][cć]|fotek)\b"
+    r"|jakie\s+(?:zdj[eę]cia|fotki)\b"
+    r"|o\s+jakie\s+(?:zdj[eę]cia|fotki)\s+chodzi"
+    r"|poka[zż]\s+(?:mi\s+)?(?:zdj[eę]cia|fotki|foto|maszyny|galeri[eę])"
+    r"|daj\s+(?:mi\s+)?(?:zdj[eę]cia|fotki|foto|galeri[eę])"
+    r"|(?:zdj[eę]cia|fotki|foto|galeria)\s+(?:wszystkich\s+)?maszyn"
+    r"|wyb[oó]r\s+(?:maszyn|ze\s+zdj[eę][cć]|ze\s+zdj[eę]cia|ze\s+zdjec)"
+    r"|wybierz\s+(?:ze\s+zdj[eę][cć]|ze\s+zdj[eę]cia|ze\s+zdjec|maszyn[eę])"
+    r"|chc[eę]\s+wybra[cć]\s+(?:maszyn[eę]\s+)?ze\s+zdj[eę][cć]"
+    r"|jak\s+wygl[aą]da(?:j[aą])?\s+(?:moja\s+|ta\s+|te\s+)?(?:maszyn\w*|modele)"
+    r"|nie\s+wiem\s+jak\s+wygl[aą]da"
+    # Angielskie wersje
     r"|i\s+don'?t\s+know\s+(?:the\s+)?(?:model|machine)"
     r"|do\s+not\s+know\s+(?:the\s+)?(?:model|machine)"
     r"|unknown\s+model"
     r"|what\s+(?:model|machine)\s+(?:do\s+i\s+have|is\s+this)"
+    r"|(?:no|where\s+are|show|see\s+no)\s+(?:the\s+)?(?:photos|pictures|images|machines)"
+    r"|there\s+are\s+no\s+(?:photos|pictures|images)"
+    r"|don'?t\s+see\s+(?:any\s+)?(?:photos|pictures|images)"
+    r"|choose\s+from\s+photos"
+    r"|pick\s+from\s+photos"
     r")",
     re.I,
 )

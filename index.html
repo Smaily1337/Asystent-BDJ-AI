@@ -6,7 +6,7 @@
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
     <script>
     (function () {
-        var NEED = '0.0.11';
+        var NEED = '0.0.14';
         if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
         var p = new URLSearchParams(location.search);
         if (p.get('v') === NEED) return;
@@ -1339,7 +1339,7 @@
             <div class="brand-titles">
                 <span class="title">DRAGON AI</span>
                 <span class="subtitle">Twój wirtualny asystent</span>
-                <span class="app-version">0.0.11</span>
+                <span class="app-version">0.0.14</span>
             </div>
         </div>
         <div class="header-actions">
@@ -1425,7 +1425,7 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.11';
+    const UI_VERSION = '0.0.14';
 
     const detectUiLang = () => {
         const p = new URLSearchParams(location.search);
@@ -1598,6 +1598,11 @@ const BDJChatApp = (() => {
         messages: [],
         pendingMachine: null,
         pendingRequestType: "oferta",
+        // Ostatnia intencja usera z wiadomości (np. "7mm uszczelka na kabel...").
+        // Gdy bot prosi o wybór maszyny ze zdjęć, UI wcześniej podmieniało input na
+        // "I have ...", co kasowało kontekst. Trzymamy tutaj, żeby po wyborze maszyny
+        // przywrócić to pytanie do backendu.
+        lastUserQuestion: null,
         sessionId: 'sess_' + Math.random().toString(36).substring(2, 10)
     };
 
@@ -1727,7 +1732,10 @@ const BDJChatApp = (() => {
             cardEl.classList.add('is-selected');
         }
         const label = (info.display || '').replace(/^BDJ\s+/i, 'BDJ ').trim();
-        DOM.input.value = label ? `${t('iHave')} ${label}` : '';
+        const intended = (state.lastUserQuestion && state.lastUserQuestion.trim())
+            ? state.lastUserQuestion
+            : (label ? `${t('iHave')} ${label}` : '');
+        DOM.input.value = intended;
         DOM.btnSend.disabled = DOM.input.value.trim().length === 0;
         resizeInput();
         DOM.input.focus();
@@ -1764,6 +1772,9 @@ const BDJChatApp = (() => {
         if (!state.sessionId) {
             state.sessionId = 'sess_' + Math.random().toString(36).substring(2, 10);
         }
+        if (!('lastUserQuestion' in state)) {
+            state.lastUserQuestion = null;
+        }
         if (!state.messages || state.messages.length === 0) {
             state.messages = [welcomeMessage()];
         }
@@ -1772,6 +1783,7 @@ const BDJChatApp = (() => {
         const hasUserMsg = (state.messages || []).some((m) => m && m.role === 'user');
         if (!hasUserMsg) {
             state.pendingMachine = null;
+            state.lastUserQuestion = null;
         }
         if (!state.pendingRequestType) {
             state.pendingRequestType = 'oferta';
@@ -1790,6 +1802,7 @@ const BDJChatApp = (() => {
             messages: [welcomeMessage()],
             pendingMachine: null,
             pendingRequestType: 'oferta',
+            lastUserQuestion: null,
             sessionId: 'sess_' + Math.random().toString(36).substring(2, 10)
         };
         DOM.offerBar.style.display = 'none';
@@ -2443,6 +2456,7 @@ const BDJChatApp = (() => {
 
         // NIGDY nie doklejaj „Mam maszynę …” do treści wiadomości.
         // Maszyna z chipa idzie tylko w polu API `machine`; treść = to, co user wpisał/wkleił.
+        state.lastUserQuestion = text;
         const fromText = resolveMachineFromText(text);
         if (fromText) {
             setPendingMachine(fromText);
@@ -2569,6 +2583,22 @@ const BDJChatApp = (() => {
             ? `<br><strong>${t('yourMessage')}</strong> ${clientMessage.replace(/</g, '&lt;').replace(/>/g, '&gt;')}`
             : '';
 
+        const offerPayload = {
+            company,
+            email,
+            phone: fullPhone,
+            items: items.map((item) => item.filter((x) => x && x !== 'Wybór')),
+            machine: state.pendingMachine || 'Zapytanie',
+            request_type: state.pendingRequestType || 'oferta',
+            message: clientMessage,
+        };
+
+        try {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'bdj-ai-offer', ...offerPayload }, '*');
+            }
+        } catch (_) { /* ignore */ }
+
         try {
             const handoffNotes = (state.pendingRequestType === 'zapytanie' && items.length === 0)
                 ? state.messages
@@ -2593,12 +2623,14 @@ const BDJChatApp = (() => {
                 })
             });
             let emailSent = false;
+            let wpForwarded = false;
             try {
                 const offerData = await offerRes.json();
                 emailSent = !!offerData.email_sent;
+                wpForwarded = !!offerData.wp_forwarded;
             } catch (_) { /* ignore parse errors */ }
 
-            const successMsg = emailSent
+            const successMsg = (emailSent || wpForwarded)
                 ? `${t('thanks')}${itemsSummary}${messageNote}`
                 : `${t('savedNoEmail')}${itemsSummary}${messageNote}`;
             state.messages.push({ role: 'bot', content: successMsg, raw: successMsg });

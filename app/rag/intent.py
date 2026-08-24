@@ -148,11 +148,11 @@ class PartSlots:
     needs_clarify: ClarifyNeed = "none"
 
     def is_parts_ish(self) -> bool:
-        if self.list_all:
-            return True
-        if self.part_kind not in ("unknown",):
+        if self.part_kind not in ("unknown", "other", ""):
             return True
         if self.size_mm is not None and self.confidence >= 0.4:
+            return True
+        if self.list_all and self.part_kind not in ("unknown", "other", ""):
             return True
         return False
 
