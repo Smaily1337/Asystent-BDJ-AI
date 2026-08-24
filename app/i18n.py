@@ -1,4 +1,4 @@
-"""Język sesji czatu (PL / EN) — bez zmiany logiki katalogu SKU."""
+"""Język sesji czatu (PL / EN / DE) — bez zmiany logiki katalogu SKU."""
 
 from __future__ import annotations
 
@@ -13,9 +13,18 @@ ENGLISH_QUERY_PREFIX = (
     "BOM qty | Machine model. Do not invent SKUs.\n\n"
 )
 
+GERMAN_QUERY_PREFIX = (
+    "[LANGUAGE: German / Deutsch] Antworte auf Deutsch. Behalte SKU-Codes, Maschinennamen "
+    "(BDJ NEXT usw.) und UI-Tags wie [MACHINE_CARDS: …], [PRODUCT_CARD: …], "
+    "[GET_REQUEST: …] unverändert bei. Übersetze Tabellenüberschriften: SKU | Artikelname | "
+    "Menge | Maschinenmodell. Erfinde keine SKUs.\n\n"
+)
+
 
 def normalize_lang(value: str | None) -> str:
     v = (value or "").strip().lower()
+    if v.startswith("de"):
+        return "de"
     if v.startswith("en"):
         return "en"
     return "pl"
@@ -31,5 +40,10 @@ def get_lang() -> str:
     return _lang.get()
 
 
-def loc(pl: str, en: str) -> str:
-    return en if get_lang() == "en" else pl
+def loc(pl: str, en: str, de: str | None = None) -> str:
+    lang = get_lang()
+    if lang == "de":
+        return de if de is not None else en
+    if lang == "en":
+        return en
+    return pl

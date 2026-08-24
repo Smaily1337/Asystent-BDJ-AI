@@ -1289,6 +1289,80 @@ def test_english_part_name_display():
         set_lang("pl")
 
 
+def test_german_ask_machine_and_product_card():
+    from app.i18n import set_lang
+    from app.rag.de_pl_glossary import translate_de_query_for_lookup
+    from app.rag.part_lookup import ask_machine_message, try_product_card, is_parts_intent
+
+    set_lang("de")
+    try:
+        msg = ask_machine_message()
+        assert "MACHINE_CARDS" in msg
+        assert "klicken sie unten auf das foto" in msg.lower()
+        q = translate_de_query_for_lookup("Ich brauche das Produktdatenblatt für BDJ Next")
+        r = try_product_card(q)
+        assert r is not None
+        assert "PRODUCT_CARD" in r.answer
+        assert "produktdatenblatt" in r.answer.lower()
+        q_parts = translate_de_query_for_lookup("Ich brauche eine 7mm Kabeldichtung für BDJ NEXT")
+        assert is_parts_intent(q_parts)
+    finally:
+        set_lang("pl")
+
+
+def test_de_pl_glossary_pipe_seal():
+    from app.i18n import set_lang
+    from app.rag.de_pl_glossary import translate_de_query_for_lookup
+
+    set_lang("de")
+    try:
+        out = translate_de_query_for_lookup("Ich brauche eine 7mm Mikrorohrdichtung")
+        assert "uszczel" in out.lower()
+        assert "mikrorur" in out.lower() or "rurk" in out.lower()
+        assert "7" in out
+    finally:
+        set_lang("pl")
+
+
+def test_german_part_name_display():
+    from app.i18n import set_lang
+    from app.rag.catalog import format_part_name_display, format_parts_markdown, PartRow
+
+    set_lang("de")
+    try:
+        belt = format_part_name_display(
+            "Pas z nakładką 5mm czerwony z frezem centralnym do PNEUMATIC",
+            sku="PNE-PAS-DOL",
+        )
+        assert "Antriebsriemen" in belt
+        assert "Mittelnut" in belt
+        assert "Pas z" not in belt
+
+        cable = format_part_name_display(
+            "Uszczelka na kabel D25x5 fi 7 (7 mm)",
+            sku="UK-D25X5-7",
+        )
+        assert cable.startswith("Kabeldichtung")
+        assert "fi 7" in cable
+
+        row = PartRow(
+            sku="PNE-PAS-GOR",
+            name="Pas z nakładką 5mm czerwony płaski do PNEUMATIC",
+            qty="1",
+            machine="BDJ NEXT",
+            machine_tag="bdj next",
+            section="",
+            fi_mm=None,
+            kind="pas",
+        )
+        md = format_parts_markdown([row], "Treffer:", "BDJ NEXT")
+        assert "| SKU | Artikelname |" in md
+        assert "flacher roter Auflage" in md
+        assert "Pas z" not in md
+    finally:
+        set_lang("pl")
+
+
 if __name__ == "__main__":
     tests = [v for k, v in globals().items() if k.startswith("test_") and callable(v)]
     failed = 0

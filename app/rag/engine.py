@@ -13,7 +13,8 @@ from llama_index.core.chat_engine import ContextChatEngine
 from llama_index.core.memory import ChatMemoryBuffer
 
 from app.config import settings
-from app.i18n import ENGLISH_QUERY_PREFIX, get_lang
+from app.i18n import ENGLISH_QUERY_PREFIX, GERMAN_QUERY_PREFIX, get_lang
+from app.rag.de_pl_glossary import translate_de_history, translate_de_query_for_lookup
 from app.rag.en_pl_glossary import translate_en_history, translate_en_query_for_lookup
 from app.prompts import SYSTEM_PROMPT
 from app.rag.intent import extract_part_slots, with_chip_machine
@@ -118,7 +119,7 @@ class SessionChatManager:
     def chat(self, session_id: str, question: str, machine: str | None = None) -> str:
         sid = session_id or "sess_default"
 
-        lookup_question = translate_en_query_for_lookup(question)
+        lookup_question = translate_de_query_for_lookup(translate_en_query_for_lookup(question))
 
         if is_machine_unknown_message(lookup_question):
             from app.rag.part_lookup import ask_machine_message
@@ -139,7 +140,7 @@ class SessionChatManager:
             q = f"Mam maszynę {machine}. {lookup_question}"
 
         prior_reason = self._last_part_reason.get(sid)
-        history = translate_en_history(self._recent_history(sid, n=4))
+        history = translate_de_history(translate_en_history(self._recent_history(sid, n=4)))
         # Chip z UI LUB model wykryty w tekście — sloty nie mogą zgubić maszyny
         chip_for_lookup = machine or (
             machine_display_name(resolved) if resolved else None
@@ -231,6 +232,8 @@ class SessionChatManager:
         query = rewrite_query(q, chip_machine=chip_for_lookup)
         if get_lang() == "en":
             query = ENGLISH_QUERY_PREFIX + query
+        elif get_lang() == "de":
+            query = GERMAN_QUERY_PREFIX + query
         engine = self.get_engine(sid)
         try:
             raw = str(engine.chat(query))

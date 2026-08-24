@@ -11,6 +11,7 @@ from app.config import ROOT_DIR
 from app.i18n import loc
 from app.rag.bom_inherit import merge_inherited_parts
 from app.rag.machines import FOLDER_TO_TAG, TAG_TO_DISPLAY, _chip_to_tag
+from app.rag.part_name_de import translate_part_name_de
 from app.rag.part_name_en import translate_part_name_en
 
 _ROW_RE = re.compile(
@@ -176,9 +177,10 @@ def normalize_fi_mm_in_name(name: str) -> str:
 
 
 def format_part_name_display(name: str, sku: str | None = None) -> str:
-    """fi mm + opcjonalne tłumaczenie EN dla UI."""
+    """fi mm + opcjonalne tłumaczenie EN / DE dla UI."""
     normalized = normalize_fi_mm_in_name(name)
-    return translate_part_name_en(normalized, sku=sku)
+    en_translated = translate_part_name_en(normalized, sku=sku)
+    return translate_part_name_de(en_translated, sku=sku)
 
 
 def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str) -> str:
@@ -188,6 +190,7 @@ def format_parts_markdown(parts: list[PartRow], intro: str, machine_display: str
         loc(
             "| Kod SKU | Nazwa elementu | Ilość w BOM | Model maszyny |",
             "| SKU | Part name | BOM qty | Machine model |",
+            "| SKU | Artikelname | Menge | Maschinenmodell |",
         ),
         "| :--- | :--- | :---: | :--- |",
     ]

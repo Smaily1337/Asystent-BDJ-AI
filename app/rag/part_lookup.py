@@ -243,6 +243,8 @@ def try_product_card(
                 f"i zdjęciami maszyny:",
                 f"Here is the **{info.display} product card** — a PDF with specs "
                 f"and photos of the machine:",
+                f"Hier ist das **Produktdatenblatt für {info.display}** — ein PDF mit "
+                f"Parametern und Fotos der Maschine:",
             )
             return LookupResult(
                 answer=f"{intro}\n\n{pdf_tag}",
@@ -254,6 +256,8 @@ def try_product_card(
             f"Szczegóły techniczne znajdziesz na stronie produktu:",
             f"We don’t have a PDF product card for **{info.display}** yet. "
             f"Technical details are on the product page:",
+            f"Für **{info.display}** ist noch kein PDF-Datenblatt verfügbar. "
+            f"Technische Details finden Sie auf der Produktseite:",
         )
         card = format_machine_card_tag(tag)
         return LookupResult(
@@ -270,6 +274,8 @@ def try_product_card(
                 "**Kliknij model** poniżej — pokażę przycisk do PDF.",
                 "Which machine should the **product card** be for? "
                 "**Click a model** below — I’ll show the PDF button.",
+                "Für welches Einblasgerät suchen Sie das **Produktdatenblatt**? "
+                "**Klicken Sie unten auf ein Modell** — ich zeige den PDF-Button.",
             )
             + (f"\n\n{cards}" if cards else "")
         ),
@@ -337,6 +343,10 @@ def _ask_machine() -> LookupResult:
                 "(or pick the model at the top of the chat). "
                 "Then tell me what you need and the size — **I’ll provide the SKU**, "
                 "and you tap «Ask for a quote».",
+                "Um ein Ersatzteil auszuwählen, **klicken Sie unten auf das Foto Ihrer Maschine** "
+                "(oder wählen Sie das Modell oben im Chat aus). "
+                "Geben Sie dann das benötigte Teil und das Maß an — **den SKU-Code gebe ich an**, "
+                "und Sie klicken auf «Angebot anfordern».",
             )
             + (f"\n\n{cards}" if cards else "")
         ),
