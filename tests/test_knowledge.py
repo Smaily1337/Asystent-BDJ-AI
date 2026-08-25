@@ -1363,6 +1363,37 @@ def test_german_part_name_display():
         set_lang("pl")
 
 
+def test_chat_stream_deterministic():
+    from app.rag import SessionChatManager, build_retriever, create_llm
+
+    retriever = build_retriever()
+    llm = create_llm()
+    mgr = SessionChatManager(retriever=retriever, llm=llm)
+
+    chunks = list(mgr.chat_stream("test_stream_sess", "Potrzebuję uszczelkę mikrorurki 7mm dla BDJ Next"))
+    assert len(chunks) >= 1
+    full_text = "".join(chunks)
+    assert "GLO-M-USZ-WST-RUR-07" in full_text
+    assert "BDJ NEXT" in full_text
+
+
+def test_chat_stream_endpoint():
+    from fastapi.testclient import TestClient
+    from app.main import app
+
+    client = TestClient(app)
+    resp = client.post(
+        "/chat/stream",
+        json={"question": "Potrzebuję uszczelkę mikrorurki 7mm dla BDJ Next", "session_id": "test_endpoint_stream"},
+    )
+    assert resp.status_code == 200
+    assert "text/event-stream" in resp.headers["content-type"]
+    text = resp.text
+    assert "data: " in text
+    assert "GLO-M-USZ-WST-RUR-07" in text
+    assert "[DONE]" in text
+
+
 if __name__ == "__main__":
     tests = [v for k, v in globals().items() if k.startswith("test_") and callable(v)]
     failed = 0

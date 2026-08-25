@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 import re
 
 from fastapi import APIRouter, Request
+from fastapi.responses import StreamingResponse
 
 from app.i18n import loc, set_lang
 from app.models import ChatRequest, ResetRequest
@@ -133,6 +135,67 @@ def handle_chat(request: ChatRequest, req: Request):
         )
         log_customer_question(request.question, err_resp, client_ip, session_id)
         return {"answer": err_resp}
+
+
+@router.post("/chat/stream")
+def handle_chat_stream(request: ChatRequest, req: Request):
+    client_ip = req.headers.get(
+        "x-forwarded-for",
+        req.client.host if req.client else "127.0.0.1",
+    ).split(",")[0]
+    session_id = request.session_id or "sess_default"
+    set_lang(request.lang)
+
+    def event_generator():
+        full_chunks: list[str] = []
+        try:
+            for chunk in chat_manager.chat_stream(
+                session_id, request.question, machine=request.machine
+            ):
+                full_chunks.append(chunk)
+                payload = json.dumps({"chunk": chunk}, ensure_ascii=False)
+                yield f"data: {payload}\n\n"
+
+            accumulated = "".join(full_chunks)
+
+            handoff_extra = ""
+            if _wants_support_contact(request.question or ""):
+                _handoff_failures[session_id] = 0
+                if "[GET_REQUEST:" not in accumulated:
+                    handoff_extra = f"\n\n[GET_REQUEST: {_machine_for_handoff(request)}]"
+            elif _is_unclear_response(accumulated):
+                _handoff_failures[session_id] = _handoff_failures.get(session_id, 0) + 1
+                if _handoff_failures.get(session_id, 0) >= HANDOFF_FAILURE_THRESHOLD:
+                    if "[GET_REQUEST:" not in accumulated:
+                        handoff_extra = f"\n\n[GET_REQUEST: {_machine_for_handoff(request)}]"
+            else:
+                _handoff_failures[session_id] = 0
+
+            if handoff_extra:
+                yield f"data: {json.dumps({'chunk': handoff_extra}, ensure_ascii=False)}\n\n"
+                accumulated += handoff_extra
+
+            log_customer_question(request.question, accumulated, client_ip, session_id)
+            yield "data: [DONE]\n\n"
+        except Exception as e:
+            print(f"⚠️ Błąd podczas streamingu chat: {e}")
+            err_resp = loc(
+                "Przepraszam, wystąpił problem z przetworzeniem pytania. Wyczyść czat i spróbuj ponownie.",
+                "Sorry, there was a problem processing your question. Clear the chat and try again.",
+                "Entschuldigung, beim Verarbeiten Ihrer Frage ist ein Problem aufgetreten.",
+            )
+            yield f"data: {json.dumps({'chunk': err_resp}, ensure_ascii=False)}\n\n"
+            yield "data: [DONE]\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache, no-transform",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @router.post("/reset")

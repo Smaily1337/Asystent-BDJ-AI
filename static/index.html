@@ -791,6 +791,21 @@
         .typing-inline span:nth-child(2) { animation-delay: 0.15s; }
         .typing-inline span:nth-child(3) { animation-delay: 0.3s; }
 
+        .typing-cursor {
+            display: inline-block;
+            width: 7px;
+            height: 15px;
+            background: #2497D0;
+            border-radius: 2px;
+            margin-left: 3px;
+            vertical-align: -2px;
+            animation: blink-cursor 0.75s infinite ease-in-out;
+        }
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
         /* --- TYPOGRAFIA ODPOWIEDZI BOTA (markdown) --- */
         .bot-md { color: var(--text-dark); font-size: 0.95rem; }
         .bot-md > *:first-child { margin-top: 0; }
@@ -1732,6 +1747,47 @@ const BDJChatApp = (() => {
         return data;
     };
 
+    const postChatStream = async (payload, onChunk) => {
+        const res = await fetch('/chat/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        if (!res.ok) {
+            const data = await postChat(payload);
+            onChunk(data.answer);
+            return;
+        }
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+        let buffer = '';
+
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (const line of lines) {
+                const trimmed = line.trim();
+                if (!trimmed.startsWith('data:')) continue;
+                const dataStr = trimmed.slice(5).trim();
+                if (dataStr === '[DONE]') {
+                    return;
+                }
+                try {
+                    const parsed = JSON.parse(dataStr);
+                    if (parsed && typeof parsed.chunk === 'string') {
+                        onChunk(parsed.chunk);
+                    }
+                } catch (e) {
+                    // Ignore JSON parsing errors for partial/malformed frames
+                }
+            }
+        }
+    };
+
     const loadMachineCatalog = async () => {
         try {
             const res = await fetch('/api/machines');
@@ -2569,41 +2625,86 @@ const BDJChatApp = (() => {
         DOM.widget.classList.add('thinking-glow');
         const typingId = showTypingIndicator();
 
+        let botRow = null;
+        let bubble = null;
+        let streamRoot = null;
+        let cursor = null;
+        let accumulatedRaw = '';
+        let hasReceivedFirstChunk = false;
+
         try {
-            const data = await postChat({
+            await postChatStream({
                 question: text,
                 session_id: state.sessionId,
                 machine: machineForApi,
                 lang: uiLang,
+            }, (chunk) => {
+                if (!hasReceivedFirstChunk) {
+                    hasReceivedFirstChunk = true;
+                    removeTypingIndicator(typingId);
+                    botRow = appendMessage('bot', '');
+                    bubble = botRow.querySelector('.bubble');
+                    bubble.classList.add('streaming');
+                    streamRoot = document.createElement('div');
+                    streamRoot.className = 'bot-md';
+                    cursor = document.createElement('span');
+                    cursor.className = 'typing-cursor';
+                    bubble.innerHTML = '';
+                    bubble.appendChild(streamRoot);
+                    bubble.appendChild(cursor);
+                }
+                accumulatedRaw += chunk;
+                streamRoot.innerHTML = marked.parse(accumulatedRaw);
+                DOM.history.scrollTop = DOM.history.scrollHeight;
             });
+
+            if (!hasReceivedFirstChunk) {
+                removeTypingIndicator(typingId);
+                botRow = appendMessage('bot', '');
+                bubble = botRow.querySelector('.bubble');
+            }
+
+            if (cursor) cursor.remove();
+            if (bubble) bubble.classList.remove('streaming');
+
             let formattedHTML;
             try {
-                formattedHTML = processBotResponse(data.answer);
+                formattedHTML = processBotResponse(accumulatedRaw);
             } catch (parseErr) {
                 console.error('processBotResponse', parseErr);
-                formattedHTML = `<div class="bot-md"><p>${(data.answer || '')
+                formattedHTML = `<div class="bot-md"><p>${(accumulatedRaw || '')
                     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                     .replace(/\n/g, '<br>')}</p></div>`;
             }
 
-            removeTypingIndicator(typingId);
-            const botRow = appendMessage('bot', '');
-            state.messages.push({ role: 'bot', content: formattedHTML, raw: data.answer });
+            if (bubble) {
+                bubble.innerHTML = formattedHTML;
+                updateCheckboxesState();
+                syncMachineCardSelection();
+            }
+
+            state.messages.push({ role: 'bot', content: formattedHTML, raw: accumulatedRaw });
             saveState();
-            await animateBotMessage(botRow, formattedHTML);
+            DOM.history.scrollTop = DOM.history.scrollHeight;
 
         } catch (error) {
             console.error('sendMessage', error);
             removeTypingIndicator(typingId);
+            if (cursor) cursor.remove();
+            if (bubble) bubble.classList.remove('streaming');
             const errHtml = `<span style="color:#ef4444; font-weight:600;">${t('errConnect')}</span>`;
+            if (!botRow) {
+                botRow = appendMessage('bot', errHtml);
+            } else if (bubble) {
+                bubble.innerHTML = errHtml;
+            }
             state.messages.push({ role: 'bot', content: errHtml, isError: true });
-            renderHistory();
+            saveState();
         } finally {
             DOM.widget.classList.remove('thinking-glow');
+            DOM.input.disabled = false;
+            DOM.input.focus();
         }
-
-        DOM.input.disabled = false;
-        DOM.input.focus();
     };
 
     const submitOffer = async () => {

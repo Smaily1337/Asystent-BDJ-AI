@@ -10,6 +10,7 @@ import threading
 from typing import Any
 
 from llama_index.core.chat_engine import ContextChatEngine
+from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core.memory import ChatMemoryBuffer
 
 from app.config import settings
@@ -245,6 +246,164 @@ class SessionChatManager:
         self._remember(sid, "user", question)
         self._remember(sid, "assistant", answer)
         return answer
+
+    def chat_stream(
+        self, session_id: str, question: str, machine: str | None = None
+    ):
+        sid = session_id or "sess_default"
+
+        lookup_question = translate_de_query_for_lookup(translate_en_query_for_lookup(question))
+
+        if is_machine_unknown_message(lookup_question):
+            from app.rag.part_lookup import ask_machine_message
+
+            self._last_part_reason[sid] = "need_machine"
+            answer = ask_machine_message()
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", answer)
+            yield answer
+            return
+
+        resolved = resolve_machine_from_query(lookup_question, chip_machine=machine)
+        q = lookup_question
+        if resolved:
+            display = machine_display_name(resolved)
+            if display and display.lower() not in lookup_question.lower():
+                q = f"Mam maszynę {display}. {lookup_question}"
+        elif machine and machine.lower() not in lookup_question.lower():
+            q = f"Mam maszynę {machine}. {lookup_question}"
+
+        prior_reason = self._last_part_reason.get(sid)
+        history = translate_de_history(translate_en_history(self._recent_history(sid, n=4)))
+        chip_for_lookup = machine or (
+            machine_display_name(resolved) if resolved else None
+        )
+
+        product_card = try_product_card(lookup_question, chip_machine=chip_for_lookup)
+        if product_card is not None and not (
+            is_parts_intent(q)
+            or is_gasket_list_followup(lookup_question, prior_reason)
+        ):
+            self._last_part_reason[sid] = product_card.reason
+            answer = sanitize_answer_skus(
+                product_card.answer, q, chip_machine=chip_for_lookup
+            )
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", answer)
+            yield answer
+            return
+
+        showcase = try_machine_showcase(lookup_question, chip_machine=chip_for_lookup)
+        if showcase is not None and not (
+            is_parts_intent(q)
+            or is_gasket_list_followup(lookup_question, prior_reason)
+        ):
+            self._last_part_reason[sid] = showcase.reason
+            answer = sanitize_answer_skus(
+                showcase.answer, q, chip_machine=chip_for_lookup
+            )
+            self._remember(sid, "user", question)
+            self._remember(sid, "assistant", answer)
+            yield answer
+            return
+
+        slots = extract_part_slots(
+            lookup_question,
+            history=history,
+            chip_machine=chip_for_lookup,
+            prior_reason=prior_reason,
+            llm=self._llm,
+            use_llm=True,
+        )
+        slots = with_chip_machine(slots, chip_for_lookup)
+
+        wants_parts = (
+            is_parts_intent(q)
+            or is_gasket_list_followup(lookup_question, prior_reason)
+            or is_gasket_list_followup(q, prior_reason)
+            or slots.is_parts_ish()
+            or (prior_reason in _PARTS_REASONS and slots.size_mm is not None)
+            or (prior_reason in _PARTS_REASONS and slots.list_all)
+        )
+
+        if wants_parts:
+            deterministic = lookup_from_slots(
+                slots,
+                q,
+                chip_machine=chip_for_lookup,
+                prior_reason=prior_reason,
+                llm=self._llm,
+                history=history,
+            )
+            if deterministic is None:
+                deterministic = lookup_from_slots(
+                    slots,
+                    lookup_question,
+                    chip_machine=chip_for_lookup,
+                    prior_reason=prior_reason,
+                    llm=self._llm,
+                    history=history,
+                )
+            if deterministic is None:
+                deterministic = try_deterministic_lookup(
+                    q,
+                    chip_machine=chip_for_lookup,
+                    prior_reason=prior_reason,
+                    machine_source=lookup_question,
+                    history=history,
+                )
+            if deterministic is not None:
+                self._last_part_reason[sid] = deterministic.reason
+                answer = sanitize_answer_skus(
+                    deterministic.answer, q, chip_machine=chip_for_lookup
+                )
+                self._remember(sid, "user", question)
+                self._remember(sid, "assistant", answer)
+                yield answer
+                return
+
+        query = rewrite_query(q, chip_machine=chip_for_lookup)
+        if get_lang() == "en":
+            query = ENGLISH_QUERY_PREFIX + query
+        elif get_lang() == "de":
+            query = GERMAN_QUERY_PREFIX + query
+
+        try:
+            nodes = self._retriever.retrieve(query)
+            context_str = "\n\n".join([n.node.get_content() for n in nodes]) if nodes else ""
+            messages = [
+                ChatMessage(
+                    role=MessageRole.SYSTEM,
+                    content=f"{self._system_prompt}\n\nKontekst z bazy wiedzy:\n<context>\n{context_str}\n</context>",
+                )
+            ]
+            for role, msg in self._recent_history(sid, n=6):
+                messages.append(
+                    ChatMessage(
+                        role=MessageRole.USER if role == "user" else MessageRole.ASSISTANT,
+                        content=msg,
+                    )
+                )
+            messages.append(ChatMessage(role=MessageRole.USER, content=query))
+
+            stream = self._llm.stream_chat(messages)
+            full_chunks: list[str] = []
+            for chunk in stream:
+                delta = getattr(chunk, "delta", str(chunk))
+                if delta:
+                    full_chunks.append(delta)
+                    yield delta
+
+            raw = "".join(full_chunks)
+        except Exception as e:
+            print(f"⚠️ Fallback to engine.chat in chat_stream: {e}")
+            engine = self.get_engine(sid)
+            raw = str(engine.chat(query))
+            yield raw
+
+        answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
+        self._remember(sid, "user", question)
+        self._remember(sid, "assistant", answer)
 
     def reset(self, session_id: str) -> None:
         sid = session_id or "sess_default"

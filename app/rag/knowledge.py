@@ -27,6 +27,7 @@ def create_llm(cfg: AppSettings | None = None) -> OpenAILike:
         api_key=cfg.deepseek_api_key,
         temperature=cfg.llm_temperature,
         is_chat_model=True,
+        streaming=True,
         context_window=cfg.context_window,
         max_tokens=cfg.max_tokens,
     )
