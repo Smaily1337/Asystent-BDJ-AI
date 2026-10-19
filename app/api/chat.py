@@ -96,6 +96,33 @@ def _append_handoff_button(response: str, req: ChatRequest) -> str:
     return cleaned + f"\n\n[GET_REQUEST: {_machine_for_handoff(req)}]"
 
 
+STARTER_REPLIES = {
+    "pomóż mi dobrać maszynę.": "Zacznijmy od Twojej instalacji. Jaką średnicę ma kabel, jaka jest średnica wewnętrzna mikrorury i planowana długość odcinka?",
+    "pomóż mi dobrać maszynę": "Zacznijmy od Twojej instalacji. Jaką średnicę ma kabel, jaka jest średnica wewnętrzna mikrorury i planowana długość odcinka?",
+    "szukam części i akcesoriów.": "Podaj model maszyny i opisz szukany element. Przy doborze akcesoriów przydadzą się również średnice kabla i mikrorury.",
+    "szukam części i akcesoriów": "Podaj model maszyny i opisz szukany element. Przy doborze akcesoriów przydadzą się również średnice kabla i mikrorury.",
+    "potrzebuję wsparcia technicznego.": "Jaki model maszyny posiadasz? Opisz, co się dzieje i na którym etapie pracy pojawia się problem.",
+    "potrzebuję wsparcia technicznego": "Jaki model maszyny posiadasz? Opisz, co się dzieje i na którym etapie pracy pojawia się problem.",
+    "help me pick a machine.": "Let's start with your installation. What is the cable diameter, microduct inner diameter, and planned route length?",
+    "help me pick a machine": "Let's start with your installation. What is the cable diameter, microduct inner diameter, and planned route length?",
+    "looking for parts and accessories.": "Please provide the machine model and describe the part you need. Cable and microduct diameters will also help.",
+    "looking for parts and accessories": "Please provide the machine model and describe the part you need. Cable and microduct diameters will also help.",
+    "i need technical support.": "Which machine model do you have? Describe what is happening and at what stage of work the issue occurs.",
+    "i need technical support": "Which machine model do you have? Describe what is happening and at what stage of work the issue occurs.",
+    "hilf mir, eine maschine auszuwählen.": "Beginnen wir mit Ihrer Installation. Welchen Durchmesser hat das Kabel, wie ist der Innendurchmesser des Mikrorohrs und die geplante Streckenlänge?",
+    "hilf mir, eine maschine auszuwählen": "Beginnen wir mit Ihrer Installation. Welchen Durchmesser hat das Kabel, wie ist der Innendurchmesser des Mikrorohrs und die geplante Streckenlänge?",
+    "ich suche teile und zubehör.": "Bitte geben Sie das Maschinenmodell an und beschreiben Sie das gesuchte Teil. Kabel- und Mikrorohrdurchmesser sind ebenfalls hilfreich.",
+    "ich suche teile und zubehör": "Bitte geben Sie das Maschinenmodell an und beschreiben Sie das gesuchte Teil. Kabel- und Mikrorohrdurchmesser sind ebenfalls hilfreich.",
+    "ich brauche technischen support.": "Welches Maschinenmodell besitzen Sie? Beschreiben Sie, was passiert und bei welchem Arbeitsschritt das Problem auftritt.",
+    "ich brauche technischen support": "Welches Maschinenmodell besitzen Sie? Beschreiben Sie, was passiert und bei welchem Arbeitsschritt das Problem auftritt.",
+}
+
+
+def _get_starter_reply(question: str) -> str | None:
+    q = (question or "").strip().lower()
+    return STARTER_REPLIES.get(q)
+
+
 def bind_chat_manager(manager) -> None:
     global chat_manager
     chat_manager = manager
@@ -109,6 +136,11 @@ def handle_chat(request: ChatRequest, req: Request):
     ).split(",")[0]
     session_id = request.session_id or "sess_default"
     set_lang(request.lang)
+
+    starter = _get_starter_reply(request.question)
+    if starter:
+        log_customer_question(request.question, starter, client_ip, session_id)
+        return {"answer": starter}
 
     try:
         response = chat_manager.chat(session_id, request.question, machine=request.machine)
@@ -145,6 +177,24 @@ def handle_chat_stream(request: ChatRequest, req: Request):
     ).split(",")[0]
     session_id = request.session_id or "sess_default"
     set_lang(request.lang)
+
+    starter = _get_starter_reply(request.question)
+    if starter:
+        def starter_event_generator():
+            payload = json.dumps({"chunk": starter}, ensure_ascii=False)
+            yield f"data: {payload}\n\n"
+            log_customer_question(request.question, starter, client_ip, session_id)
+            yield "data: [DONE]\n\n"
+
+        return StreamingResponse(
+            starter_event_generator(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache, no-transform",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
 
     def event_generator():
         full_chunks: list[str] = []

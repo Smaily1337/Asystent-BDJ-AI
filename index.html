@@ -310,6 +310,9 @@
             border-bottom: 1px solid var(--d-line);
             flex-shrink: 0;
         }
+        .machine-context-bar.is-empty {
+            display: none !important;
+        }
         .machine-context-icon {
             display: flex;
             align-items: center;
@@ -377,8 +380,11 @@
 
         /* --- WELCOME HERO BANNER (z dragon-ai-widget.html) --- */
         .dragon-welcome {
-            padding: 0 0 16px;
+            padding: 0 0 20px;
             animation: dragon-in .35s ease-out both;
+        }
+        .dragon-welcome[hidden] {
+            display: none !important;
         }
         .dragon-kicker {
             font-size: 9px;
@@ -411,12 +417,14 @@
             gap: 8px;
             margin-top: 22px;
         }
+        .dragon-topics button,
         .dragon-topics .btn-topic {
+            width: 100%;
             text-align: left;
             border: 1px solid var(--d-line);
             border-radius: 10px;
             padding: 12px 14px;
-            color: #142b3a;
+            color: #365365;
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -425,21 +433,32 @@
             font-weight: 500;
             cursor: pointer;
             transition: border-color .2s, background .2s, color .2s;
+            box-shadow: 0 1px 2px rgba(20, 43, 58, 0.02);
+            font-family: inherit;
         }
+        .dragon-topics button:hover,
         .dragon-topics .btn-topic:hover {
-            border-color: #009cc7;
+            border-color: #76cadf;
             background: #f5fbfd;
             color: #009cc7;
         }
-        .dragon-topics .btn-topic svg {
-            width: 16px !important;
-            height: 16px !important;
+        .dragon-topics button span[aria-hidden="true"],
+        .dragon-topics .btn-topic span[aria-hidden="true"] {
+            font-size: 16px;
+            color: #8ca3b0;
+            line-height: 1;
+            font-weight: normal;
+        }
+        .dragon-topics button:hover span[aria-hidden="true"],
+        .dragon-topics .btn-topic:hover span[aria-hidden="true"] {
             color: #009cc7;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2.2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        }
+
+        #dragon-messages {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
         }
 
         /* --- WIADOMOŚCI (Dragon Messages) --- */
@@ -808,7 +827,7 @@
             </div>
         </div>
         <div class="header-actions">
-            <button class="btn-reset" id="btn-reset" title="Wyczyść historię rozmowy" aria-label="Wyczyść czat">
+            <button class="btn-reset" id="btn-reset" title="Wyczyść historię rozmowy" aria-label="Wyczyść czat" style="display: none;">
                 <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
             </button>
             <button class="btn-close" id="btn-close" aria-label="Zamknij czat">
@@ -829,7 +848,26 @@
     </div>
 
     <main id="chat-history">
-        <!-- Renderowane przez JS -->
+        <div class="dragon-welcome" id="dragon-welcome">
+            <div class="dragon-kicker">DOBRZE, ŻE JESTEŚ</div>
+            <h2>Dużo możliwości.<br><span>Proste odpowiedzi.</span></h2>
+            <p>Pomogę Ci dobrać maszynę, znaleźć części i sprawnie wrócić do pracy.</p>
+            <div class="dragon-topics">
+                <button type="button" class="btn-topic" data-question="Pomóż mi dobrać maszynę.">
+                    <span>Dobierz maszynę</span>
+                    <span aria-hidden="true">↗</span>
+                </button>
+                <button type="button" class="btn-topic" data-question="Szukam części i akcesoriów.">
+                    <span>Znajdź części i akcesoria</span>
+                    <span aria-hidden="true">↗</span>
+                </button>
+                <button type="button" class="btn-topic" data-question="Potrzebuję wsparcia technicznego.">
+                    <span>Uzyskaj wsparcie techniczne</span>
+                    <span aria-hidden="true">↗</span>
+                </button>
+            </div>
+        </div>
+        <div id="dragon-messages" role="log" aria-label="Wiadomości" aria-live="polite" aria-relevant="additions text"></div>
     </main>
 
     <div id="offer-action-bar">
@@ -893,7 +931,7 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.14';
+    const UI_VERSION = '0.0.17';
 
     const detectUiLang = () => {
         const p = new URLSearchParams(location.search);
@@ -1140,6 +1178,27 @@ const BDJChatApp = (() => {
         if (tipClose) tipClose.setAttribute('aria-label', t('closeTip'));
         const fab = document.getElementById('fab-btn');
         if (fab) fab.setAttribute('aria-label', t('openChat'));
+
+        const kicker = document.querySelector('#dragon-welcome .dragon-kicker');
+        if (kicker) kicker.textContent = t('heroKicker') || 'DOBRZE, ŻE JESTEŚ';
+        const h2 = document.querySelector('#dragon-welcome h2');
+        if (h2) h2.innerHTML = `${t('heroH2_1') || 'Dużo możliwości.'}<br><span>${t('heroH2_2') || 'Proste odpowiedzi.'}</span>`;
+        const lead = document.querySelector('#dragon-welcome p');
+        if (lead) lead.textContent = t('heroLead') || 'Pomogę Ci dobrać maszynę, znaleźć części i sprawnie wrócić do pracy.';
+        const topicBtns = document.querySelectorAll('#dragon-welcome .btn-topic');
+        if (topicBtns.length >= 3) {
+            const t1 = topicBtns[0].querySelector('span:first-child');
+            if (t1) t1.textContent = t('topic1') || 'Dobierz maszynę';
+            topicBtns[0].dataset.question = uiLang === 'en' ? 'Help me pick a machine.' : (uiLang === 'de' ? 'Hilf mir, eine Maschine auszuwählen.' : 'Pomóż mi dobrać maszynę.');
+
+            const t2 = topicBtns[1].querySelector('span:first-child');
+            if (t2) t2.textContent = t('topic2') || 'Znajdź części i akcesoria';
+            topicBtns[1].dataset.question = uiLang === 'en' ? 'Looking for parts and accessories.' : (uiLang === 'de' ? 'Ich suche Teile und Zubehör.' : 'Szukam części i akcesoriów.');
+
+            const t3 = topicBtns[2].querySelector('span:first-child');
+            if (t3) t3.textContent = t('topic3') || 'Uzyskaj wsparcie techniczne';
+            topicBtns[2].dataset.question = uiLang === 'en' ? 'I need technical support.' : (uiLang === 'de' ? 'Ich brauche technischen Support.' : 'Potrzebuję wsparcia technicznego.');
+        }
     };
 
     let state = {
@@ -1163,6 +1222,8 @@ const BDJChatApp = (() => {
         fab: document.getElementById('fab-btn'),
         widget: document.getElementById('chat-widget'),
         history: document.getElementById('chat-history'),
+        welcome: document.getElementById('dragon-welcome'),
+        messages: document.getElementById('dragon-messages'),
         input: document.getElementById('chat-input'),
         btnSend: document.getElementById('btn-send'),
         btnReset: document.getElementById('btn-reset'),
@@ -1346,12 +1407,6 @@ const BDJChatApp = (() => {
         localStorage.setItem('bdj_chat_state', JSON.stringify(state));
     };
 
-    const welcomeMessage = () => ({
-        role: 'bot',
-        content: t('welcomeHtml'),
-        raw: t('welcomeRaw')
-    });
-
     const loadState = () => {
         const storedUiVer = localStorage.getItem('bdj_ui_version');
         if (storedUiVer !== UI_VERSION) {
@@ -1368,20 +1423,22 @@ const BDJChatApp = (() => {
         if (!('lastUserQuestion' in state)) {
             state.lastUserQuestion = null;
         }
-        if (!state.messages || state.messages.length === 0) {
-            state.messages = [welcomeMessage()];
+        if (!Array.isArray(state.messages)) {
+            state.messages = [];
         }
-        // Stary clear zostawiał pendingMachine w localStorage przy pustym czacie —
-        // wtedy każde wklejenie dostało „Mam maszynę NEXT” mimo braku wyboru.
-        const hasUserMsg = (state.messages || []).some((m) => m && m.role === 'user');
+        // Wyczyść ewentualny stary bot welcome bubble lub puste sesje
+        if (state.messages.length === 1 && state.messages[0].role === 'bot') {
+            state.messages = [];
+        }
+        const hasUserMsg = state.messages.some((m) => m && m.role === 'user');
         if (!hasUserMsg) {
+            state.messages = [];
             state.pendingMachine = null;
             state.lastUserQuestion = null;
         }
         if (!state.pendingRequestType) {
             state.pendingRequestType = 'oferta';
         }
-        // Nadpisz popsute localStorage (stary clear zostawiał maszynę przy pustym czacie)
         try { localStorage.setItem('bdj_chat_state', JSON.stringify(state)); } catch (e) {}
     };
 
@@ -1392,7 +1449,7 @@ const BDJChatApp = (() => {
         const oldSessionId = state.sessionId;
         localStorage.removeItem('bdj_chat_state');
         state = {
-            messages: [welcomeMessage()],
+            messages: [],
             pendingMachine: null,
             pendingRequestType: 'oferta',
             lastUserQuestion: null,
@@ -1404,7 +1461,6 @@ const BDJChatApp = (() => {
         renderHistory();
         saveState();
         try {
-            // Reset starej sesji na backendzie (nie nowej — ta jest pusta)
             if (oldSessionId) {
                 await fetch('/reset', {
                     method: 'POST',
@@ -1416,72 +1472,31 @@ const BDJChatApp = (() => {
     };
 
     const renderHistory = () => {
-        DOM.history.innerHTML = '';
-        if (state.messages.length <= 1) {
-            DOM.history.appendChild(createHeroBanner());
+        if (!DOM.messages) return;
+        DOM.messages.innerHTML = '';
+        const hasMessages = state.messages && state.messages.length > 0;
+        if (!hasMessages) {
+            if (DOM.welcome) {
+                DOM.welcome.hidden = false;
+                DOM.welcome.style.display = 'block';
+            }
+            if (DOM.btnReset) DOM.btnReset.style.display = 'none';
+        } else {
+            if (DOM.welcome) {
+                DOM.welcome.hidden = true;
+                DOM.welcome.style.display = 'none';
+            }
+            if (DOM.btnReset) DOM.btnReset.style.display = 'grid';
+            state.messages.forEach(msg => {
+                const content = (msg.role === 'bot' && msg.raw && !msg.isError)
+                    ? processBotResponse(msg.raw)
+                    : msg.content;
+                DOM.messages.appendChild(createMessageElement(msg.role, content));
+            });
+            scrollToBottom();
         }
-        state.messages.forEach(msg => {
-            const content = (msg.role === 'bot' && msg.raw && !msg.isError)
-                ? processBotResponse(msg.raw)
-                : msg.content;
-            DOM.history.appendChild(createMessageElement(msg.role, content));
-        });
-        scrollToBottom();
         updateCheckboxesState();
         syncMachineCardSelection();
-    };
-
-    let heroRotateTimer = null;
-
-    const HERO_MACHINE_LABELS = [
-        'Mini C Plus',
-        'Next',
-        'Budget',
-        'Budget Easy Set',
-        'Budget Plus',
-        'Budget Plus Easy Set',
-        'Extended',
-        'Max Dual Head',
-        'Max',
-        'Hydro Chain Cable',
-        'Hydro Multi Tube',
-        'DragonAir',
-    ];
-
-    const createHeroBanner = () => {
-        const div = document.createElement('div');
-        div.className = 'dragon-welcome hero-banner';
-        div.id = 'dragon-welcome';
-        div.innerHTML = `
-            <div class="dragon-kicker">${t('heroKicker') || 'DOBRZE, ŻE JESTEŚ'}</div>
-            <h2>${t('heroH2_1') || 'Dużo możliwości.'}<br><span>${t('heroH2_2') || 'Proste odpowiedzi.'}</span></h2>
-            <p>${t('heroLead') || 'Pomogę Ci dobrać maszynę, znaleźć części i sprawnie wrócić do pracy.'}</p>
-            <div class="dragon-topics">
-                <button type="button" class="btn-topic" data-question="Pomóż mi dobrać maszynę.">
-                    <span>${t('topic1') || 'Dobierz maszynę'}</span>
-                    <svg viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg>
-                </button>
-                <button type="button" class="btn-topic" data-question="Szukam części i akcesoriów.">
-                    <span>${t('topic2') || 'Znajdź części i akcesoria'}</span>
-                    <svg viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg>
-                </button>
-                <button type="button" class="btn-topic" data-question="Potrzebuję wsparcia technicznego.">
-                    <span>${t('topic3') || 'Uzyskaj wsparcie techniczne'}</span>
-                    <svg viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></svg>
-                </button>
-            </div>
-        `;
-        div.querySelectorAll('.btn-topic').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                const q = btn.dataset.question;
-                if (q) {
-                    DOM.input.value = q;
-                    sendMessage();
-                }
-            });
-        });
-        return div;
     };
 
     const createMessageElement = (role, htmlContent) => {
@@ -1502,10 +1517,18 @@ const BDJChatApp = (() => {
     };
 
     const showTypingIndicator = () => {
+        if (DOM.welcome) {
+            DOM.welcome.hidden = true;
+            DOM.welcome.style.display = 'none';
+        }
         const id = 'typing-' + Date.now();
         const row = createMessageElement('bot', '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>');
         row.id = id;
-        DOM.history.appendChild(row);
+        if (DOM.messages) {
+            DOM.messages.appendChild(row);
+        } else {
+            DOM.history.appendChild(row);
+        }
         scrollToBottom();
         return id;
     };
@@ -1523,8 +1546,17 @@ const BDJChatApp = (() => {
     };
 
     const appendMessage = (role, htmlContent) => {
+        if (DOM.welcome) {
+            DOM.welcome.hidden = true;
+            DOM.welcome.style.display = 'none';
+        }
+        if (DOM.btnReset) DOM.btnReset.style.display = 'grid';
         const row = createMessageElement(role, htmlContent);
-        DOM.history.appendChild(row);
+        if (DOM.messages) {
+            DOM.messages.appendChild(row);
+        } else {
+            DOM.history.appendChild(row);
+        }
         return row;
     };
 
@@ -2076,9 +2108,64 @@ const BDJChatApp = (() => {
         return last;
     };
 
+    const CANNED_REPLIES = {
+        'Pomóż mi dobrać maszynę.': 'Zacznijmy od Twojej instalacji. Jaką średnicę ma kabel, jaka jest średnica wewnętrzna mikrorury i planowana długość odcinka?',
+        'Szukam części i akcesoriów.': 'Podaj model maszyny i opisz szukany element. Przy doborze akcesoriów przydadzą się również średnice kabla i mikrorury.',
+        'Potrzebuję wsparcia technicznego.': 'Jaki model maszyny posiadasz? Opisz, co się dzieje i na którym etapie pracy pojawia się problem.',
+        'Help me pick a machine.': "Let's start with your installation. What is the cable diameter, microduct inner diameter, and planned route length?",
+        'Looking for parts and accessories.': "Please provide the machine model and describe the part you need. Cable and microduct diameters will also help.",
+        'I need technical support.': "Which machine model do you have? Describe what is happening and at what stage of work the issue occurs.",
+        'Hilf mir, eine Maschine auszuwählen.': "Beginnen wir mit Ihrer Installation. Welchen Durchmesser hat das Kabel, wie ist der Innendurchmesser des Mikrorohrs und die geplante Streckenlänge?",
+        'Ich suche Teile und Zubehör.': "Bitte geben Sie das Maschinenmodell an und beschreiben Sie das gesuchte Teil. Kabel- und Mikrorohrdurchmesser sind ebenfalls hilfreich.",
+        'Ich brauche technischen Support.': "Welches Maschinenmodell besitzen Sie? Beschreiben Sie, was passiert und bei welchem Arbeitsschritt das Problem auftritt."
+    };
+
+    const getCannedStarterReply = (text) => {
+        if (!text) return null;
+        if (CANNED_REPLIES[text]) return CANNED_REPLIES[text];
+        const trimmed = text.trim();
+        if (/^(pom[oó]ż mi dobrać maszyn[eę]|dobierz maszyn[eę]|help me pick a machine|hilf mir, eine maschine)/i.test(trimmed)) {
+            return uiLang === 'en' ? CANNED_REPLIES['Help me pick a machine.'] : (uiLang === 'de' ? CANNED_REPLIES['Hilf mir, eine Maschine auszuwählen.'] : CANNED_REPLIES['Pomóż mi dobrać maszynę.']);
+        }
+        if (/^(szukam czę[sś]ci|znajd[zź] czę[sś]ci|looking for parts|ich suche teile)/i.test(trimmed)) {
+            return uiLang === 'en' ? CANNED_REPLIES['Looking for parts and accessories.'] : (uiLang === 'de' ? CANNED_REPLIES['Ich suche Teile und Zubehör.'] : CANNED_REPLIES['Szukam części i akcesoriów.']);
+        }
+        if (/^(potrzebuj[eę] wsparcia|uzyskaj wsparcie|i need technical support|ich brauche technischen support)/i.test(trimmed)) {
+            return uiLang === 'en' ? CANNED_REPLIES['I need technical support.'] : (uiLang === 'de' ? CANNED_REPLIES['Ich brauche technischen Support.'] : CANNED_REPLIES['Potrzebuję wsparcia technicznego.']);
+        }
+        return null;
+    };
+
     const sendMessage = async () => {
         const text = DOM.input.value.trim();
         if (!text) return;
+
+        const cannedReply = getCannedStarterReply(text);
+        if (cannedReply) {
+            state.lastUserQuestion = text;
+            DOM.input.value = '';
+            DOM.input.disabled = true;
+            DOM.btnSend.disabled = true;
+            resizeInput();
+
+            state.messages.push({ role: 'user', content: text, raw: text });
+            appendMessage('user', text);
+            DOM.widget.classList.add('thinking-glow');
+            const typingId = showTypingIndicator();
+
+            await wait(600);
+            removeTypingIndicator(typingId);
+            DOM.widget.classList.remove('thinking-glow');
+
+            const formattedHtml = `<div class="bot-md"><p>${cannedReply}</p></div>`;
+            appendMessage('bot', formattedHtml);
+            state.messages.push({ role: 'bot', content: formattedHtml, raw: cannedReply });
+            saveState();
+
+            DOM.input.disabled = false;
+            DOM.input.focus();
+            return;
+        }
 
         // NIGDY nie doklejaj „Mam maszynę …” do treści wiadomości.
         // Maszyna z chipa idzie tylko w polu API `machine`; treść = to, co user wpisał/wkleił.
@@ -2500,6 +2587,16 @@ const BDJChatApp = (() => {
         }
 
         DOM.history.addEventListener('click', (e) => {
+            const topicBtn = e.target.closest('#dragon-welcome .btn-topic');
+            if (topicBtn) {
+                e.preventDefault();
+                const q = topicBtn.dataset.question;
+                if (q) {
+                    DOM.input.value = q;
+                    sendMessage();
+                }
+                return;
+            }
             if (e.target.closest('.machine-card-ext-link') || e.target.closest('.machine-card-pdf-link')) {
                 e.stopPropagation();
                 return;
