@@ -46,6 +46,10 @@
     "box-shadow:0 20px 48px rgba(15,23,42,.18),0 8px 20px rgba(15,23,42,.08)!important;}",
     "#bdj-ai-embed.is-open{display:block!important;pointer-events:auto!important;}",
     "#bdj-ai-widget{width:100%!important;height:100%!important;border:0!important;background:transparent!important;}",
+    "#bdj-ai-loader{position:absolute!important;inset:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;background:#ffffff!important;z-index:2!important;font-family:system-ui,-apple-system,sans-serif!important;color:#142b3a!important;gap:12px!important;transition:opacity .25s ease!important;}",
+    "#bdj-ai-loader.is-hidden{opacity:0!important;pointer-events:none!important;}",
+    ".bdj-spinner{width:32px!important;height:32px!important;border:3px solid #e6edf1!important;border-top-color:#009cc7!important;border-radius:50%!important;animation:bdjSpin .75s linear infinite!important;}",
+    "@keyframes bdjSpin{to{transform:rotate(360deg)}}",
     "@media (max-width:680px){",
     "body.bdj-ai-chat-open{overflow:hidden!important;}",
     "#bdj-ai-fab{bottom:max(18px,env(safe-area-inset-bottom,18px))!important;right:max(18px,env(safe-area-inset-right,18px))!important;}",
@@ -88,12 +92,23 @@
 
   var wrap = document.createElement("div");
   wrap.id = "bdj-ai-embed";
+  var loader = document.createElement("div");
+  loader.id = "bdj-ai-loader";
+  loader.innerHTML = '<div class="bdj-spinner"></div><div style="font-size:13px;font-weight:600;color:#142b3a;letter-spacing:-0.01em;">Dragon AI</div>';
+  wrap.appendChild(loader);
   var frame = document.createElement("iframe");
   frame.id = "bdj-ai-widget";
   frame.title = "Dragon AI";
   frame.allow = "clipboard-write";
   frame.setAttribute("allowfullscreen", "true");
   wrap.appendChild(frame);
+
+  function hideLoader() {
+    if (loader) {
+      loader.classList.add("is-hidden");
+      setTimeout(function () { if (loader && loader.parentNode) loader.style.display = "none"; }, 300);
+    }
+  }
 
   var ready = false;
   var wantOpen = false;
@@ -180,6 +195,7 @@
 
     setTimeout(ensureFrame, 500);
     frame.addEventListener("load", function () {
+      hideLoader();
       if (wantOpen) {
         setTimeout(function () { ready = true; sendOpen(); }, 80);
       }
@@ -206,6 +222,7 @@
     window.addEventListener("message", function (e) {
       if (!e.data || typeof e.data !== "object") return;
       if (e.data.type === "bdj-ai-ready") {
+        hideLoader();
         ready = true;
         if (wantOpen) {
           try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (err) {}

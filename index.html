@@ -4,16 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Blue Dragon Jet | Konfigurator Części Pro</title>
-    <script>
-    (function () {
-        var NEED = '0.0.14';
-        if (!/[?&]embed=1(?:&|$)/.test(location.search)) return;
-        var p = new URLSearchParams(location.search);
-        if (p.get('v') === NEED) return;
-        p.set('v', NEED);
-        location.replace(location.pathname + '?' + p.toString());
-    })();
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
     <style>
@@ -92,12 +82,13 @@
             border-radius: 0 !important;
             border: none !important;
             box-shadow: none !important;
-            opacity: 1;
-            transform: none;
-            pointer-events: all;
+            display: flex !important;
+            opacity: 1 !important;
+            transform: none !important;
+            pointer-events: auto !important;
             overscroll-behavior: contain;
         }
-        html.embed-mode #chat-widget.open { opacity: 1; transform: none; pointer-events: all; }
+        html.embed-mode #chat-widget.open { display: flex !important; opacity: 1 !important; transform: none !important; pointer-events: auto !important; }
         html.embed-mode .modal-overlay { z-index: 2147483647; }
 
         /* --- FAB TOGGLE BUTTON (Dragon AI) --- */
@@ -204,6 +195,10 @@
                 border-radius: 0 !important;
                 border: none !important;
                 box-shadow: none !important;
+                display: flex !important;
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto !important;
             }
         }
 
@@ -421,7 +416,7 @@
             border: 1px solid var(--d-line);
             border-radius: 10px;
             padding: 12px 14px;
-            color: #365365;
+            color: #142b3a;
             background: #ffffff;
             display: flex;
             align-items: center;
@@ -432,17 +427,17 @@
             transition: border-color .2s, background .2s, color .2s;
         }
         .dragon-topics .btn-topic:hover {
-            border-color: #76cadf;
+            border-color: #009cc7;
             background: #f5fbfd;
-            color: var(--d-navy);
+            color: #009cc7;
         }
         .dragon-topics .btn-topic svg {
             width: 16px !important;
             height: 16px !important;
-            color: #8ca3b0;
+            color: #009cc7;
             fill: none;
             stroke: currentColor;
-            stroke-width: 1.6;
+            stroke-width: 2.2;
             stroke-linecap: round;
             stroke-linejoin: round;
         }
@@ -737,7 +732,7 @@
     </style>
 </head>
 <body>
-<script>if (/[?&]embed=1(?:&|$)/.test(location.search)) document.documentElement.classList.add('embed-mode');</script>
+<script>if (/[?&]embed=1(?:&|$)/.test(location.search) || window.self !== window.top) document.documentElement.classList.add('embed-mode');</script>
 
 
 <!-- FLOATING TOOLTIP / CHMURKA ZACHĘCAJĄCA (Po 3 sekundach) -->
@@ -896,6 +891,13 @@ const BDJChatApp = (() => {
             heroHello: 'Witaj w',
             heroSub: 'Opisz model maszyny i część — dobiorę pozycję z katalogu BDJ.',
             heroHint: 'Np. «Mam Extended, potrzebuję uszczelkę mikrorurki 7 mm»',
+            heroKicker: 'DOBRZE, ŻE JESTEŚ',
+            heroH2_1: 'Dużo możliwości.',
+            heroH2_2: 'Proste odpowiedzi.',
+            heroLead: 'Pomogę Ci dobrać maszynę, znaleźć części i sprawnie wrócić do pracy.',
+            topic1: 'Dobierz maszynę',
+            topic2: 'Znajdź części i akcesoria',
+            topic3: 'Uzyskaj wsparcie techniczne',
             iHave: 'Mam',
             clickPhoto: 'Kliknij zdjęcie, aby wybrać',
             productCard: 'Karta produktu',
@@ -951,6 +953,13 @@ const BDJChatApp = (() => {
             heroHello: 'Welcome to',
             heroSub: 'Describe the machine model and the part — I’ll pick it from the BDJ catalog.',
             heroHint: 'E.g. «I have Extended, I need a 7 mm microduct gasket»',
+            heroKicker: 'GLAD YOU ARE HERE',
+            heroH2_1: 'Many possibilities.',
+            heroH2_2: 'Simple answers.',
+            heroLead: 'I will help you pick a machine, find spare parts and get back to work quickly.',
+            topic1: 'Pick a machine',
+            topic2: 'Find parts & accessories',
+            topic3: 'Get technical support',
             iHave: 'I have',
             clickPhoto: 'Click the photo to select',
             productCard: 'Product card',
@@ -1006,6 +1015,13 @@ const BDJChatApp = (() => {
             heroHello: 'Willkommen bei',
             heroSub: 'Beschreiben Sie Maschinenmodell und Teil — ich wähle die passende Position aus dem BDJ-Katalog.',
             heroHint: 'Z. B. «Ich habe Extended, ich brauche eine 7 mm Mikrorohrdichtung»',
+            heroKicker: 'SCHÖN, DASS SIE DA SIND',
+            heroH2_1: 'Viele Möglichkeiten.',
+            heroH2_2: 'Einfache Antworten.',
+            heroLead: 'Ich helfe Ihnen bei der Maschinenauswahl, finde Ersatzteile und bringe Sie schnell zurück an die Arbeit.',
+            topic1: 'Maschine auswählen',
+            topic2: 'Teile & Zubehör finden',
+            topic3: 'Technischen Support erhalten',
             iHave: 'Ich habe',
             clickPhoto: 'Klicken Sie auf das Foto zur Auswahl',
             productCard: 'Produktdatenblatt',
@@ -1120,15 +1136,19 @@ const BDJChatApp = (() => {
         machineContextBar: document.getElementById('machine-context-bar'),
     };
 
-    const init = async () => {
+    const init = () => {
         applyUiLang();
-        warmupBackend();
-        await loadMachineCatalog();
         loadState();
-        syncMachineSelect();
         renderHistory();
         bindEvents();
+        if (isEmbed) {
+            setChatOpen(true);
+        }
         resizeInput();
+        warmupBackend();
+        loadMachineCatalog().then(() => {
+            syncMachineSelect();
+        }).catch(() => {});
     };
 
     const warmupBackend = () => {
@@ -2380,11 +2400,7 @@ const BDJChatApp = (() => {
                 if (e.data.action === 'close') setChatOpen(false);
             });
             try { window.parent.postMessage({ type: 'bdj-ai-ready' }, '*'); } catch (_) {}
-            if (/[?&]open=1(?:&|$)/.test(location.search)) {
-                setChatOpen(true);
-            } else {
-                notifyEmbedParent();
-            }
+            setChatOpen(true);
         } else {
             notifyEmbedParent();
             setTimeout(() => {
