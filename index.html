@@ -474,19 +474,20 @@
 
         .bubble {
             width: fit-content;
-            font-size: 13.5px;
-            line-height: 1.65;
+            font-size: 13px;
+            line-height: 1.45;
             white-space: pre-wrap;
             overflow-wrap: anywhere;
             max-width: 92%;
-            padding: 11px 15px;
+            padding: 9px 13px;
             border-radius: 12px;
         }
         .msg-row.user .bubble {
             background: #e9f5fa;
             color: #234b60;
             border-bottom-right-radius: 3px;
-            font-size: 13.5px;
+            font-size: 13px;
+            white-space: pre-wrap;
         }
         .msg-row.bot .bubble {
             background: #f2f5f7;
@@ -494,13 +495,29 @@
             border-bottom-left-radius: 3px;
             width: 100%;
             max-width: 100%;
-            font-size: 13.5px;
+            font-size: 13px;
+            line-height: 1.45;
+            white-space: normal !important;
         }
 
-        /* Typografia Markdown */
-        .bot-md { color: #254455; font-size: 13.5px; line-height: 1.65; }
-        .bot-md p { margin: 0 0 8px; line-height: 1.65; color: #254455; font-size: 13.5px; }
-        .bot-md p:last-child { margin-bottom: 0; }
+        /* Kompaktowa typografia Markdown */
+        .bot-md {
+            color: #254455;
+            font-size: 13px;
+            line-height: 1.45;
+            white-space: normal !important;
+        }
+        .bot-md p,
+        .bubble p {
+            margin: 0 0 5px 0;
+            line-height: 1.45;
+            color: #254455;
+            font-size: 13px;
+        }
+        .bot-md p:last-child,
+        .bubble p:last-child {
+            margin-bottom: 0 !important;
+        }
         .bot-md strong { color: var(--d-navy); font-weight: 600; }
         .bot-md h1,
         .bot-md h2,
@@ -508,8 +525,8 @@
         .bubble h2 {
             color: var(--d-navy) !important;
             font-weight: 700 !important;
-            font-size: 14.5px !important;
-            margin: 10px 0 6px !important;
+            font-size: 13.5px !important;
+            margin: 6px 0 3px !important;
             line-height: 1.35 !important;
             letter-spacing: -0.01em !important;
         }
@@ -525,26 +542,48 @@
         .bubble h3 {
             color: var(--d-navy) !important;
             font-weight: 600 !important;
-            font-size: 13.5px !important;
-            margin: 8px 0 4px !important;
+            font-size: 13px !important;
+            margin: 5px 0 2px !important;
             line-height: 1.35 !important;
         }
         .bot-md h4, .bot-md h5, .bot-md h6,
         .bubble h4, .bubble h5, .bubble h6 {
             color: var(--d-navy) !important;
             font-weight: 600 !important;
-            font-size: 13px !important;
-            margin: 6px 0 3px !important;
+            font-size: 12.5px !important;
+            margin: 4px 0 2px !important;
             line-height: 1.35 !important;
         }
         .bot-md ul, .bot-md ol,
         .bubble ul, .bubble ol {
-            margin: 4px 0 8px 18px;
+            margin: 3px 0 5px 16px !important;
+            padding: 0 !important;
             color: #365365;
-            font-size: 13.5px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.42;
         }
-        .bot-md li, .bubble li { margin-bottom: 3px; }
+        .bot-md li,
+        .bubble li {
+            margin: 0 0 2px 0 !important;
+            padding: 0 !important;
+            line-height: 1.42;
+        }
+        .bot-md li:last-child,
+        .bubble li:last-child {
+            margin-bottom: 0 !important;
+        }
+        .bot-md li p,
+        .bubble li p,
+        .bot-md li > p,
+        .bubble li > p {
+            margin: 0 !important;
+            padding: 0 !important;
+            display: inline !important;
+            line-height: inherit !important;
+        }
+        .bot-md br + br {
+            display: none !important;
+        }
         .bot-md code, .sku-tag {
             display: inline-block;
             padding: 2px 7px;
