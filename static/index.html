@@ -1759,20 +1759,24 @@ const BDJChatApp = (() => {
             });
             cardEl.classList.add('is-selected');
         }
-        const label = (info.display || '').replace(/^BDJ\s+/i, 'BDJ ').trim();
-        const intended = (state.lastUserQuestion && state.lastUserQuestion.trim())
-            ? state.lastUserQuestion
-            : (label ? `${t('iHave')} ${label}` : '');
-        state.lastUserQuestion = null;
-        DOM.input.value = intended;
-        DOM.btnSend.disabled = DOM.input.value.trim().length === 0;
-        resizeInput();
-        if (intended) {
-            sendMessage();
-        } else {
-            DOM.input.focus();
+        const machineName = (info.display || '').replace(/^BDJ\s+/i, 'BDJ ').trim();
+        const current = (DOM.input.value || '').trim();
+
+        let newText = machineName + ' ';
+        if (current && !current.toLowerCase().startsWith('bdj')) {
+            newText = machineName + ' ' + current;
         }
+
+        state.lastUserQuestion = null;
+        DOM.input.value = newText;
+        DOM.btnSend.disabled = false;
+        resizeInput();
+        DOM.input.focus();
+        try {
+            DOM.input.setSelectionRange(DOM.input.value.length, DOM.input.value.length);
+        } catch (_) {}
     };
+
 
 
     const syncMachineCardSelection = () => {
