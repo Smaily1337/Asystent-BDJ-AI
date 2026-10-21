@@ -365,6 +365,7 @@
         /* --- OBSZAR WIADOMOŚCI I KATALOGU (Dragon Content) --- */
         #chat-history {
             flex: 1;
+            min-height: 0;
             overflow-y: auto;
             padding: 26px 22px;
             overscroll-behavior: contain;
@@ -684,16 +685,18 @@
         .input-group#dragon-form:focus-within { border-color: #b9cdd7; }
         #chat-input {
             width: 100%;
-            height: 38px;
+            height: 42px;
+            min-height: 42px;
             max-height: 110px;
-            padding: 7px 0;
+            padding: 8px 0;
             resize: none;
             border: 0;
             background: transparent;
             color: #254455;
             outline: none;
             font-size: 14px !important;
-            line-height: 1.6;
+            line-height: 1.5;
+            box-sizing: border-box;
         }
         #chat-input::placeholder { color: #94a5af; }
         #btn-send {
@@ -794,7 +797,15 @@
     </style>
 </head>
 <body>
-<script>if (/[?&]embed=1(?:&|$)/.test(location.search) || window.self !== window.top) document.documentElement.classList.add('embed-mode');</script>
+<script>
+try {
+    if (/[?&]embed=1(?:&|$)/.test(location.search) || window.self !== window.top) {
+        document.documentElement.classList.add('embed-mode');
+    }
+} catch (_) {
+    document.documentElement.classList.add('embed-mode');
+}
+</script>
 
 
 <!-- FLOATING TOOLTIP / CHMURKA ZACHĘCAJĄCA (Po 3 sekundach) -->
@@ -931,7 +942,7 @@
 <!-- JAVASCRIPT LOGIKA -->
 <script>
 const BDJChatApp = (() => {
-    const UI_VERSION = '0.0.17';
+    const UI_VERSION = '0.0.18';
 
     const detectUiLang = () => {
         const p = new URLSearchParams(location.search);
@@ -1201,6 +1212,37 @@ const BDJChatApp = (() => {
         }
     };
 
+    // Bezpieczny magazyn pamięci — chroni przed SecurityError w cross-origin iframe (Safari/Chrome)
+    const safeStorage = {
+        _mem: {},
+        getItem(key) {
+            try {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    const v = window.localStorage.getItem(key);
+                    if (v !== null) return v;
+                }
+            } catch (_) {}
+            return Object.prototype.hasOwnProperty.call(this._mem, key) ? this._mem[key] : null;
+        },
+        setItem(key, val) {
+            const strVal = String(val);
+            try {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    window.localStorage.setItem(key, strVal);
+                }
+            } catch (_) {}
+            this._mem[key] = strVal;
+        },
+        removeItem(key) {
+            try {
+                if (typeof window !== 'undefined' && window.localStorage) {
+                    window.localStorage.removeItem(key);
+                }
+            } catch (_) {}
+            delete this._mem[key];
+        }
+    };
+
     let state = {
         messages: [],
         pendingMachine: null,
@@ -1245,7 +1287,7 @@ const BDJChatApp = (() => {
         loadState();
         renderHistory();
         bindEvents();
-        if (isEmbed) {
+        if (isEmbed || /[?&]open=1(?:&|$)/.test(location.search) || window.location.pathname === '/') {
             setChatOpen(true);
         }
         resizeInput();
@@ -1253,6 +1295,11 @@ const BDJChatApp = (() => {
         loadMachineCatalog().then(() => {
             syncMachineSelect();
         }).catch(() => {});
+        try {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({ type: 'bdj-ai-ready' }, '*');
+            }
+        } catch (_) {}
     };
 
     const warmupBackend = () => {
@@ -1404,16 +1451,16 @@ const BDJChatApp = (() => {
     };
 
     const saveState = () => {
-        localStorage.setItem('bdj_chat_state', JSON.stringify(state));
+        safeStorage.setItem('bdj_chat_state', JSON.stringify(state));
     };
 
     const loadState = () => {
-        const storedUiVer = localStorage.getItem('bdj_ui_version');
+        const storedUiVer = safeStorage.getItem('bdj_ui_version');
         if (storedUiVer !== UI_VERSION) {
-            localStorage.removeItem('bdj_chat_state');
-            localStorage.setItem('bdj_ui_version', UI_VERSION);
+            safeStorage.removeItem('bdj_chat_state');
+            safeStorage.setItem('bdj_ui_version', UI_VERSION);
         }
-        const saved = localStorage.getItem('bdj_chat_state');
+        const saved = safeStorage.getItem('bdj_chat_state');
         if (saved) {
             try { state = JSON.parse(saved); } catch (e) { state.messages = []; }
         }
@@ -1439,7 +1486,7 @@ const BDJChatApp = (() => {
         if (!state.pendingRequestType) {
             state.pendingRequestType = 'oferta';
         }
-        try { localStorage.setItem('bdj_chat_state', JSON.stringify(state)); } catch (e) {}
+        safeStorage.setItem('bdj_chat_state', JSON.stringify(state));
     };
 
     const resetSession = async () => {
@@ -1447,7 +1494,7 @@ const BDJChatApp = (() => {
             return;
         }
         const oldSessionId = state.sessionId;
-        localStorage.removeItem('bdj_chat_state');
+        safeStorage.removeItem('bdj_chat_state');
         state = {
             messages: [],
             pendingMachine: null,
@@ -2637,14 +2684,32 @@ const BDJChatApp = (() => {
 
     const resizeInput = () => {
         DOM.input.style.height = 'auto';
-        DOM.input.style.height = Math.min(DOM.input.scrollHeight, 120) + 'px';
+        DOM.input.style.height = Math.max(42, Math.min(DOM.input.scrollHeight, 120)) + 'px';
     };
     const scrollToBottom = () => { DOM.history.scrollTop = DOM.history.scrollHeight; };
 
     return { init };
 })();
 
-document.addEventListener('DOMContentLoaded', BDJChatApp.init);
+(function() {
+    let started = false;
+    function run() {
+        if (started) return;
+        started = true;
+        try {
+            BDJChatApp.init();
+        } catch (e) {
+            console.error('BDJChatApp init failed:', e);
+        }
+    }
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', run);
+        window.addEventListener('load', run);
+    } else {
+        run();
+    }
+    setTimeout(run, 150);
+})();
 </script>
 </body>
 </html>

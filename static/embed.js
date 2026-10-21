@@ -8,7 +8,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.17";
+  var EMBED_VERSION = "0.0.18";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -94,7 +94,7 @@
   wrap.id = "bdj-ai-embed";
   var loader = document.createElement("div");
   loader.id = "bdj-ai-loader";
-  loader.innerHTML = '<div class="bdj-spinner"></div><div style="font-size:13px;font-weight:600;color:#142b3a;letter-spacing:-0.01em;">Dragon AI</div>';
+  loader.innerHTML = '<div class="bdj-spinner"></div><div id="bdj-ai-loader-text" style="font-size:13px;font-weight:600;color:#142b3a;letter-spacing:-0.01em;">Dragon AI</div>';
   wrap.appendChild(loader);
   var frame = document.createElement("iframe");
   frame.id = "bdj-ai-widget";
@@ -107,6 +107,13 @@
     if (loader) {
       loader.classList.add("is-hidden");
       setTimeout(function () { if (loader && loader.parentNode) loader.style.display = "none"; }, 300);
+    }
+  }
+
+  function showLoader() {
+    if (loader) {
+      loader.style.display = "flex";
+      loader.classList.remove("is-hidden");
     }
   }
 
@@ -143,6 +150,9 @@
     wantOpen = true;
     showChat();
     ensureFrame();
+    if (!ready) {
+      showLoader();
+    }
     sendOpen();
   }
 
@@ -193,13 +203,21 @@
     document.body.appendChild(tip);
     document.body.appendChild(wrap);
 
-    setTimeout(ensureFrame, 500);
+    setTimeout(ensureFrame, 300);
     frame.addEventListener("load", function () {
-      hideLoader();
+      setTimeout(function () {
+        hideLoader();
+      }, 1200);
       if (wantOpen) {
         setTimeout(function () { ready = true; sendOpen(); }, 80);
       }
     });
+    setTimeout(function () {
+      if (!ready && loader) {
+        var txt = document.getElementById("bdj-ai-loader-text");
+        if (txt) txt.textContent = PAGE_LANG === "en" ? "Connecting Dragon AI..." : "Wznawianie serwera Dragon AI...";
+      }
+    }, 4500);
     setTimeout(function () {
       if (!wrap.classList.contains("is-open")) tip.style.display = "block";
     }, 3000);
@@ -222,8 +240,8 @@
     window.addEventListener("message", function (e) {
       if (!e.data || typeof e.data !== "object") return;
       if (e.data.type === "bdj-ai-ready") {
-        hideLoader();
         ready = true;
+        hideLoader();
         if (wantOpen) {
           try { frame.contentWindow.postMessage({ type: "bdj-ai-command", action: "open" }, "*"); } catch (err) {}
         }
