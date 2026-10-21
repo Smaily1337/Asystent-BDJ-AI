@@ -935,6 +935,143 @@
             text-decoration: none;
         }
         .machine-cards-catalog-link:hover { text-decoration: underline; }
+
+        /* --- KARTA REKOMENDACJI / PREZENTACJI MODELU (SHOWCASE) --- */
+        .machine-showcase-container {
+            width: 100%;
+            margin: 10px 0 6px;
+        }
+        .machine-showcase-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #dce6ec;
+            background: #ffffff;
+            box-shadow: 0 3px 12px rgba(20, 43, 58, 0.08);
+            width: 100%;
+            max-width: 380px;
+            box-sizing: border-box;
+            transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+        }
+        .machine-showcase-card:hover {
+            border-color: var(--d-blue);
+            box-shadow: 0 6px 20px rgba(0, 156, 199, 0.18);
+        }
+        .machine-showcase-img-link {
+            position: relative;
+            display: block;
+            width: 100%;
+            height: 155px;
+            background: #f2f5f7;
+            overflow: hidden;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .machine-showcase-img-link img {
+            width: 100%;
+            height: 155px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.25s ease;
+        }
+        .machine-showcase-img-link:hover img {
+            transform: scale(1.04);
+        }
+        .machine-showcase-img-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: rgba(14, 30, 44, 0.82);
+            color: #ffffff;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            backdrop-filter: blur(4px);
+            transition: background 0.15s ease, transform 0.15s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+        .machine-showcase-img-link:hover .machine-showcase-img-badge {
+            background: var(--d-blue);
+            transform: translateY(-1px);
+        }
+        .machine-showcase-body {
+            padding: 10px 12px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .machine-showcase-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .machine-showcase-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--d-navy);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            line-height: 1.25;
+        }
+        .machine-showcase-title:hover {
+            color: var(--d-blue);
+        }
+        .machine-showcase-tagline {
+            font-size: 11.5px;
+            color: #5c7482;
+            line-height: 1.4;
+        }
+        .machine-showcase-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 4px;
+        }
+        .btn-machine-page {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #ffffff !important;
+            background: var(--d-blue);
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none !important;
+            transition: background 0.15s ease, transform 0.15s ease;
+        }
+        .btn-machine-page:hover {
+            background: #0087ad;
+            transform: translateY(-1px);
+        }
+        .btn-machine-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--d-navy) !important;
+            background: #f0f4f7;
+            border: 1px solid #dce4e8;
+            padding: 6px 11px;
+            border-radius: 6px;
+            text-decoration: none !important;
+            transition: background 0.15s ease, border-color 0.15s ease;
+        }
+        .btn-machine-pdf:hover {
+            background: #e4edf2;
+            border-color: var(--d-blue);
+            color: var(--d-blue) !important;
+        }
         .catalog-trust-badge {
             display: inline-flex;
             align-items: center;
@@ -1313,6 +1450,9 @@ const BDJChatApp = (() => {
             topic3: 'Uzyskaj wsparcie techniczne',
             iHave: 'Mam',
             clickPhoto: 'Kliknij zdjęcie, aby wybrać',
+            openInNewTab: 'Otwórz stronę w nowej karcie',
+            openPage: 'Strona produktu',
+            viewMachineOnWeb: 'Zobacz stronę maszyny',
             productCard: 'Karta produktu',
             productPage: 'Strona produktu',
             allBlowers: 'Wszystkie wdmuchiwarki BDJ →',
@@ -1377,6 +1517,9 @@ const BDJChatApp = (() => {
             topic3: 'Get technical support',
             iHave: 'I have',
             clickPhoto: 'Click the photo to select',
+            openInNewTab: 'Open page in new tab',
+            openPage: 'Product page',
+            viewMachineOnWeb: 'View on BDJ website',
             productCard: 'Product card',
             productPage: 'Product page',
             allBlowers: 'All BDJ blowing machines →',
@@ -1441,6 +1584,9 @@ const BDJChatApp = (() => {
             topic3: 'Technischen Support erhalten',
             iHave: 'Ich habe',
             clickPhoto: 'Klicken Sie auf das Foto zur Auswahl',
+            openInNewTab: 'In neuem Tab öffnen',
+            openPage: 'Produktseite',
+            viewMachineOnWeb: 'Auf BDJ-Website ansehen',
             productCard: 'Produktdatenblatt',
             productPage: 'Produktseite',
             allBlowers: 'Alle BDJ Einblasgeräte →',
@@ -1583,9 +1729,21 @@ const BDJChatApp = (() => {
     };
 
     let machineCatalog = { catalog_url: '', machines: [] };
-    const machineByTag = () => Object.fromEntries(
-        (machineCatalog.machines || []).map((m) => [m.tag, m])
-    );
+    const machineByTag = () => {
+        const map = {};
+        (machineCatalog.machines || []).forEach((m) => {
+            if (!m || !m.tag) return;
+            map[m.tag.toLowerCase()] = m;
+            const shortTag = m.tag.replace(/^bdj\s+/i, '').toLowerCase();
+            map[shortTag] = m;
+            if (m.display) {
+                map[m.display.toLowerCase()] = m;
+                const shortDisplay = m.display.replace(/^bdj\s+/i, '').toLowerCase();
+                map[shortDisplay] = m;
+            }
+        });
+        return map;
+    };
 
     const DOM = {
         fab: document.getElementById('fab-btn'),
@@ -2315,6 +2473,52 @@ const BDJChatApp = (() => {
         </div>`;
     };
 
+    const buildMachineShowcaseCard = (info) => {
+        if (!info) return '';
+        const url = info.url || 'https://bluedragonjet.com/c/wdmuchiwarki-pl/';
+        const tagline = (uiLang === 'en' && info.tagline_en)
+            ? info.tagline_en
+            : ((uiLang === 'de' && info.tagline_de) ? info.tagline_de : (info.tagline || ''));
+
+        const imgInner = info.image
+            ? `<img src="${info.image}" alt="${info.display}" loading="lazy" referrerpolicy="no-referrer" />`
+            : `<div class="machine-card-no-img"><span>${info.display}</span></div>`;
+
+        const imgLink = `<a class="machine-showcase-img-link" href="${url}" target="_blank" rel="noopener noreferrer" title="${info.display} — ${t('openInNewTab')}">
+            ${imgInner}
+            <span class="machine-showcase-img-badge">
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                ${t('openPage')} ↗
+            </span>
+        </a>`;
+
+        const pdfLink = info.product_card_url
+            ? `<a class="btn-machine-pdf" href="${info.product_card_url}" target="_blank" rel="noopener noreferrer" title="${t('productCard')} PDF">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                ${t('productCard')} PDF
+               </a>`
+            : '';
+
+        return `<div class="machine-showcase-card" data-machine-tag="${info.tag}" data-machine-display="${info.display}">
+            ${imgLink}
+            <div class="machine-showcase-body">
+                <div class="machine-showcase-header">
+                    <a class="machine-showcase-title" href="${url}" target="_blank" rel="noopener noreferrer" title="${info.display}">
+                        ${info.display}
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                </div>
+                ${tagline ? `<div class="machine-showcase-tagline">${tagline}</div>` : ''}
+                <div class="machine-showcase-actions">
+                    <a class="btn-machine-page" href="${url}" target="_blank" rel="noopener noreferrer">
+                        ${t('viewMachineOnWeb')} ↗
+                    </a>
+                    ${pdfLink}
+                </div>
+            </div>
+        </div>`;
+    };
+
     const buildMachineCard = (info) => {
         if (!info) return '';
         const img = info.image
@@ -2474,14 +2678,23 @@ const BDJChatApp = (() => {
 
         enhanceBotMarkdown(wrapper);
 
-        const cardTags = machineCardsAll || machineCardTags;
-        if (cardTags && cardTags.length) {
+        if (machineCardTags && machineCardTags.length) {
+            const container = document.createElement('div');
+            container.className = 'machine-showcase-container';
+            container.innerHTML = machineCardTags.map((tag) => {
+                const info = machineByTag()[tag];
+                return buildMachineShowcaseCard(info);
+            }).filter(Boolean).join('');
+            while (container.firstChild) wrapper.appendChild(container.firstChild);
+        }
+
+        if (machineCardsAll && machineCardsAll.length) {
             const grid = document.createElement('div');
-            grid.innerHTML = buildMachineCardsGrid(cardTags);
+            grid.innerHTML = buildMachineCardsGrid(machineCardsAll);
             while (grid.firstChild) wrapper.appendChild(grid.firstChild);
         }
 
-        if (productCardTag) {
+        if (productCardTag && !(machineCardTags && machineCardTags.length)) {
             const info = machineByTag()[productCardTag];
             if (info && info.product_card_url) {
                 const link = document.createElement('a');
@@ -3046,6 +3259,19 @@ const BDJChatApp = (() => {
             }
             if (e.target.closest('.machine-card-ext-link') || e.target.closest('.machine-card-pdf-link')) {
                 e.stopPropagation();
+                return;
+            }
+            if (e.target.closest('.machine-showcase-img-link, .machine-showcase-title, .btn-machine-page, .btn-machine-pdf')) {
+                // Pozwól na natywne przejście do nowej karty (target="_blank")
+                return;
+            }
+            const showcaseCard = e.target.closest('.machine-showcase-card');
+            if (showcaseCard) {
+                // Kliknięcie w dowolne miejsce karty showcase otwiera stronę w nowej karcie
+                const info = machineByTag()[showcaseCard.dataset.machineTag];
+                if (info && info.url) {
+                    window.open(info.url, '_blank', 'noopener,noreferrer');
+                }
                 return;
             }
             const mCard = e.target.closest('.machine-card--pick');

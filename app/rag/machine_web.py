@@ -178,6 +178,13 @@ def machine_web_info(tag: str | None) -> MachineWebInfo | None:
     key = tag.lower().strip()
     if key in MACHINE_WEB:
         return MACHINE_WEB[key]
+    try:
+        from app.rag.machines import _chip_to_tag
+        normalized = _chip_to_tag(key)
+        if normalized and normalized in MACHINE_WEB:
+            return MACHINE_WEB[normalized]
+    except Exception:
+        pass
     return None
 
 

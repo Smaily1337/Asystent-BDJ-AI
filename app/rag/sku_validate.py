@@ -70,6 +70,16 @@ def sanitize_answer_skus(
     """
     machine = resolve_machine_from_query(question or "", chip_machine=chip_machine)
     if not machine:
+        m_card = re.search(r"\[MACHINE_CARD:\s*([^\]]+)\]", answer, re.I)
+        m_quote = re.search(r"\[GET_QUOTE:\s*([^\]]+)\]", answer, re.I)
+        if m_card:
+            from app.rag.machines import _chip_to_tag
+            machine = _chip_to_tag(m_card.group(1).strip())
+        elif m_quote:
+            from app.rag.machines import _chip_to_tag
+            machine = _chip_to_tag(m_quote.group(1).strip())
+
+    if not machine:
         # Bez modelu — usuń wymyślone SKU z odpowiedzi LLM (BM25 potrafi wkleić obce kody).
         skus = extract_skus(answer)
         if not skus:
@@ -80,6 +90,8 @@ def sanitize_answer_skus(
         cleaned = re.sub(r"\|\s*\|", "| — |", cleaned)
         cleaned = re.sub(r"[ \t]{2,}", " ", cleaned)
         cleaned = re.sub(r"\n{3,}", "\n\n", cleaned).strip()
+        if "[MACHINE_CARD:" in cleaned or "[GET_QUOTE:" in cleaned:
+            return cleaned
         cards = format_machine_cards_tag(["all"])
         if is_parts_intent(question or ""):
             return loc(
@@ -90,7 +102,7 @@ def sanitize_answer_skus(
                 "or pick the model at the top of the chat.\n\n"
                 f"{cards}",
             )
-        if cards:
+        if cards and "[MACHINE_CARDS:" not in cleaned:
             return f"{cleaned}\n\n{cards}".strip()
         return cleaned
 

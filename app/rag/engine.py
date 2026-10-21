@@ -54,12 +54,54 @@ _PARTS_REASONS = frozenset({
 })
 
 
+def _extract_machine_card_if_recommended(answer: str) -> str | None:
+    """
+    Jeśli odpowiedź rekomenduje maszynę (np. zawiera [GET_QUOTE: MODEL]
+    lub wyraźnie poleca dany model), zwraca tag [MACHINE_CARD: <tag>].
+    """
+    if not answer:
+        return None
+    if "[MACHINE_CARD:" in answer or "[MACHINE_CARDS:" in answer:
+        return None
+
+    try:
+        from app.rag.machine_web import format_machine_card_tag, machine_web_info
+        from app.rag.machines import _chip_to_tag, resolve_machine_from_query
+
+        # 1. Z tagu [GET_QUOTE: MODEL]
+        quote_match = re.search(r"\[GET_QUOTE:\s*([^\]]+)\]", answer, re.IGNORECASE)
+        if quote_match:
+            model_str = quote_match.group(1).strip()
+            tag = _chip_to_tag(model_str) or resolve_machine_from_query(model_str)
+            if tag and machine_web_info(tag):
+                return format_machine_card_tag(tag)
+
+        # 2. Sprawdź czy odpowiedź zawiera wyraźną rekomendację konkretnej maszyny
+        rec_match = re.search(
+            r"(?:najlepszym wyborem jest|pierwszy wybór:|rekomenduj[eę]|polecam(?:y)?|wybierz)\s+"
+            r"(?:model\s+)?(?:\*\*)?(?:bdj\s+)?([a-z0-9\s+]+?)(?:\*\*|[.,\n\r])",
+            answer,
+            re.IGNORECASE,
+        )
+        if rec_match:
+            cand = rec_match.group(1).strip()
+            tag = _chip_to_tag(cand) or resolve_machine_from_query(cand)
+            if tag and machine_web_info(tag):
+                return format_machine_card_tag(tag)
+    except Exception as e:
+        print(f"⚠️ Error extracting recommended machine card: {e}")
+
+    return None
+
+
 def _needs_machine_cards(text: str) -> bool:
     if not text:
         return False
     if "[MACHINE_CARDS:" in text or "[MACHINE_CARD:" in text:
         return False
     t = text.lower()
+    if "[get_quote:" in t:
+        return False
     markers = [
         "podaj proszę model",
         "podaj model",
@@ -273,8 +315,12 @@ class SessionChatManager:
         except Exception:
             self.reset(sid)
             engine = self.get_engine(sid)
-            answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
-        if not chip_for_lookup and _needs_machine_cards(answer):
+            raw = str(engine.chat(query))
+        answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
+        rec_card = _extract_machine_card_if_recommended(answer)
+        if rec_card:
+            answer = f"{answer.rstrip()}\n\n{rec_card}"
+        elif not chip_for_lookup and _needs_machine_cards(answer):
             from app.rag.machine_web import format_machine_cards_tag
             cards = format_machine_cards_tag(["all"])
             if cards and "[MACHINE_CARDS:" not in answer and "[MACHINE_CARD:" not in answer:
@@ -438,7 +484,12 @@ class SessionChatManager:
             yield raw
 
         answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
-        if not chip_for_lookup and _needs_machine_cards(answer):
+        rec_card = _extract_machine_card_if_recommended(answer)
+        if rec_card:
+            extra = f"\n\n{rec_card}"
+            answer += extra
+            yield extra
+        elif not chip_for_lookup and _needs_machine_cards(answer):
             from app.rag.machine_web import format_machine_cards_tag
             cards = format_machine_cards_tag(["all"])
             if cards and "[MACHINE_CARDS:" not in answer and "[MACHINE_CARD:" not in answer:
