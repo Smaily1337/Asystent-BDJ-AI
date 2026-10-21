@@ -2,8 +2,8 @@
 
 ## Metadata
 - **Źródło**: „Budowa nowoczesnych sieci telekomunikacyjnych z zastosowaniem techniki wdmuchiwania kabli światłowodowych”, autor: mgr inż. Michał Andrzejewski (GAMM-BUD / Blue Dragon Jet), Rozdziały 9.1, 10.7, 10.8, 10.9 i 11.4.
-- **Kategoria**: Sprzęt Pneumatyczny, Kompresory Śrubowe, Chłodnice Końcowe (Aftercooler), Osuszacze Powietrza, Naolejacze, Parametry Powietrza
-- **Słowa kluczowe**: kompresor śrubowy, po chłodnica, chłodnica końcowa, aftercooler, osuszacz powietrza, separator cyklonowy, wydatek powietrza, ciśnienie robocze, balonowanie mikrorur, zamarzanie silnika pneumatycznego, mgła olejowa
+- **Kategoria**: Sprzęt Pneumatyczny, Kompresory Śrubowe, Chłodnice Końcowe (Aftercooler), Osuszacze Powietrza, Podgrzewacze Powietrza na Propan-Butan, Naolejacze
+- **Słowa kluczowe**: kompresor śrubowy, po chłodnica, chłodnica końcowa, aftercooler, osuszacz powietrza, podgrzewacz powietrza, propan-butan, separator cyklonowy, Kaeser M82, Kaeser M13, Kaeser i-comp 3, balonowanie mikrorur, zamarzanie silnika pneumatycznego, mgła olejowa
 
 ---
 
@@ -11,17 +11,17 @@
 
 Sprężone powietrze jest nośnikiem energii w procesie wdmuchiwania kabli. W zależności od średnicy rurociągu wymagane są zupełnie inne parametry ciśnienia i wydatku objętościowego:
 
-| Kategoria instalacji | Średnice kabla | Średnice rurociągu (ID) | Wymagane ciśnienie robocze | Wymagany wydatek objętościowy powietrza | Typowy model sprężarki |
+| Kategoria instalacji | Średnice kabla | Średnice rurociągu (ID) | Wymagane ciśnienie robocze | Wymagany wydatek objętościowy powietrza | Typowe modele sprężarek z programu produkcyjnego |
 |:---|:---:|:---:|:---:|:---:|:---|
-| **Tradycyjne kable doziemne i rury wtórne** | $10 – 25\text{ mm}$ | $26 – 41\text{ mm}$ (HDPE 32, 40, 50) | **$8 – 10\text{ bar}$** | **$> 10{,}0\text{ m}^3\text{/min}$** (zazwyczaj 10–12 m³/min) | Przewoźna sprężarka śrubowa dużej wydajności (np. Kaeser M100, M122, Atlas Copco) |
-| **Mikrokable standardowe** | $2 – 10\text{ mm}$ | $6 – 16\text{ mm}$ (Speedpipe 10–20) | **do $15 – 16\text{ bar}$** | **$1{,}0 – 2{,}0\text{ m}^3\text{/min}$** | Przewoźna sprężarka wysokociśnieniowa (np. Kaeser M17A 15 bar, M27 14 bar, M31) |
-| **Cienkie mikrokable i wiązki EPFU** | $0{,}8 – 2\text{ mm}$ | $3 – 6\text{ mm}$ (Speedpipe 5–7) | **$10 – 15\text{ bar}$** | **$0{,}1 – 0{,}5\text{ m}^3\text{/min}$** | Kompaktowy kompresor elektryczny lub spalinowy wysokociśnieniowy |
+| **Tradycyjne kable doziemne i rury wtórne** | $10 – 25\text{ mm}$ | $26 – 41\text{ mm}$ (HDPE 32, 40, 50) | **$8 – 10\text{ bar}$** | **$8{,}0 – 12{,}0\text{ m}^3\text{/min}$** | Przewoźna sprężarka śrubowa dużej wydajności (np. **Kaeser M82**, **M100**, **M122**, Atlas Copco) |
+| **Mikrokable standardowe** | $2 – 10\text{ mm}$ | $6 – 16\text{ mm}$ (Speedpipe 10–20) | **do $15 – 16\text{ bar}$** | **$1{,}0 – 2{,}0\text{ m}^3\text{/min}$** | Przewoźna sprężarka wysokociśnieniowa (np. **Kaeser M13 15 bar**, **M17A 15 bar**, **M27 14 bar**, **M31**) |
+| **Cienkie mikrokable i wiązki EPFU** | $0{,}8 – 2\text{ mm}$ | $3 – 6\text{ mm}$ (Speedpipe 5–7) | **$10 – 12\text{ bar}$** | **$0{,}1 – 0{,}5\text{ m}^3\text{/min}$** | Kompaktowy kompresor tłokowy wysokociśnieniowy (np. **Kaeser i-comp 3**) |
 
 > [!CRITICAL]
 > **Fakt Inżynieryjny: Brak Uniwersalnego Kompresora**:
 > **Nie istnieje jeden uniwersalny kompresor obsługujący całe spektrum telekomunikacji!**
 > 1. Sprężarka do rur grubościennych (np. $10\text{ m}^3\text{/min}$ przy $8\text{ bar}$) jest **całkowicie bezużyteczna przy wdmuchiwaniu mikrokabli**, ponieważ nie jest w stanie wygenerować ciśnienia $15\text{ bar}$ niezbędnego do przezwyciężenia oporów mikrorur.
-> 2. Sprężarka wysokociśnieniowa do mikrokanalizacji ($15\text{ bar}$, lecz wydatek tylko $1{,}5\text{ m}^3\text{/min}$) jest **bezużyteczna dla rury HDPE 40**, ponieważ prędkość liniowa powietrza w rurze o dużym przekroju spadnie niemal do zera – powietrze natychmiast ucieknie bez wytworzenia siły aerodynamicznej.
+> 2. Sprężarka wysokociśnieniowa do mikrokanalizacji ($15\text{ bar}$, lecz wydatek tylko $1{,}2 – 1{,}5\text{ m}^3\text{/min}$) jest **bezużyteczna dla rury HDPE 40**, ponieważ prędkość liniowa powietrza w rurze o dużym przekroju spadnie niemal do zera – powietrze natychmiast ucieknie bez wytworzenia siły aerodynamicznej.
 
 ---
 
@@ -63,7 +63,16 @@ Schłodzenie sprężonego powietrza w chłodnicy powoduje gwałtowny spadek jego
 
 ---
 
-## 4. Naolejacz Mgłowy do Silników Pneumatycznych
+## 4. Podgrzewacze Powietrza na Gaz Propan-Butan (Praca w Warunkach Zimowych)
+
+W sytuacjach awaryjnych lub przy pracach w warunkach głębokiego mrozu i wysokiej wilgotności względnej, gdy ekipa instalacyjna nie dysponuje sprężarką z wbudowanym osuszaczem adsorpcyjnym, stosuje się **zewnętrzne podgrzewacze powietrza**:
+- **Zasada działania**: Urządzenie wyposażone w wysokowydajny palnik gazowy zasilany butlą z gazem **propan-butan**.
+- **Funkcja**: Sprężone powietrze przepływa przez wymiennik ciepła podgrzewacza gazowego przed podaniem do wdmuchiwarki.
+- **Efekt**: Podniesienie temperatury strumienia powietrza powyżej punktu tworzenia się kryształków lodu całkowicie eliminuje ryzyko zamarznięcia łopatek silników pneumatycznych oraz korków lodowych wewnątrz rurociągu kablowego.
+
+---
+
+## 5. Naolejacz Mgłowy do Silników Pneumatycznych
 
 1. **Konstrukcja i Przeznaczenie**:
    - Wdmuchiwarki wyposażone w napęd pneumatyczny (np. silniki łopatkowe) wymagają ciągłego smarowania elementów wirujących.

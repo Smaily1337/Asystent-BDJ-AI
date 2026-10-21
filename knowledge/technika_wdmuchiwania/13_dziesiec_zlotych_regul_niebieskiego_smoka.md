@@ -1,88 +1,103 @@
 # Baza Wiedzy: Dziesięć Złotych Reguł Niebieskiego Smoka (Kanon Inżynieryjny GAMM-BUD)
 
 ## Metadata
-- **Źródło**: „Budowa nowoczesnych sieci telekomunikacyjnych z zastosowaniem techniki wdmuchiwania kabli światłowodowych”, autor: mgr inż. Michał Andrzejewski (GAMM-BUD / Blue Dragon Jet), Rozdział 14 (Podsumowanie i kanon dobrych praktyk inżynierskich).
-- **Kategoria**: Kanon Inżynieryjny, Złote Zasady Wdmuchiwania, Standardy Jakości, Etyka Wykonawcza, Wytyczne BDJ
-- **Słowa kluczowe**: Złote Reguły Niebieskiego Smoka, Blue Dragon Jet, dekalog wdmuchiwacza, dobre praktyki inżynieryjne, BHP wdmuchiwania, crash-test, aftercooler, relaksacja 5 minut, kalibracja rury, zasada 60 procent
+- **Źródło**: „Budowa nowoczesnych sieci telekomunikacyjnych z zastosowaniem techniki wdmuchiwania kabli światłowodowych”, autor: mgr inż. Michał Andrzejewski (GAMM-BUD / Blue Dragon Jet), Rozdział 14 (Oficjalny kanon dziesięciu reguł, Szczecin 2023/2024).
+- **Kategoria**: Kanon Inżynieryjny, Złote Zasady Wdmuchiwania, Standardy Jakości GAMM-BUD, Procedura Operacyjna, BHP
+- **Słowa kluczowe**: Dziesięć Złotych Reguł Niebieskiego Smoka, Blue Dragon Jet, dekalog wdmuchiwacza, dobór wdmuchiwarki, crash-test, aftercooler, zasada 5 minut, zasada 60 procent, Kaeser M82, M13, BDJ MultiTube, Figaro, Twister
 
 ---
 
-## Dziesięć Złotych Reguł Wdmuchiwania Kabli Światłowodowych
+## Oficjalny Dekalog Niebieskiego Smoka (Kanon GAMM-BUD / Blue Dragon Jet)
 
-Poniższy zbiór dziesięciu reguł stanowi autorytatywny kanon wiedzy inżynieryjnej wypracowany przez ekspertów **GAMM-BUD / Blue Dragon Jet** na bazie ponad 25 lat doświadczeń laboratoryjnych i polowych. Przestrzeganie tych zasad eliminuje 99% ryzyka uszkodzenia światłowodu i gwarantuje osiąganie maksymalnych zasięgów instalacyjnych.
-
----
-
-### Reguła 1: Zawsze wykonaj próbę ciśnieniową i kalibrację rurociągu przed wdmuchiwaniem
-- **Zasada**: Nigdy nie przystępuj do wdmuchiwania kabla „w ciemno”.
-- **Wymóg techniczny**:
-  - Próba ciśnieniowa: min. **10 bar** dla rurociągów wtórnych HDPE lub **15–20 bar** dla mikrokanalizacji.
-  - Kalibracja: przedmuchanie sztywnego wałka poliuretanowego o średnicy **$\ge 90\%$ ID rury** (dla HDPE 32/40/50) lub stalowej kulki kalibracyjnej o średnicy **$80\% – 90\%$ ID mikrorury**.
-- **Dlaczego to kluczowe**: Zgniot rury od kamienia polnego lub czop mułu po HDD zniszczy kabel. Jeśli wałek kalibracyjny nie przejdzie przez rurę, kabel tym bardziej nie ma szans przejść!
+Poniższy zbiór dziesięciu reguł stanowi autorytatywny kanon procedur inżynieryjnych wypracowany przez mgr inż. Michała Andrzejewskiego oraz zespół inżynierów GAMM-BUD / Blue Dragon Jet. Przestrzeganie tych reguł eliminuje 99% awarii i gwarantuje bezpieczne osiągnięcie maksymalnych dystansów wdmuchiwania.
 
 ---
 
-### Reguła 2: Bezwzględny zakaz cięcia rur piłami do metalu i nożami tapicerskimi
-- **Zasada**: Do obróbki rurociągów wtórnych i mikrorur stosuj wyłącznie dedykowane obcinaki krążkowe (rotary cutters) oraz nożyce gilotynowe.
-- **Wymóg techniczny**: Po wykonaniu prostopadłego cięcia, każda krawędź rury musi zostać poddana gratowaniu (fazowaniu) od wewnątrz i od zewnątrz specjalnym deburrerem.
-- **Dlaczego to kluczowe**: Piła generuje ostre wióry i zadziory, które wewnątrz mikrorury tworzą czopy blokujące światłowód, a brak zewnętrznego gratowania niszczy uszczelki O-ring w złączkach push-fit.
+### Reguła 1: Przygotuj odpowiednio kanalizację teletechniczną
+1. **Sprawdź szczelność rurociągu**: Przeprowadź próbę ciśnieniową (min. **10 bar przez 12h** dla rurociągów wtórnych HDPE lub **15–20 bar** dla mikrokanalizacji; wg wytycznych Deutsche Telekom dla DN 32/40/50: **5 bar przez 15 minut**, spadek $\le 0{,}6\text{ bar}$).
+2. **Sprawdź drożność i geometrię rurociągu**: Dokonaj kalibracji przedmuchując wałek kalibracyjny ($\ge 90\%$ ID rury HDPE) lub kulki stalowe o średnicy **$80\% – 90\%$ wewnętrznej średnicy mikrorurki**. Kalibrator wyposaż w sondę radiową 33 kHz / 512 Hz.
+3. **Oczyść i przesmaruj rurociąg**: Przedmuchaj kanalizację cylindryczną gąbką piankową nasączoną certyfikowanym płynem poślizgowym.
+4. **Cięcie rur**: Bezwzględny zakaz stosowania pił do metalu i noży tapicerskich! Używaj wyłącznie obcinaków krążkowych i nożyc gilotynowych, a każdą krawędź fazuj gratownikiem wewnątrz i na zewnątrz.
 
 ---
 
-### Reguła 3: Zawsze wykonaj Crash-Test przed rozpoczęciem wdmuchiwania
-- **Zasada**: Przed wdmuchaniem pierwszego metra kabla wykonaj próbę zderzeniową na testowym odcinku rury (1,0 m mikrorury lub 1,5 m rury HDPE) z zaślepką oporową.
-- **Wymóg techniczny**: Stopniowo zwiększaj siłę silnika podajnika do momentu zaobserwowania pierwszego ugięcia kabla. Za maksymalną bezpieczną siłę roboczą przyjmij wartość z **poprzedniego, w pełni stabilnego kroku**.
-- **Dlaczego to kluczowe**: Tylko Crash-Test gwarantuje, że w przypadku nagłego napotkania przeszkody podajnik wdmuchiwarki wejdzie w bezpieczny poślizg, zamiast złamać włókna światłowodowe.
+### Reguła 2: Dobierz odpowiednią średnicę kabla do istniejącej kanalizacji
+1. **Złota reguła 60%**: Stosunek średnicy zewnętrznej kabla do średnicy wewnętrznej rurki ($d/D$) powinien wynosić optymalnie **ok. 60%** (zakres dopuszczalny: 50% – 70% dla mikrokanalizacji, ~40% dla kanalizacji wtórnej).
+2. Przy tej wartości uzyskuje się największe zasięgi wdmuchiwania:
+   - Zbyt cienki kabel ($K_d < 35\%$) fałduje się w helisę (wężowanie) i ulega wyboczeniu.
+   - Zbyt gruby kabel ($K_d > 75\%$) dławi przepływ powietrza i niszczy siłę aerodynamiczną.
 
 ---
 
-### Reguła 4: Utrzymuj optymalny stopień wypełnienia rurociągu (Złota Zasada 60%)
-- **Zasada**: Średnica zewnętrzna kabla ($d$) w stosunku do średnicy wewnętrznej rurociągu ($D$) powinna wynosić optymalnie **$K_d \approx 50\% – 70\%$** (idealnie ok. **60%**).
-- **Dlaczego to kluczowe**:
-  - Jeżeli kabel jest zbyt cienki ($K_d < 35\%$), pofałduje się w spiralę (zjawisko helisy) i zakleszczy.
-  - Jeżeli kabel jest zbyt gruby ($K_d > 75\%$), przepływ powietrza zostanie zdławiony i zaniknie poduszka aerodynamiczna.
+### Reguła 3: Dobierz odpowiedni kompresor
+*Nie istnieje jedna uniwersalna sprężarka do wszystkich zastosowań:*
+1. **Rury osłonowe HDPE $32 – 50\text{ mm}$**: Duże kompresory śrubowe o wydajności **$8 – 11\text{ m}^3\text{/min}$** i ciśnieniu roboczym **$8 – 10\text{ bar}$** (np. Kaeser M82, M100, M122).
+2. **Rury i mikrorury o średnicach $12 – 20\text{ mm}$**: Kompresor wysokociśnieniowy o ciśnieniu **$15\text{ bar}$** i wydajności **do $2\text{ m}^3\text{/min}$** (np. Kaeser M17A, M27, M31).
+3. **Mikrorurki o średnicach $7 – 12\text{ mm}$**: Kompresor o ciśnieniu **$15\text{ bar}$** i wydajności **$1\text{ m}^3\text{/min}$** (np. Kaeser M13 15 bar).
+4. **Mikrorurki cienkie o średnicach do $7\text{ mm}$**: Kompresory kompaktowe o ciśnieniu **$10 – 12\text{ bar}$** i wydajności **$0{,}1 – 0{,}5\text{ m}^3\text{/min}$** (np. Kaeser i-comp 3).
 
 ---
 
-### Reguła 5: Nigdy nie wdmuchuj gorącym powietrzem – chłodnica końcowa (Aftercooler) jest obowiązkowa
-- **Zasada**: Sprężone powietrze opuszczające stopień sprężarki śrubowej ma temperaturę $> 90^\circ\text{C} – 110^\circ\text{C}$. Bezwzględnie przepuszczaj je przez chłodnicę końcową z separatorem wody.
-- **Wymóg techniczny**: Temperatura powietrza wdmuchującego nie może przekraczać temperatury otoczenia o więcej niż $+5^\circ\text{C} \text{ do } +10^\circ\text{C}$.
-- **Dlaczego to kluczowe**: Gorące powietrze rozmiękcza mikrorury (zjawisko balonowania i wybuchu rury pod ciśnieniem 15 bar), niszczy powłokę kabla i powoduje gwałtowny wzrost tarcia.
+### Reguła 4: Dobierz odpowiednią wdmuchiwarkę (Dopasowanie Maszyn BDJ)
+1. **Mikrorurki do $12\text{ mm}$**: **BDJ Budget** (lekka, napędzana wkrętarką akumulatorową lub silnikiem elektrycznym).
+2. **Mikrorurki do $20\text{ mm}$**: **BDJ Mini**, **BDJ Standard**, **BDJ Extendet / BDJ Smart** (zaawansowane podajniki rolkowe i paskowe, napęd pneumatyczny lub elektryczny).
+3. **Rurociągi wtórne i HDPE do $50\text{ mm}$**: **BDJ Max** (napęd pneumatyczny), **BDJ Hydro**, **BDJ HydroChain** (potężny podajnik łańcuchowo-gąsienicowy, napęd hydrauliczny o sile ciągu do 160–200 daN).
+4. **Wdmuchiwanie pakietów mikrorur**: **BDJ MultiTube** oraz **BDJ MultiTube Belt** (specjalistyczne głowice i podajniki gąsienicowe/paskowe do jednoczesnego wdmuchiwania wiązek mikrorur do rur HDPE).
 
 ---
 
-### Reguła 6: Dobierz właściwy kompresor – nie ma jednej sprężarki do wszystkiego
-- **Zasada**: Ściśle dopasuj parametry sprężarki do technologii:
-  - Rury wtórne HDPE (32, 40, 50 mm): kompresor o wydatku **$> 10\text{ m}^3\text{/min}$** i ciśnieniu **$8 – 10\text{ bar}$**.
-  - Mikrokanalizacja (Speedpipe 7–16 mm): kompresor wysokociśnieniowy **do $15 – 16\text{ bar}$** o wydatku **$1{,}0 – 2{,}0\text{ m}^3\text{/min}$**.
-- **Dlaczego to kluczowe**: Kompresor o za małym ciśnieniu nie przepchnie powietrza w mikrorurze, a kompresor o małym wydatku nie wypełni rury HDPE 40 mm.
+### Reguła 5: Dobierz odpowiedni osprzęt pomocniczy
+1. **Osprzęt kompresorów**: Obowiązkowa chłodnica końcowa (Aftercooler – schłodzenie powietrza do temp. otoczenia $+5..10^\circ\text{C}$ zapobiegające balonowaniu mikrorur), separator cyklonowy, osuszacz ziębniczy/adsorpcyjny oraz **podgrzewacz powietrza na propan-butan** w warunkach silnych mrozów.
+2. **Osprzęt wdmuchujący**: Złącza Y i X do technologii overblowing (dodmuchiwanie), głowice dodmuchujące (Nachblaskopf / CableBooster).
+3. **Osprzęt do kabli**: Przyczepy kablowe, hydrauliczne stojaki odwijające z hamulcem tarczowym/taśmowym, automatyczne zasobniki do odwijania nadmiaru kabla (**Twister**, **Figaro**).
+4. **Osprzęt do rur**: Rozcinacze folii pakietów mikrorur, hermetyczne główki prowadzące z uszczelką O-ring do pompowania mikrorur, aparatura do napełniania mikrorur sprężonym powietrzem (4–6 bar).
 
 ---
 
-### Reguła 7: Używaj właściwego lubrykantu i dawkuj go zgodnie ze sztuką
-- **Zasada**:
-  - Dla kabli i mikrokabli o średnicy **$> 1{,}5\text{ mm}$**: stosuj wyłącznie certyfikowane płyny poślizgowe (lubrykanty polimerowe/wodne), aplikowane wstępnie gąbką oraz stale przez lubrykator.
-  - Dla mikrowłókien i mikrokabli o średnicy **$\le 1{,}5\text{ mm}$**: **BEZWZGLĘDNY ZAKAZ STOSOWANIA PŁYNÓW POŚLIZGOWYCH** (wdmuchiwanie wyłącznie na sucho).
-- **Dlaczego to kluczowe**: Odpowiedni lubrykant redukuje współczynnik tarcia o 80%, ale dla ultracienkich włókien lepkość płynu powoduje ich natychmiastowe przyklejenie do rurki!
+### Reguła 6: Zadbaj o perfekcyjną organizację placu budowy
+1. **Odwijanie kabla**: Zapewnij swobodne odwijanie kabla z bębna ze stałą kontrolą siły naciągu i zabezpieczeniem przed bezwładnościowym rozbieganiem się bębna.
+2. **Stabilność wdmuchiwarki**: Ustaw maszynę na stabilnym stojaku warsztatowym lub dedykowanym statywie mobilnym, chroniąc ją przed błotem, kurzem i wodą.
+3. **Osiowość wprowadzenia**: Bęben z kablem, wdmuchiwarka oraz wejście do rurociągu muszą znajdować się w miarę możliwości w jednej linii prostej.
+4. **Strefa wylotowa (BHP)**: Na końcu trasy wdmuchiwania (w studni docelowej) zainstaluj siatkę wychwytującą lub kosz ochronny, aby pędzący tłoczek, kulka lub czoło kabla pod ciśnieniem 15 bar nie uderzyły pracowników.
 
 ---
 
-### Reguła 8: Zastosuj mosiężną głowicę pilotującą na czole kabla
-- **Zasada**: Na czoło wdmuchiwanego kabla zawsze załóż fabryczną głowicę prowadzącą o obłym kształcie pocisku (bullet head).
-- **Dlaczego to kluczowe**: Ostre czoło kabla wbija się w ścianki rurociągu na zakrętach, blokuje na krawędziach złączek push-fit, a pęd powietrza może zerwać płaszcz zewnętrzny i rozpleść tuby z włóknami.
+### Reguła 7: Zadbaj o wyposażenie i bezpieczeństwo obsługi
+1. Wszyscy operatorzy muszą przejść formalne szkolenie z obsługi wdmuchiwarki i kompresora; instrukcje DTR muszą być obecne na stanowisku pracy.
+2. Obsługa musi bezwzględnie stosować środki ochrony indywidualnej (okulary ochronne, rękawice, nauszniki przeciwhałasowe, obuwie ze stalowym podnoskiem).
+3. Zapewnij stałą łączność radiową (radiotelefony) pomiędzy operatorami wdmuchiwarki a ekipą w studni końcowej.
+4. Po zakończeniu pracy bezwzględnie zredukuj ciśnienie we wszystkich przewodach pneumatycznych i komorze wdmuchującej do ciśnienia atmosferycznego (0 bar).
 
 ---
 
-### Reguła 9: W razie nagłego zatrzymania – zatrzymaj napęd, zrzuć ciśnienie i odczekaj 5 minut
-- **Zasada (Zasada 5 Minut)**: W momencie zablokowania kabla natychmiast wyłącz wdmuchiwarkę, otwórz zawór upustowy do 0 bar i **bezwzględnie odczekaj 5 minut**.
-- **Dlaczego to kluczowe**: W tworzywie HDPE zachodzi relaksacja naprężeń wzdłużnych, fale uderzeniowe wygasają, a tarcie spoczynkowe maleje o połowę. Po 5 minutach wykonaj krótki impuls mechaniczny bez powietrza, a następnie powoli otwieraj zawór ciśnieniowy.
+### Reguła 8: Przygotuj odpowiednio kabel do wdmuchiwania
+1. Skontroluj prawidłowość nawinięcia kabla na bębnie (brak zakleszczonych zwojów).
+2. Sprawdź, czy powłoka zewnętrzna nie wykazuje deformacji, załamań lub spłaszczeń.
+3. Bezwzględnie zabezpiecz kabel przed zanieczyszczeniem piaskiem lub błotem (rozwijanie wyłącznie na plandekach lub z kosza Twister).
+4. Na czoło kabla załóż dopasowaną mosiężną główkę pilotującą o kształcie pocisku (bullet head), chroniącą włókna przed rozerwaniem pędem powietrza i uskokami złączek.
 
 ---
 
-### Reguła 10: Szanuj geometrię trasy – 47% sukcesu zależy od prac ziemnych
-- **Zasada**: Pamiętaj o badaniach Vetter Cableverlegetechnik – aż 47% powodzenia wdmuchiwania (geometria 24% + jakość ułożenia 23%) wynika z jakości robót budowlano-ziemnych.
-- **Wymóg techniczny**:
-  - Promienie gięcia: **$R > 2{,}5\text{ m}$** dla HDPE, **$R > 1{,}5\text{ m}$** dla mikrorur.
-  - Zafalowanie trasy: **$\le 0{,}2\% – 0{,}3\%$**.
-  - Podsypka piaskowa: min. 10 cm pod rurą, 20–30 cm nad rurą bez kamieni.
-  - Ciśnienie poduszkowe: **4–6 bar** wewnątrz cienkościennych mikrorur podczas zagęszczania wykopu.
+### Reguła 9: Przeprowadź CRASH-TEST przed każdym wdmuchiwaniem
+1. Zamocuj w głowicy wdmuchiwarki krótki odcinek rury testowej (**$1{,}0\text{ m}$ dla mikrorurki** lub **$1{,}5\text{ m}$ dla rury HDPE 32/40/50**).
+2. Zablokuj wylot rury sztywnym korkiem zaślepiającym.
+3. Wprowadź do podajnika wdmuchiwarki odcinek 3–4 m kabla z bębna roboczego.
+4. Ustaw moc silnika podajnika na minimum i uruchom podajnik z pełną prędkością roboczą w kierunku zaślepki.
+5. Powtarzaj próbę, zwiększając za każdym razem moc silnika o mały krok, aż do zaobserwowania pierwszego ugięcia (wyboczenia) kabla.
+6. **Maksymalną bezpieczną siłą wpychającą podajnika będzie wartość z ostatniej próby, która nie spowodowała ugięcia kabla!**
+
+---
+
+### Reguła 10: Przeprowadź prawidłowo proces wdmuchiwania
+1. Załóż na końcówkę kabla mosiężną główkę prowadzącą.
+2. Wlej do rurociągu odpowiednią porcję certyfikowanego płynu poślizgowego (dla mikrokabli $\le 1{,}5\text{ mm}$ – wyłącznie na sucho bez płynu!).
+3. Wepchnij ręcznie kabel do rurki na kilkanaście metrów.
+4. Zamocuj rurkę i kabel w głowicy wdmuchiwarki.
+5. Uruchom podajnik mechaniczny **BEZ POWIETRZA** z prędkością do **$60\text{ m/min}$** i wprowadź kabel na maksymalną odległość, pilnując, by nie przekroczyć siły z Crash-Testu.
+6. Gdy kabel zacznie zwalniać, powoli otwórz zawór powietrza, ustawiając ciśnienie początkowe **nie większe niż 2 bary**.
+7. W miarę oddalania się kabla podnoś ciśnienie stopniowo **o 1 bar**, aż do osiągnięcia stabilnego posuwu roboczego.
+8. **Zasada 5 minut w sytuacji awaryjnej**: Jeśli kabel nagle zatrzyma się w rurociągu:
+   - Natychmiast wyłącz wdmuchiwarkę i odpowietrz rurę do 0 bar.
+   - **Odczekaj minimum 5 minut** (czas na relaksację sprężystą HDPE i spadek tarcia spoczynkowego).
+   - Wykonaj krótki impuls mechaniczny bez powietrza (2–3 s), po czym stopniowo podawaj ciśnienie od 1–2 bar w górę.
+   - Operację tę można z powodzeniem powtórzyć kilkukrotnie.

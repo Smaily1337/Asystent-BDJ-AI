@@ -1,83 +1,91 @@
 # Baza Wiedzy: Urządzenia Pomocnicze i Osprzęt do Wdmuchiwania Kabli
 
 ## Metadata
-- **Źródło**: „Budowa nowoczesnych sieci telekomunikacyjnych z zastosowaniem techniki wdmuchiwania kabli światłowodowych”, autor: mgr inż. Michał Andrzejewski (GAMM-BUD / Blue Dragon Jet), Rozdział 10.
-- **Kategoria**: Urządzenia Pomocnicze, Osprzęt Instalacyjny, Złączki Y, Kosze Ósemkowe Twister, Lubrykatory, Sondy Lokalizacyjne
-- **Słowa kluczowe**: złączka Y, złączka X, overblowing, dodmuchiwanie kabli, kosz ósemkowy, twister kablowy, stojak hydrauliczny do bębnów, lubrykator kablowy, płyn poślizgowy, głowica pilotująca, sonda radiowa 33kHz, lokalizator trasy
+- **Źródło**: „Budowa nowoczesnych sieci telekomunikacyjnych z zastosowaniem techniki wdmuchiwania kabli światłowodowych”, autor: mgr inż. Michał Andrzejewski (GAMM-BUD / Blue Dragon Jet), Rozdział 10 (Urządzenia i materiały pomocnicze).
+- **Kategoria**: Urządzenia Pomocnicze, Osprzęt Instalacyjny, Złączki Y/X, Twistery, Rozcinacze Pakietów, Głowice Ciśnieniowe Mikrorur, Aparatura Napełniająca
+- **Słowa kluczowe**: złączka Y, złączka X, głowica dodmuchująca, Nachblaskopf, CableBooster, lubrykator kablowy, twister kablowy, kosz Figaro, rozcinacz folii mikrorur, główki prowadzące mikrorurki, aparatura napełniania mikrorurek, sonda radiowa 33kHz, stojak wdmuchiwarki
 
 ---
 
-## 1. Złączki Rozgałęźne Y i X (Technologia Overblowing)
+## 1. Złączki Rozgałęźne Y i X oraz Głowice Dodmuchujące (Overblowing)
 
-Złączki typu Y (oraz rzadziej typu X) służą do wprowadzania dodatkowego kabla światłowodowego lub wiązki mikrorur do rurociągu kablowego, w którym znajduje się już zainstalowany i czynny kabel transmisyjny (technika *overblowing* / dodmuchiwanie):
+Złączki typu Y, złącza X oraz głowice dodmuchujące umożliwiają wprowadzenie dodatkowego kabla światłowodowego lub wiązki mikrorur do rurociągu kablowego, w którym znajduje się już zainstalowany i czynny kabel:
 
-### 1.1. Konstrukcja i Zasada Działania Złączki Y
-- **Korpus ciśnieniowy**: Wykonany ze stopów aluminium lub hartowanego tworzywa, odporny na ciśnienie robocze min. **16 bar**.
-- **Wprowadzenie kabla czynnego**: Boczna odnoga wyposażona w demontowalną, wzdłużnie dzieloną uszczelkę elastomerową dopasowaną precyzyjnie do średnicy pracującego już kabla.
-- **Wprowadzenie nowego kabla**: Centralna odnoga podłączana jest pod głowicę wdmuchiwarki.
-- **Doprowadzenie sprężonego powietrza**: Powietrze ze sprężarki wtłaczane jest do wnętrza rurociągu przez komorę złączki Y, opływając kabel czynny i tworząc poduszkę aerodynamiczną dla nowego kabla.
+### 1.1. Konstrukcja i Zastosowanie Złączek Y i X
+- **Złącze Y**: Posiada dwa wejścia i jedno wyjście ciśnieniowe (min. 16 bar). Boczna odnoga uszczelnia wzdłużnie kabel czynny za pomocą dzielonej uszczelki elastomerowej. Centralna odnoga przyjmuje nowy kabel z wdmuchiwarki.
+  - *Zastosowanie w rurociągach HDPE*: Standard dla średnic $\ge 32\text{ mm}$ (np. Lancier, Plumett).
+  - *Zastosowanie w mikrokanalizacji*: Specjalna modyfikacja głowicy wdmuchiwarki **Blue Dragon Jet Standard**, umożliwiająca dodmuchanie mikrokabla do częściowo zajętej mikrorury.
+- **Złącze X**: Przyrząd specjalistyczny wyposażony w trzy wprowadzenia, pozwalający na dodmuchanie trzeciego kabla do rurociągu, w którym pracują już dwa kable światłowodowe (np. Fremco X-block).
 
-### 1.2. Wymogi Techniczne przy Dodmuchiwaniu (Overblowing)
-1. **Współczynnik zajętości przestrzeni**: Całkowity przekrój poprzeczny wszystkich kabli w rurze po dodmuchaniu nie powinien przekraczać **$40\% – 50\%$** wewnętrznego przekroju rury.
-2. **Ryzyko przetarcia**: Nowy wdmuchiwany kabel musi być obficie zwilżany dedykowanym lubrykantem, aby zapobiec miejscowemu przetarciu powłoki kabla pracującego na łukach rurociągu.
-3. **Czoło kabla**: Nowy kabel musi być bezwzględnie wyposażony w gładką, zaokrągloną głowicę pilotującą bez ostrych krawędzi.
+### 1.2. Głowice Dodmuchujące (Cable Booster / Nachblaskopf)
+- Urządzenia stosowane w celu zwiększenia sumarycznego zasięgu wdmuchiwania lub do wprowadzenia nadmiaru kabla pozostawionego w zasobniku po wdmuchiwaniu dwukierunkowym.
+- Wyposażone w niezależne komory ciśnieniowe i zaciski rur osłonowych (często montowane na trasie rurociągu w studniach pośrednich).
 
 ---
 
-## 2. Prawidłowa Obsługa Bębnów i Stojaki Odwijające
-
-Niewłaściwa kontrola bębna kablowego jest przyczyną ponad 30% przypadków uszkodzeń powłoki kabla na wejściu do wdmuchiwarki.
+## 2. Prawidłowa Obsługa Bębnów, Stojaki i Stoły Montażowe
 
 ### 2.1. Hydrauliczne Stojaki Podnośnikowe do Bębnów
-- Umożliwiają bezpieczne podniesienie bębnów o masie od $1000\text{ kg}$ do $5000\text{ kg}$ za pomocą siłowników hydraulicznych obsługiwanych dźwignią ręczną lub agregatem.
-- Oś nośna wyposażona jest w bezobsługowe łożyska toczne gwarantujące płynny obrót bębna bez bicia osiowego.
+- Umożliwiają bezpieczne podniesienie bębnów o masie od $1000\text{ kg}$ do $5000\text{ kg}$ za pomocą siłowników hydraulicznych.
+- Wyposażone w **regulowany hamulec cierny (tarczowy lub taśmowy)** zapobiegający bezwładnościowemu rozbieganiu się szpuli kabla przy nagłym zatrzymaniu wdmuchiwarki.
 
-### 2.2. Regulowane Hamulce Odwijaka
-- Podczas wdmuchiwania bęben kablowy nabiera znacznej energii kinetycznej (prędkość obwodowa odpowiada prędkości wdmuchiwania $40 – 80\text{ m/min}$).
-- W razie nagłego zatrzymania wdmuchiwarki (np. zadziałanie zabezpieczenia zderzeniowego), niehamowany bęben obraca się dalej siłą bezwładności, co powoduje natychmiastowe zrzucenie zwojów kabla, powstanie supłów (tzw. ptasiego gniazda) i załamanie światłowodu.
-- Stojak musi być wyposażony w **regulowany hamulec cierny (tarczowy lub taśmowy)**, który stawia stały, kontrolowany opór obrotowi bębna.
-
----
-
-## 3. Układanie Kabla w Ósemkę i Karuzela Kablowa (Twister)
-
-Gdy długość projektowanego odcinka przekracza możliwości wdmuchnięcia w jednym kierunku (np. odcinek 4 km), wdmuchiwanie realizuje się ze środka trasy (metoda dwukierunkowa / *middle-out blowing*).
-
-### 3.1. Ręczne Układanie w Ósemkę (Tradycyjne)
-- W punkcie środkowym wdmuchuje się najpierw pierwsze 2 km kabla w stronę studni A.
-- Pozostały odcinek 2 km kabla odwija się z bębna i układa na czystej plandece w pętle przypominające cyfrę „8” (tzw. figura ósemkowa).
-- *Cel figury ósemkowej*: Zwoje w kształcie ósemki wprowadzają na przemian skręt prawoskrętny i lewoskrętny, dzięki czemu podczas późniejszego wdmuchiwania w stronę studni B kabel samoczynnie odkręca się, nie ulegając skręceniu osiowemu (twisting).
-- *Wady*: Ryzyko zabrudzenia piaskiem, konieczność angażowania kilku pracowników, ryzyko załamania pętli przy podmuchach wiatru.
-
-### 3.2. Karuzela Kablowa / Twister (Automatyczny Kosz Ósemkowy)
-- Nowoczesne urządzenie mechaniczne z obrotowym ramieniem i pionowym bębnem koszowym.
-- Kabel wychodzący z bębna wprowadzany jest przez silnik Twistera bezpośrednio do wnętrza kosza, gdzie układa się w idealne, uporządkowane warstwy ósemkowe w zamkniętej, czystej przestrzeni.
-- Po zakończeniu pierwszego etapu, drugi koniec kabla wdmuchuje się bezpośrednio z Twistera w stronę studni B z prędkością roboczą bez udziału dodatkowych pracowników.
+### 2.2. Stoły i Statywy Warsztatowe do Wdmuchiwarek
+- Na budowach panują skrajnie trudne warunki: błoto, wilgoć, piasek i pył.
+- Wdmuchiwarka musi być stabilnie posadowiona na dedykowanym statywie mobilnym lub składanym stole warsztatowym.
+- Zapewnia to:
+  - Idealne osiowe wprowadzenie kabla z bębna do rurociągu bez załamań.
+  - Całkowitą ochronę mechanizmów podajnika, komory ciśnieniowej i liczników przed zanieczyszczeniem błotem i pyłem gruntowym.
 
 ---
 
-## 4. Lubrykatory Kablowe i Dozowanie Płynu Poślizgowego
+## 3. Zwijanie Nadmiaru Kabla: Kosze Ósemkowe Twister i Figaro
 
-1. **Zasada Ciągłego Dozowania**:
-   - Przy trasach powyżej 1000 m samo wstępne przedmuchanie rurociągu gąbką z lubrykantem nie zapewnia trwałego filmu olejowego na ostatnich setkach metrów.
-   - Pomiędzy podajnikiem wdmuchiwarki a komorą wdmuchującą instaluje się **lubrikator kablowy**.
-2. **Budowa Lubrikatora**:
-   - Zbiornik ciśnieniowy z płynem poślizgowym (np. Microjet, Cablejet Lube).
-   - Dysze natryskowe lub pierścień filcowy/gąbkowy opasujący przesuwający się kabel.
-   - Płyn jest równomiernie rozprowadzany po całej powierzchni powłoki zewnętrznej kabla w sposób ciągły, w ilości ok. $5 – 10\text{ ml}$ na $100\text{ m}$ posuwu.
-3. **Redukcja Tarcia**: Profesjonalny lubrykant redukuje współczynnik tarcia polietylenu o ponad **$70\% – 80\%$**, obniżając $\mu$ z poziomu ok. $0{,}35$ do poziomu poniżej $0{,}08$.
+Przy wdmuchiwaniu ze środka trasy (metoda dwukierunkowa / *middle-out*):
+
+1. **Tradycyjne ósemkowanie na plandece**: Ręczne układanie kabla na folii w kształt cyfry „8”. Zapewnia przemienny skręt prawy/lewy (brak skręcania osiowego), lecz wymaga 2–3 dodatkowych pracowników i niesie ryzyko zabrudzenia.
+2. **Karuzele Mechaniczne (Twister / Figaro)**:
+   - Urządzenie z obrotowym ramieniem i pionowym bębnem koszowym (np. Twister GAMM-BUD, Karuzela Lancier).
+   - Kabel z bębna wdmuchiwany jest bezpośrednio do wnętrza obrotowego kosza Twistera, układając się samoczynnie w czyste, idealne zwoje ósemkowe.
+   - Po odwróceniu maszyny drugi koniec kabla wdmuchuje się bezpośrednio z kosza w przeciwnym kierunku trasy.
 
 ---
 
-## 5. Głowice Prowadzące, Głowice Dźwiękowe i Sondy Radiowe
+## 4. Narzędzia do Pakietów Mikrorur i Głowice Ciśnieniowe
 
-1. **Mosiężne Głowice Prowadzące (Bullet Heads)**:
-   - Stożkowo-zaokrąglone końcówki z mosiądzu lub poliamidu montowane na czole kabla światłowodowego.
-   - Średnica głowicy jest minimalnie większa lub równa średnicy kabla, co zapobiega podwijaniu się czoła kabla na uskokach złączek push-fit i łagodnie pokonuje nierówności.
-2. **Sondy Radiowe (Mini-Nadajniki 33 kHz / 512 Hz)**:
-   - Miniaturowy nadajnik elektromagnetyczny montowany w cylindrycznej głowicy na czole kabla lub przedmuchiwanego tłoczka kalibracyjnego.
-   - Zasilany baterią litową (czas pracy 20–40 godzin).
-   - W przypadku zakleszczenia kabla na trasie rurociągu, operator z powierzchni ziemi za pomocą odbiornika/lokalizatora trasowego namierza dokładne położenie sondy z głębokości do $3 – 5\text{ metrów}$ z precyzją do kilku centymetrów. Pozwala to na punktowy, precyzyjny wykop naprawczy bez konieczności rozkopywania setek metrów trasy.
-3. **Głowice Dźwiękowe (Sonic Heads)**:
-   - Posiadają specjalnie nacięte kanały aerodynamiczne (gwizdki akustyczne).
-   - Pod wpływem pędzącego strumienia sprężonego powietrza generują głośny dźwięk o charakterystycznej częstotliwości, ułatwiając obsłudze w studni docelowej zlokalizowanie zbliżającego się czoła kabla.
+### 4.1. Rozcinacze Folii do Pakietów Mikrorurek
+- Pakiety mikrorur (np. 5x10, 7x12) w wersji cienkościennej są fabrycznie spięte cienką folią polietylenową.
+- Przed wprowadzeniem pakietu do rury HDPE folia musi zostać usunięta, aby rurki mogły swobodnie ułożyć się w przekroju rury osłonowej.
+- Używanie noży tapicerskich grozi nacięciem ścianki mikrorury. Stosuje się **specjalistyczne rozcinacze wzdłużne folii**, które bezpiecznie przecinają folię opasującą bez kontaktu z tworzywem samych mikrorur.
+
+### 4.2. Główki Prowadzące Mikrorurki (Szczelne Głowice Ciśnieniowe)
+- Specjalne główki wytoczone z mosiądzu lub stopów aluminium, wkręcane bezpośrednio na czoło wdmuchiwanej mikrorurki.
+- **Podwójna funkcja**:
+  1. *Prowadzenie*: Stożkowy kształt zapobiega zablokowaniu czoła mikrorurki na uskokach i krawędziach złączek wewnątrz rurociągu HDPE.
+  2. *Utrzymanie ciśnienia poduszkowego*: Wyposażone w uszczelkę typu O-ring hermetyzującą mikrorurkę, co pozwala na jej **uprzednie napompowanie do ciśnienia 4–6 bar**. Zapewnia to wymaganą sztywność wzdłużną zapobiegającą zgnieceniu mikrorurki podczas wdmuchiwania i zasypywania.
+
+### 4.3. Aparatura do Napełniania Mikrorurek Powietrzem
+- Dedykowane zestawy ciśnieniowe (kolektory manometryczne) służące do wtłaczania powietrza do mikrorur:
+  - *Adaptery pojedyncze*: do napełniania i kontroli ciśnienia pojedynczej mikrorurki.
+  - *Adaptery wielowyjściowe (kolektory pakietowe)*: umożliwiające jednoczesne napompowanie całego pakietu (np. 7 mikrorur naraz) ze sprężarki przed rozpoczęciem wdmuchiwania pakietu w rurę wtórną.
+
+---
+
+## 5. Lubrykatory Kablowe i Dozowanie Płynów Poślizgowych
+
+1. **Lubrykatory wzdłużne**:
+   - Montowane pomiędzy podajnikiem a komorą wdmuchującą (jako moduł zewnętrzny lub zintegrowany z głowicą, np. Fremco Powerflow, Lancier Kabeloeler).
+   - Ciągłe natryskiwanie lub dozowanie przez pierścień filcowy płynu poślizgowego na przesuwający się kabel w ilości ok. $5 – 10\text{ ml}$ na $100\text{ m}$.
+2. **Zasady doboru płynów**:
+   - Płyny do rurociągów $ID > 20\text{ mm}$ (wyższa lepkość).
+   - Płyny do mikrokanalizacji (bardzo niska lepkość polimerowa, zapobiegająca sklejaniu).
+   - **Kable $\le 1{,}5\text{ mm}$**: bezwzględny zakaz stosowania jakichkolwiek płynów poślizgowych!
+
+---
+
+## 6. Kalibratory, Gąbki i Sondy Radiowe
+
+1. **Gąbki czyszcząco-smarujące (Reinigungsmolche)**: Cylindryczne gąbki piankowe nasączone płynem poślizgowym, przedmuchiwane ciśnieniem 1–2 bar tuż przed wprowadzeniem kabla.
+2. **Zestawy kulek kalibracyjnych do mikrokanalizacji**: Zestaw precyzyjnych kulek stalowych ($80\% – 90\%$ ID) przedmuchiwanych przez każdą mikrorurkę w celu weryfikacji braku przewężeń.
+3. **Sondy lokalizacyjne (Minisonden 33 kHz / 512 Hz)**:
+   - Montowane wewnątrz wałków kalibracyjnych lub na czole kabla w cylindrycznych głowicach.
+   - W przypadku utknięcia kalibratora lub kabla w rurociągu, precyzyjny detektor elektromagnetyczny (np. Ortungssystem CL43) lokalizuje punkt zatoru z głębokości do $3 – 5\text{ m}$ z dokładnością do 5 cm.

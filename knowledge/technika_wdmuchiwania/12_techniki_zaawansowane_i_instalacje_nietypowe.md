@@ -1,9 +1,9 @@
-# Baza Wiedzy: Techniki Zaawansowane i Instalacje Nietypowe (Water Floating, Kaskady, BOP)
+# Baza Wiedzy: Techniki Zaawansowane i Instalacje Nietypowe (Water Floating, Pakiety Mikrorur, Kaskady, BOP)
 
 ## Metadata
 - **Źródło**: „Budowa nowoczesnych sieci telekomunikacyjnych z zastosowaniem techniki wdmuchiwania kabli światłowodowych”, autor: mgr inż. Michał Andrzejewski (GAMM-BUD / Blue Dragon Jet), Rozdziały 12 i 13.
-- **Kategoria**: Zaawansowane Techniki Instalacyjne, Floating Wodny, Wdmuchiwanie Kaskadowe (Tandem), System SENSO JET, Technologia BOP w Kanalizacji Ściekowej
-- **Słowa kluczowe**: floating wodny, hydroinstalacja, neutralna pływalność kabla, Westerschelde, pompa 25 bar, wdmuchiwanie tandemowe, wdmuchiwanie kaskadowe, Senso Jet Plumettaz, instalacja BOP, relining kanalizacji, mikrorurki stalowe
+- **Kategoria**: Zaawansowane Techniki Instalacyjne, Floating Wodny, Pakiety Mikrorur, Wdmuchiwanie Kaskadowe (Tandem), System SENSO JET, Technologia BOP, Mikrowłókna Kapilary
+- **Słowa kluczowe**: floating wodny, hydroinstalacja, neutralna pływalność kabla, Westerschelde, pompa 25 bar, wdmuchiwanie tandemowe, wdmuchiwanie kaskadowe, wdmuchiwanie pakietów mikrorur, siła 180 kG, Senso Jet Plumettaz, instalacja BOP, relining kanalizacji, mikrowłókna 0.2 mm
 
 ---
 
@@ -24,52 +24,68 @@ Technika wdmuchiwania wodnego (tzw. *Water Floating*) jest najbardziej zaawansow
 
 ### 1.3. Rekordowe Przykłady Aplikacji Referencyjnych
 1. **Próba Polowa w Niemczech ($5400\text{ m}$)**:
-   - Wprowadzenie kabla światłowodowego na dystans $5400\text{ metrów}$ w jednym podejściu przy ciśnieniu roboczym 25 bar i zużyciu 450 l wody.
-2. **Przejście Westerschelde w Holandii ($5500\text{ m}$)**:
-   - Rekordowa instalacja kabla pod estuarium rzeki Skaldy (Westerschelde).
-   - Kabel zainstalowany w rurociągu podmorskim na dystansie **$5500\text{ metrów}$** bez żadnych złączy pośrednich, co było niemożliwe do wykonania przy użyciu tradycyjnych kompresorów powietrznych ze względu na spadki ciśnienia.
+   - Wprowadzenie mikrokabla o średnicy $6{,}1\text{ mm}$ do mikrorurki $10 \times 1{,}0\text{ mm}$ na dystans **$5400\text{ metrów}$** w czasie 5 godzin i 20 minut przy ciśnieniu roboczym 22 bar i zużyciu zaledwie 450 l wody (średnia prędkość $17\text{ m/min}$).
+2. **Przejście Podmorskie Westerschelde w Holandii ($5500\text{ m}$)**:
+   - W potężnym kablu energetycznym ułożonym na dnie zatoki Westerschelde zintegrowano 6 rur osłonowych 25/20 pod światłowody.
+   - Kabel światłowodowy o średnicy $6\text{ mm}$ (49 włókien) został zainstalowany przy użyciu maszyny bazującej na głowicy Plumett MicroJet zasilanej pompą wodną na rekordowym dystansie **$5500\text{ metrów}$** w jednym odcinku bez muf pośrednich.
 
 ---
 
-## 2. Wdmuchiwanie Kaskadowe i Tandemowe na Trasach Długodystansowych
+## 2. Wdmuchiwanie Pakietów Mikrorurek do Rur HDPE
+
+Zastąpienie tradycyjnego zaciągania mikrorur techniką pneumatyczną pozwala na wielokrotne zwiększenie zasięgu:
+1. **Ograniczenia wciągania mechanicznego**:
+   - Wciąganie wiązki mikrorur przy użyciu pręta z włókna szklanego i wciągarki hydraulicznej jest możliwe na dystansach **maksymalnie do $500\text{ m}$**.
+2. **Technika wdmuchiwania pakietu (Speedpipe Bundle)**:
+   - Wymaga maszyny o dużej sile posuwu wyposażonej w podajnik gąsienicowy lub pasowy z napędem hydraulicznym (np. BDJ MultiTube, Lancier Fibercat, Fremco MultiFlow).
+   - **Wymagana siła dopychająca**: ok. **$160 – 180\text{ daN (kG)}$**.
+   - **Wymagania pneumatyczne**: sprężarka o wydajności **minimum $8 – 11\text{ m}^3\text{/min}$** i ciśnieniu 8–10 bar.
+   - **Osiągany zasięg**: W optymalnych warunkach ułożenia rury HDPE zasięg wdmuchnięcia całego pakietu mikrorur wynosi **do $1500\text{ m}$**!
+
+---
+
+## 3. Wdmuchiwanie Kaskadowe i Tandemowe na Trasach Długodystansowych
 
 Dla tras tranzytowych o długościach 6 km, 10 km i dłuższych, stosuje się instalacje sekwencyjne:
 
-### 2.1. Metoda Tandemowa (Wdmuchiwarki w Szeregu)
-- W punkcie początkowym instaluje się wdmuchiwarkę główną A.
-- W studni pośredniej (np. na 2500 m) montuje się drugą wdmuchiwarkę B (zasilaną niezależnym kompresorem) wyposażoną w złączkę ciśnieniową Y.
-- Wdmuchiwarka A podaje kabel do studni pośredniej; w momencie przejścia kabla przez głowicę wdmuchiwarki B, zostaje załączony napęd maszyny B, która przejmuje siłę pchania i dopręża powietrze na kolejnym odcinku trasy.
+### 3.1. Metoda Kaskadowa (Wdmuchiwarki w Szeregu)
+- W studniach pośrednich (co ok. 1500–2500 m) ustawia się kolejne wdmuchiwarki z kompresorami.
+- Przed każdą kolejną wdmuchiwarką wykłada się krótki odcinek kabla w studni jako **bufor optyczny**, co pozwala operatorowi na bieżąco korygować prędkość i synchronizować posuw z maszyną poprzedzającą.
 
-### 2.2. Strategia Wdmuchiwania Odcinka 6 km z Układaniem w Ósemkę
-1. **Zespół Jednoosobowy / Jedna Maszyna**:
-   - Ustawienie wdmuchiwarki w studni na 3. kilometrze (środek trasy).
-   - Wdmuchnięcie 3 km kabla w stronę studni początkowej (kierunek A).
-   - Rozwinięcie pozostałych 3 km kabla z bębna i ułożenie w zwoje ósemkowe w koszu Twister.
-   - Wprowadzenie kabla z kosza Twister i wdmuchnięcie w stronę studni końcowej (kierunek B).
-2. **Zespół Dwuosobowy / Dwie Maszyny (Zbieżnie do Środka)**:
-   - Dwie ekipy wdmuchują kable z obu skrajnych końców trasy (studnia 0 km i studnia 6 km) do studni centralnej (3 km), gdzie wykonuje się mufę światłowodową ze spawami.
+### 3.2. Strategie Wdmuchiwania Odcinka 6 km
+1. **Wariant z jedną ekipą (1 wdmuchiwarka + 2 Twistery)**:
+   - Posadowienie bębna w środku trasy (studnia 3, km 3,0).
+   - Wdmuchnięcie 1,5 km do studni 4 i przedmuchanie kolejnych 1,5 km do Twistera w studni 4.
+   - Odwinięcie pozostałych 3 km kabla przy studni 3 do drugiego Twistera.
+   - Wdmuchnięcie 1,5 km do studni 2 i przedmuchanie do studni 1.
+   - Przestawienie wdmuchiwarki do studni 4 i 2 i wdmuchnięcie końcówek ze zwojów Twistera.
+2. **Wariant z dwiema ekipami kaskadowymi**:
+   - Dwa zespoły pracujące z wdmuchiwarkami w studniach pośrednich dmuchają kabel sekwencyjnie w obu kierunkach od punktu środkowego.
 
 ---
 
-## 3. Technologia SENSO JET (Precyzyjny Montaż w Kapilarnych Rurkach Stalowych)
+## 4. Technologia SENSO JET (Kapilarne Rurki Stalowe)
 
-Opracowana przez szwajcarską firmę **Plumettaz** specjalistyczna technologia przeznaczona do instalacji światłowodowych czujników telemetrycznych (Distributed Temperature Sensing – DTS oraz Distributed Acoustic Sensing – DAS):
-
-- **Średnice rurociągów**: Mikroskopijne kapilary ze stali nierdzewnej o średnicy wewnętrznej od **$2\text{ mm}$ do $5\text{ mm}$**.
-- **Media nośne i ciśnienia**:
+Opracowana przez szwajcarską firmę **Plumettaz** do instalacji światłowodowych sensorów temperatury (DTS) i naprężeń (DAS) wzdłuż rurociągów naftowych i gazowych:
+- **Średnice osłonowe**: Kapilary ze stali nierdzewnej o średnicy wewnętrznej od **$2\text{ mm}$ do $5\text{ mm}$**.
+- **Media i ciśnienia**:
   - Woda pod ciśnieniem **$20 – 40\text{ bar}$**.
-  - W przypadku rurek o ekstremalnie małym świetle lub przy temperaturach ujemnych stosuje się **czysty alkohol techniczny (etanol / glikol)** pod ciśnieniem sięgającym aż **$100\text{ bar}$**!
-- **Zasięg**: Wprowadzanie włókien sensorowych na odległości do **$10\text{ km}$** wzdłuż ropociągów, gazociągów oraz głębokich odwiertów geotermalnych.
+  - W temperaturach ujemnych lub przy ekstremalnie małych średnicach: **czysty alkohol techniczny (etanol / glikol) pod ciśnieniem do $100\text{ bar}$**!
+- **Zasięg**: Do **$10\text{ km}$** (w testach laboratoryjnych osiągnięto zasięgi do 3 km na pojedynczych odcinkach).
 
 ---
 
-## 4. Technologia BOP (Bytes in Old Pipes) w Infrastrukturze Ściekowej
+## 5. Wdmuchiwanie Mikrowłókien w Kapilary ($0{,}2\text{ mm}$ w $0{,}4\text{ mm}$)
 
-Budowa sieci światłowodowej w gęsto zabudowanych centrach miast historycznych napotyka barierę braku miejsca w pasie drogowym i gigantycznych kosztów wykopów otwartych. Rozwiązaniem jest wykorzystanie istniejących kolektorów kanalizacji deszczowej i ściekowej:
+W ramach prac badawczo-rozwojowych firmy **GAMM-BUD** zrealizowano próby wdmuchiwania pojedynczych włókien o miniaturowych średnicach:
+- **Włókno światłowodowe $0{,}2\text{ mm}$**: Wprowadzone do rurki o średnicy wewnętrznej **$ID = 0{,}4\text{ mm}$** na dystans do kilkunastu metrów.
+- **Rurka o średnicy wewnętrznej $ID = 1{,}0\text{ mm}$**: Pozwoliła na uzyskanie zasięgu rzędu kilkudziesięciu metrów.
+- Znajduje zastosowanie w specjalistycznej aparaturze medycznej, pomiarowej i systemach sensorycznych w przemyśle precyzyjnym.
 
-### 1. Zasada Systemu BOP
-- Wykorzystanie czynnych kanałów ściekowych (o przekrojach od DN 200 do kolektorów przełazowych) jako magistrali teletechnicznych.
-- Roboty bezwykopowe wprowadzają do wnętrza kanału specjalne rury osłonowe wykonane ze stali kwasoodpornej lub grubościennego polietylenu zbrojonego, mocując je w sklepieniu kolektora za pomocą rozporowych kotew ze stali nierdzewnej (powyżej lustra ścieków).
+---
 
-### 2. Zastosowanie przy Reliningu Kanalizacji
-- Podczas bezwykopowej renowacji starych kanałów metodą rękawa utwardzanego promieniami UV (CIPP – Cured In Place Pipe), rurki światłowodowe wprowadza się pomiędzy stary kanał a zewnętrzną ściankę utwardzanego rękawa, zyskując idealną ochronę mechaniczną i chemiczną kabla bez ograniczania światła kanału ściekowego.
+## 6. Technologia BOP (Bytes in Old Pipes) w Infrastrukturze Ściekowej
+
+Instalacja światłowodów w czynnych kanałach ściekowych i renowacji CIPP:
+1. **Mocowanie w sklepieniu kolektora**: Rury osłonowe ze stali kwasoodpornej lub polietylenu zbrojonego kotwione robotami w sklepieniu kanału ściekowego powyżej lustra ścieków.
+2. **Integracja z rękawem reliningowym UV (CIPP)**: Mikrorurki światłowodowe wprowadza się pod zewnętrzną powłokę rękawa z włókna szklanego przed jego utwardzeniem promieniowaniem UV, tworząc monolit zrehabilitowanego kanału bez redukcji przepływu ścieków.

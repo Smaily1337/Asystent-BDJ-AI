@@ -7,15 +7,23 @@
 
 ---
 
-## 1. Siły Działające na Kabel w Rurociągu
+## 1. Zasady Dynamiki Newtona i Siły Działające na Kabel
 
-W procesie pneumatyczno-mechanicznego wprowadzania kabla światłowodowego do rurociągu zachodzi jednoczesne oddziaływanie trzech sił:
+### 1.1. Adaptacja Zasad Newtona do Procesu Wdmuchiwania
+Zgodnie z fizycznymi podstawami mechaniki płynów i ciał stałych proces wdmuchiwania opiera się na zasadach dynamiki:
+- **I Zasada Dynamiki Newtona**: Kabel porusza się w rurociągu ze stałą prędkością, dopóki siły napędowe równoważą siły oporu.
+- **II Zasada Dynamiki Newtona**: Kabel przyspiesza lub zwalnia pod wpływem niezrównoważonej siły wypadkowej ($F_w = m \cdot a$).
+
+Kabel w rurze osłonowej przemieszcza się tak długo, jak długo suma siły ciągnącej $F_c$ (pochodzącej od opływu powietrza w metodzie strumieniowej lub od parcia tłoczka w metodzie tłoczkowej) oraz siły pchającej $F_p$ podajnika wdmuchiwarki przewyższa opory tarcia kabla o rurę $F_t$ i opory odwijania kabla z bębna $F_{odw}$:
+
+$$F_p + F_c > F_t + F_{odw}$$
+
+*(Opory odwijania kabla ze stabilnego stojaka bębnowego wynoszą zazwyczaj zaledwie kilka kilogramów / kilkadziesiąt niutonów).*
+
+### 1.2. Trzy Fundamentalne Siły Procesu
 1. **Siła tarcia kabla o ściankę rurociągu ($F_t$)**: siła oporowa przeciwdziałająca ruchowi kabla, zależna od masy kabla, geometrii trasy, współczynnika tarcia tworzyw oraz zafalowania rury.
-2. **Siła pchająca podajnika wdmuchiwarki ($F_p$)**: siła mechaniczna przekazywana przez pasy lub rolki podajnika wdmuchiwarki na powłokę kabla.
+2. **Siła pchająca podajnika wdmuchiwarki ($F_p$)**: siła mechaniczna przekazywana przez pasy lub rolki podajnika wdmuchiwarki na powłokę kabla (kalibrowana w Crash-Teście).
 3. **Siła ciągnąca powietrza ($F_c$)**: siła wzdłużna generowana przez przepływający strumień sprężonego powietrza (w metodzie strumieniowej) lub różnicę ciśnień na czole tłoczka (w metodzie tłoczkowej).
-
-Równowaga dynamiczna ruchu kabla zachodzi, gdy:
-$$F_p + F_c > F_t$$
 
 ---
 
