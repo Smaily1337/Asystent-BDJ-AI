@@ -18,11 +18,6 @@
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
   var EMBED_VERSION = "0.0.19";
-  try {
-    if (document.currentScript && document.currentScript.src) {
-      BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
-    }
-  } catch (e) {}
 
   // Usuń stare atrapy z WPCode (w stopce)
   ["bdj-ai-fab", "bdj-ai-tip", "bdj-ai-embed", "bdj-ai-widget"].forEach(function (id) {

@@ -10,7 +10,12 @@
   var BASE = "https://asystent-bdj-ai.onrender.com";
   var EMBED_VERSION = "0.0.19";
   try {
-    if (document.currentScript && document.currentScript.src) {
+    if (
+      document.currentScript &&
+      document.currentScript.src &&
+      /^https?:\/\//i.test(document.currentScript.src) &&
+      /\/embed\.js(?:\?.*)?$/i.test(document.currentScript.src)
+    ) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
     }
   } catch (e) {}
