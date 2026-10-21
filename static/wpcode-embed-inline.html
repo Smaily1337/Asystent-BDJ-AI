@@ -19,7 +19,7 @@
   window.__bdjAiEmbedLoaded = true;
 
   var BASE = "https://asystent-bdj-ai.onrender.com";
-  var EMBED_VERSION = "0.0.18";
+  var EMBED_VERSION = "0.0.19";
   try {
     if (document.currentScript && document.currentScript.src) {
       BASE = document.currentScript.src.replace(/\/embed\.js(?:\?.*)?$/, "");
@@ -48,14 +48,16 @@
     "#bdj-ai-tip strong{display:block;font-size:14px;color:#0f172a;}",
     "#bdj-ai-tip span{display:block;font-size:13px;color:#64748b;line-height:1.35;margin-top:2px;}",
     "#bdj-ai-tip-close{background:none;border:none;font-size:18px;color:#94a3b8;cursor:pointer;padding:0 2px;pointer-events:auto!important;}",
-    "#bdj-ai-embed{display:none;position:fixed!important;",
+    "#bdj-ai-embed{position:fixed!important;",
     "bottom:max(24px,env(safe-area-inset-bottom,24px))!important;",
     "right:max(24px,env(safe-area-inset-right,24px))!important;",
     "width:min(420px,calc(100vw - 48px))!important;height:min(720px,calc(100dvh - 48px))!important;",
     "z-index:2147483646!important;background:#fff!important;pointer-events:none!important;border:none!important;",
     "border-radius:24px!important;overflow:hidden!important;",
-    "box-shadow:0 20px 48px rgba(15,23,42,.18),0 8px 20px rgba(15,23,42,.08)!important;}",
-    "#bdj-ai-embed.is-open{display:block!important;pointer-events:auto!important;}",
+    "box-shadow:0 20px 48px rgba(15,23,42,.18),0 8px 20px rgba(15,23,42,.08)!important;",
+    "opacity:0!important;visibility:hidden!important;transform:translateY(16px) scale(.98)!important;",
+    "transition:opacity .2s ease,transform .2s ease,visibility .2s ease!important;}",
+    "#bdj-ai-embed.is-open{opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:translateY(0) scale(1)!important;}",
     "#bdj-ai-widget{width:100%!important;height:100%!important;border:0!important;background:transparent!important;}",
     "#bdj-ai-loader{position:absolute!important;inset:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;background:#ffffff!important;z-index:2!important;font-family:system-ui,-apple-system,sans-serif!important;color:#142b3a!important;gap:12px!important;transition:opacity .25s ease!important;}",
     "#bdj-ai-loader.is-hidden{opacity:0!important;pointer-events:none!important;}",
@@ -67,7 +69,7 @@
     "#bdj-ai-tip{bottom:calc(88px + env(safe-area-inset-bottom,0px))!important;right:max(16px,env(safe-area-inset-right,16px))!important;}",
     "#bdj-ai-embed.is-open{inset:0!important;top:0!important;right:0!important;bottom:0!important;left:0!important;",
     "width:100%!important;height:100%!important;height:100dvh!important;max-width:none!important;max-height:none!important;",
-    "border-radius:0!important;box-shadow:none!important;background:#fff!important;}",
+    "border-radius:0!important;box-shadow:none!important;background:#fff!important;transform:none!important;}",
     "}",
   ].join("");
 
@@ -114,7 +116,12 @@
   frame.setAttribute("allowfullscreen", "true");
   wrap.appendChild(frame);
 
+  var loaderSafetyTimer = null;
   function hideLoader() {
+    if (loaderSafetyTimer) {
+      clearTimeout(loaderSafetyTimer);
+      loaderSafetyTimer = null;
+    }
     if (loader) {
       loader.classList.add("is-hidden");
       setTimeout(function () { if (loader && loader.parentNode) loader.style.display = "none"; }, 300);
@@ -125,6 +132,10 @@
     if (loader) {
       loader.style.display = "flex";
       loader.classList.remove("is-hidden");
+      if (loaderSafetyTimer) clearTimeout(loaderSafetyTimer);
+      loaderSafetyTimer = setTimeout(function () {
+        hideLoader();
+      }, 7000);
     }
   }
 
@@ -138,16 +149,12 @@
     hideTip();
     fab.classList.add("is-chat-open");
     wrap.classList.add("is-open");
-    wrap.style.display = "block";
-    wrap.style.pointerEvents = "auto";
     document.body.classList.add("bdj-ai-chat-open");
   }
 
   function hideChat() {
     fab.classList.remove("is-chat-open");
     wrap.classList.remove("is-open");
-    wrap.style.display = "none";
-    wrap.style.pointerEvents = "none";
     document.body.classList.remove("bdj-ai-chat-open");
     wantOpen = false;
   }
@@ -269,5 +276,4 @@
   if (document.body) mount();
   else document.addEventListener("DOMContentLoaded", mount);
 })();
-
 </script>

@@ -2,11 +2,9 @@
 
 from __future__ import annotations
 
-from urllib.parse import urlencode
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, RedirectResponse, Response
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from app import __version__
@@ -56,16 +54,6 @@ def create_app() -> FastAPI:
 
     @application.get("/")
     def read_index(request: Request):
-        # Stary WPCode ładuje /?embed=1 bez v= — przeglądarka trzyma cache sprzed redesignu.
-        if request.query_params.get("embed") == "1":
-            if request.query_params.get("v") != __version__:
-                params = dict(request.query_params)
-                params["v"] = __version__
-                return RedirectResponse(
-                    url="/?" + urlencode(params),
-                    status_code=302,
-                    headers=no_cache_headers,
-                )
         return FileResponse(str(index_path), headers=no_cache_headers)
 
     @application.head("/")
