@@ -325,6 +325,25 @@ def try_machine_showcase(
     )
 
 
+def ask_identify_machine_message() -> str:
+    """Komunikat gdy user nie zna modelu / prosi o pomoc w identyfikacji ze zdjęć."""
+    cards = format_machine_cards_tag(["all"])
+    return (
+        loc(
+            "Spokojnie, pomożemy ustalić model! Najprościej rozpoznać maszynę po wyglądzie. 🙂\n\n"
+            "Poniżej znajdziesz **zdjęcia i nazwy maszyn Blue Dragon Jet**. "
+            "**Kliknij zdjęcie maszyny**, która wygląda jak Twoja (albo wybierz model z listy u góry czatu):",
+            "No worries, we'll help you identify the model! The easiest way is by appearance. 🙂\n\n"
+            "Below are **photos and names of all Blue Dragon Jet blowing machines**. "
+            "**Click the photo of the machine** that looks like yours (or pick the model at the top of the chat):",
+            "Kein Problem, wir helfen Ihnen, das Modell zu bestimmen! Am einfachsten geht das nach dem Aussehen. 🙂\n\n"
+            "Unten finden Sie **Fotos und Namen aller Blue Dragon Jet Einblasgeräte**. "
+            "**Klicken Sie auf das Foto der Maschine**, die wie Ihre aussieht (oder wählen Sie das Modell oben im Chat aus):",
+        )
+        + (f"\n\n{cards}" if cards else "")
+    )
+
+
 def ask_machine_message() -> str:
     """Publiczny komunikat need_machine (z kartami maszyn)."""
     return _ask_machine().answer

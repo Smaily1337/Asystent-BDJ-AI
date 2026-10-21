@@ -1083,6 +1083,12 @@ def test_unknown_machine_message_ignores_chip():
     assert "HYDRO CHAIN MULTI TUBE" not in out2
     assert "model maszyny" in out2.lower() or "MACHINE_CARDS" in out2
 
+    out3 = mgr.chat("test-unknown-model-3", "nie wiem jaka to maszyna")
+    assert "MACHINE_CARDS" in out3
+
+    out4 = mgr.chat("test-unknown-model-4", "klient nie wie jaka ma maszyne")
+    assert "MACHINE_CARDS" in out4
+
 
 def test_product_card_next():
     from app.rag.part_lookup import try_product_card

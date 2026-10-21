@@ -118,9 +118,25 @@ STARTER_REPLIES = {
 }
 
 
-def _get_starter_reply(question: str) -> str | None:
+def _get_starter_reply(question: str, machine: str | None = None) -> str | None:
     q = (question or "").strip().lower()
-    return STARTER_REPLIES.get(q)
+    base = STARTER_REPLIES.get(q)
+    if not base:
+        return None
+    if not machine and (
+        "szukam części" in q
+        or "looking for parts" in q
+        or "ich suche teile" in q
+        or "potrzebuję wsparcia" in q
+        or "i need technical support" in q
+        or "ich brauche technischen support" in q
+    ):
+        from app.rag.machine_web import format_machine_cards_tag
+
+        cards = format_machine_cards_tag(["all"])
+        if cards and "[MACHINE_CARDS:" not in base:
+            return f"{base}\n\n{cards}"
+    return base
 
 
 def bind_chat_manager(manager) -> None:
@@ -137,7 +153,7 @@ def handle_chat(request: ChatRequest, req: Request):
     session_id = request.session_id or "sess_default"
     set_lang(request.lang)
 
-    starter = _get_starter_reply(request.question)
+    starter = _get_starter_reply(request.question, machine=request.machine)
     if starter:
         log_customer_question(request.question, starter, client_ip, session_id)
         return {"answer": starter}
@@ -178,7 +194,7 @@ def handle_chat_stream(request: ChatRequest, req: Request):
     session_id = request.session_id or "sess_default"
     set_lang(request.lang)
 
-    starter = _get_starter_reply(request.question)
+    starter = _get_starter_reply(request.question, machine=request.machine)
     if starter:
         def starter_event_generator():
             payload = json.dumps({"chunk": starter}, ensure_ascii=False)

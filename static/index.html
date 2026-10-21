@@ -800,6 +800,173 @@
         }
         .btn-quote:hover { background: #eef9fc; border-color: var(--d-blue); }
 
+        /* --- SIATKA KART MASZYN (WYBÓR ZE ZDJĘĆ) --- */
+        .machine-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+            margin: 10px 0 6px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .machine-card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #dce6ec;
+            background: #ffffff;
+            box-shadow: 0 2px 7px rgba(20, 43, 58, 0.05);
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            text-align: left;
+            padding: 0;
+            transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .machine-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--d-blue);
+            box-shadow: 0 6px 16px rgba(0, 156, 199, 0.16);
+        }
+        .machine-card.is-selected {
+            border: 2px solid var(--d-blue) !important;
+            background: #f0f9fc !important;
+            box-shadow: 0 0 0 3px rgba(0, 156, 199, 0.22) !important;
+        }
+        .machine-card img {
+            width: 100%;
+            height: 92px;
+            object-fit: cover;
+            background: #f2f5f7;
+            border-bottom: 1px solid #eef2f5;
+            display: block;
+        }
+        .machine-card-no-img {
+            width: 100%;
+            height: 92px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #edf4f8;
+            border-bottom: 1px solid #eef2f5;
+            color: #7c909c;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 8px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        .machine-card-body {
+            padding: 8px 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+        }
+        .machine-card-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--d-navy);
+            line-height: 1.25;
+            letter-spacing: -0.01em;
+        }
+        .machine-card-tagline {
+            font-size: 10.5px;
+            color: #5c7482;
+            line-height: 1.35;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .machine-card-hint {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--d-blue);
+            margin-top: 4px;
+        }
+        .machine-card-ext-link {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            color: var(--d-navy);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            z-index: 2;
+            transition: transform 0.15s ease, background 0.15s ease;
+        }
+        .machine-card-ext-link:hover {
+            transform: scale(1.1);
+            background: #ffffff;
+            color: var(--d-blue);
+        }
+        .machine-card-pdf-link {
+            font-size: 10px;
+            color: #007a9e;
+            text-decoration: underline;
+            margin-top: 2px;
+            display: inline-block;
+        }
+        .machine-cards-catalog-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--d-blue);
+            text-decoration: none;
+        }
+        .machine-cards-catalog-link:hover { text-decoration: underline; }
+        .catalog-trust-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--d-blue);
+            background: #eef9fc;
+            border: 1px solid #ccecf6;
+        }
+        .btn-product-card {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 8px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: #ffffff;
+            border: 1px solid var(--d-blue);
+            color: var(--d-blue);
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.15s ease;
+        }
+        .btn-product-card:hover {
+            background: #eef9fc;
+        }
+
         /* --- BAR WYSYŁANIA OFERTY --- */
         #offer-action-bar {
             background: #ffffff; color: var(--d-navy); padding: 10px 18px;
@@ -1596,11 +1763,17 @@ const BDJChatApp = (() => {
         const intended = (state.lastUserQuestion && state.lastUserQuestion.trim())
             ? state.lastUserQuestion
             : (label ? `${t('iHave')} ${label}` : '');
+        state.lastUserQuestion = null;
         DOM.input.value = intended;
         DOM.btnSend.disabled = DOM.input.value.trim().length === 0;
         resizeInput();
-        DOM.input.focus();
+        if (intended) {
+            sendMessage();
+        } else {
+            DOM.input.focus();
+        }
     };
+
 
     const syncMachineCardSelection = () => {
         const selected = state.pendingMachine;
@@ -2142,7 +2315,7 @@ const BDJChatApp = (() => {
         if (!info) return '';
         const img = info.image
             ? `<img src="${info.image}" alt="${info.display}" loading="lazy" referrerpolicy="no-referrer" />`
-            : '';
+            : `<div class="machine-card-no-img"><span>${info.display}</span></div>`;
         const extLink = info.url
             ? `<a class="machine-card-ext-link" href="${info.url}" target="_blank" rel="noopener noreferrer" aria-label="${t('productPage')} ${info.display}" title="${t('productPage')}">↗</a>`
             : '';
@@ -2158,11 +2331,12 @@ const BDJChatApp = (() => {
             <div class="machine-card-body">
                 <div class="machine-card-title">${info.display}</div>
                 <div class="machine-card-tagline">${tagline}</div>
-                <div class="machine-card-hint">${t('clickPhoto')}</div>
+                <div class="machine-card-hint"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ${t('clickPhoto')}</div>
                 ${pdfLink}
             </div>
         </button>`;
     };
+
 
     const buildMachineCardsGrid = (tags) => {
         const byTag = machineByTag();

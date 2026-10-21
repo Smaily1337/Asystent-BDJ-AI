@@ -237,41 +237,38 @@ def _find_machine_mentions(query: str) -> list[tuple[int, str]]:
 
 
 # User nie zna / pyta o model / prosi o zdjęcia maszyn — nie dziedzicz chipa ani historii sesji.
-_MACHINE_UNKNOWN_RE = re.compile(
-    r"(?:"
-    # Nie wiem jaki model / nie znam
-    r"nie\s+w[iy]em\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?(?:\s+mam)?\s*(?:model|maszyn)"
-    r"|nie\s+znam\s+(?:modelu|maszyny|jak[aą]\s+(?:to\s+)?maszyn)"
-    r"|nie\s+mam\s+poj[eę]cia\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za)?\s*(?:model|maszyn)"
-    r"|(?:jaki|jaka|jak[aą])\s+(?:to\s+)?(?:model|maszyn)\s+(?:mam|posiadam|u\s+mnie|to\s+jest)"
+_MACHINE_UNKNOWN_PATTERNS = [
+    # Nie wiem / nie wie / klient nie wie / nie znamy / nie pamiętam
+    r"(?:klient\s+|u[zż]ytkownik\s+)?nie\s+w[iy]e[mć]?\b.*?(?:jaki|jak[aą]|co|model|maszyn|urz[aą]dzen)",
+    r"^nie\s+w[iy]e[m]?\s*[!.]*$",
+    r"^nie\s+w[iy]e[m]?\s+(?:jaki|jak[aą]|kt[oó]r[aąy]|co)\s*[!.]*$",
+    r"nie\s+w[iy]em\s+(?:jaki|jaka|jak[aą]|co\s+to\s+za|co\s+za|to)?\s*(?:to\s+)?(?:\s*mam\s*)?\s*(?:model|maszyn)",
+    r"nie\s+(?:znam|znamy|pami[eę]tam|pami[eę]tamy)\b.*?(?:model|maszyn)",
+    r"nie\s+mam(?:y)?\s+poj[eę]cia\b",
+    r"(?:brak|nie\s+ma)\s+(?:tabliczki|oznacze[nń]|napisu)",
+    r"(?:jak|sk[aą]d)\s+(?:mam|mamy|mo[zż]na)?\s*(?:wiedzie[cć]|sprawdzi[cć]|rozpozna[cć]|ustali[cć])\b.*?(?:model|maszyn)",
+    r"(?:jaki|jak[aą]|co)\s+(?:to\s+)?(?:za\s+)?(?:model|maszyn)\b.*?(?:mam|posiadam|to\s+jest|jest\s+u\s+mnie)",
     # Zdjęcia maszyn / brak zdjęć / nie widzę zdjęć / gdzie zdjęcia / wybór ze zdjęć
-    r"|nie\s+(?:ma|widz[eę]|mam)\s+(?:tu\s+|tutaj\s+|żadnych\s+|zadnych\s+|żadnego\s+|zadnego\s+)?(?:zdj[eę][cć]|zdj[eę]cia|fot(?:ek|o|ografii))"
-    r"|brak\s+(?:tu\s+|tutaj\s+)?(?:zdj[eę][cć]|zdj[eę]cia|fot(?:ek|o|ografii))"
-    r"|gdzie\s+(?:s[aą]|te|to|znajd[eę])?\s*(?:te\s+)?(?:zdj[eę]cia|zdj[eę]cie|fotki|foto)"
-    r"|jakich\s+(?:zdj[eę][cć]|fotek)\b"
-    r"|jakie\s+(?:zdj[eę]cia|fotki)\b"
-    r"|o\s+jakie\s+(?:zdj[eę]cia|fotki)\s+chodzi"
-    r"|poka[zż]\s+(?:mi\s+)?(?:zdj[eę]cia|fotki|foto|maszyny|galeri[eę])"
-    r"|daj\s+(?:mi\s+)?(?:zdj[eę]cia|fotki|foto|galeri[eę])"
-    r"|(?:zdj[eę]cia|fotki|foto|galeria)\s+(?:wszystkich\s+)?maszyn"
-    r"|wyb[oó]r\s+(?:maszyn|ze\s+zdj[eę][cć]|ze\s+zdj[eę]cia|ze\s+zdjec)"
-    r"|wybierz\s+(?:ze\s+zdj[eę][cć]|ze\s+zdj[eę]cia|ze\s+zdjec|maszyn[eę])"
-    r"|chc[eę]\s+wybra[cć]\s+(?:maszyn[eę]\s+)?ze\s+zdj[eę][cć]"
-    r"|jak\s+wygl[aą]da(?:j[aą])?\s+(?:moja\s+|ta\s+|te\s+)?(?:maszyn\w*|modele)"
-    r"|nie\s+wiem\s+jak\s+wygl[aą]da"
-    # Angielskie wersje
-    r"|i\s+don'?t\s+know\s+(?:the\s+)?(?:model|machine)"
-    r"|do\s+not\s+know\s+(?:the\s+)?(?:model|machine)"
-    r"|unknown\s+model"
-    r"|what\s+(?:model|machine)\s+(?:do\s+i\s+have|is\s+this)"
-    r"|(?:no|where\s+are|show|see\s+no)\s+(?:the\s+)?(?:photos|pictures|images|machines)"
-    r"|there\s+are\s+no\s+(?:photos|pictures|images)"
-    r"|don'?t\s+see\s+(?:any\s+)?(?:photos|pictures|images)"
-    r"|choose\s+from\s+photos"
-    r"|pick\s+from\s+photos"
-    r")",
+    r"(?:poka[zż]|daj|wy[sś]wietl)\b.*?(?:zdj[eę]c|fot|maszyn|galeri)",
+    r"(?:wyb[oó]r|wybierz|wybra[cć])\b.*?(?:ze\s+zdj|maszyn)",
+    r"(?:gdzie|brak|nie\s+widz[eę]|nie\s+ma)\b.*?(?:zdj[eę]|fot)",
+    r"(?:zdj[eę]cia|fotki|foto|galeria)\s+(?:wszystkich\s+)?maszyn",
+    r"jak\s+wygl[aą]da(?:j[aą])?\s+(?:moja\s+|ta\s+|te\s+)?(?:maszyn\w*|modele)",
+    r"nie\s+wiem\s+jak\s+wygl[aą]da",
+    # Angielskie i niemieckie wersje
+    r"(?:i\s+|client\s+)?(?:don'?t|do\s+not|doesn'?t|does\s+not)\s+know\b.*?(?:model|machine|which)",
+    r"^(?:i\s+)?(?:don'?t|do\s+not)\s+know\s*[!.]*$",
+    r"unknown\s+(?:model|machine)",
+    r"(?:show|see|where)\b.*?(?:photo|picture|image|machine)",
+    r"(?:choose|pick)\s+(?:a\s+)?(?:machine\s+)?from\s+photos",
+    r"(?:wei[sß]\s+nicht|keine\s+ahnung)\b",
+]
+
+_MACHINE_UNKNOWN_RE = re.compile(
+    "|".join(f"(?:{p})" for p in _MACHINE_UNKNOWN_PATTERNS),
     re.I,
 )
+
 
 
 def is_machine_unknown_message(text: str) -> bool:

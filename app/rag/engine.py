@@ -54,6 +54,38 @@ _PARTS_REASONS = frozenset({
 })
 
 
+def _needs_machine_cards(text: str) -> bool:
+    if not text:
+        return False
+    if "[MACHINE_CARDS:" in text or "[MACHINE_CARD:" in text:
+        return False
+    t = text.lower()
+    markers = [
+        "podaj proszę model",
+        "podaj model",
+        "jaki model posiadasz",
+        "jaki masz model",
+        "jaką masz maszynę",
+        "jaka to maszyna",
+        "jaki to model",
+        "wybierz model",
+        "kliknij zdjęcie",
+        "nie wiem jaka to maszyna",
+        "który model",
+        "który to model",
+        "potwierdzenia modelu",
+        "potwierdź model",
+        "which machine",
+        "what machine",
+        "please provide the machine",
+        "select your machine",
+        "choose your machine",
+        "welches modell",
+        "welche maschine",
+    ]
+    return any(m in t for m in markers)
+
+
 class SessionChatManager:
     """Jeden silnik czatu na session_id (z limitem LRU-like przyrostu)."""
 
@@ -123,10 +155,10 @@ class SessionChatManager:
         lookup_question = translate_de_query_for_lookup(translate_en_query_for_lookup(question))
 
         if is_machine_unknown_message(lookup_question):
-            from app.rag.part_lookup import ask_machine_message
+            from app.rag.part_lookup import ask_identify_machine_message
 
             self._last_part_reason[sid] = "need_machine"
-            answer = ask_machine_message()
+            answer = ask_identify_machine_message()
             self._remember(sid, "user", question)
             self._remember(sid, "assistant", answer)
             return answer
@@ -241,8 +273,12 @@ class SessionChatManager:
         except Exception:
             self.reset(sid)
             engine = self.get_engine(sid)
-            raw = str(engine.chat(query))
-        answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
+            answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
+        if not chip_for_lookup and _needs_machine_cards(answer):
+            from app.rag.machine_web import format_machine_cards_tag
+            cards = format_machine_cards_tag(["all"])
+            if cards and "[MACHINE_CARDS:" not in answer and "[MACHINE_CARD:" not in answer:
+                answer = f"{answer.rstrip()}\n\n{cards}"
         self._remember(sid, "user", question)
         self._remember(sid, "assistant", answer)
         return answer
@@ -255,10 +291,10 @@ class SessionChatManager:
         lookup_question = translate_de_query_for_lookup(translate_en_query_for_lookup(question))
 
         if is_machine_unknown_message(lookup_question):
-            from app.rag.part_lookup import ask_machine_message
+            from app.rag.part_lookup import ask_identify_machine_message
 
             self._last_part_reason[sid] = "need_machine"
-            answer = ask_machine_message()
+            answer = ask_identify_machine_message()
             self._remember(sid, "user", question)
             self._remember(sid, "assistant", answer)
             yield answer
@@ -402,6 +438,13 @@ class SessionChatManager:
             yield raw
 
         answer = sanitize_answer_skus(raw, q, chip_machine=chip_for_lookup)
+        if not chip_for_lookup and _needs_machine_cards(answer):
+            from app.rag.machine_web import format_machine_cards_tag
+            cards = format_machine_cards_tag(["all"])
+            if cards and "[MACHINE_CARDS:" not in answer and "[MACHINE_CARD:" not in answer:
+                extra = f"\n\n{cards}"
+                answer += extra
+                yield extra
         self._remember(sid, "user", question)
         self._remember(sid, "assistant", answer)
 
